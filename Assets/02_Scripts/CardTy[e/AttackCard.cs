@@ -18,10 +18,10 @@ public class AttackCard : Card
     //타겟 확인
     public bool IsTargetValid(GameObject target)
     {
-        // 1. 대상이 존재하는지 확인
+        // 대상이 존재하는지 확인
         if (target == null) return false;
 
-        // 2. 대상의 태그 확인         .
+        // 대상의 태그 확인         .
         if (target.CompareTag("Player") || target.CompareTag("Enemy"))
         {
             return true;
