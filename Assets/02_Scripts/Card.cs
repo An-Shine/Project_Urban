@@ -30,22 +30,3 @@ public abstract class Card
     //제외 카드 여부
     public bool isExceptionCard { get; }
 }
-
-    //카드 효과 수치
-    // 공격 카드 데미지
-    public int cardDamage;
-
-    // 방어 카드 방어도
-    public int cardShield;
-
-    // 버프 수치
-    public int buffEffect;
-
-    // 디버프 수치
-    public int debuffEffect;
-
-    
-
-    
-
-  
