@@ -7,7 +7,7 @@ abstract public class PointController : MonoBehaviour
     [SerializeField] protected int minPoint;
     [SerializeField] protected int curPoint;
 
-    public int CurrentPoint => maxPoint;
+    public int CurrentPoint => curPoint;
     public UnityEvent<int> OnUpdatePoint { get; set; } = new();
     public UnityEvent<int> OnUpdateMaxPoint { get; set; } = new();
 
@@ -21,6 +21,11 @@ abstract public class PointController : MonoBehaviour
         OnUpdatePoint?.Invoke(curPoint);
     }
 
+    public void Increase(float per)
+    {
+        Increase((int)(maxPoint * per));
+    }
+
     public void Decrease(int amount = 1)
     {
         curPoint -= amount;
@@ -31,10 +36,20 @@ abstract public class PointController : MonoBehaviour
         OnUpdatePoint?.Invoke(curPoint);
     }
 
+    public void Decrease(float per)
+    {
+        Decrease((int)(maxPoint * per));
+    }
+
     public void ExpandMax(int amount)
     {
         maxPoint += amount;
         OnUpdateMaxPoint?.Invoke(maxPoint);
+    }
+
+    public void ExpandMax(float per)
+    {
+        ExpandMax((int)(maxPoint * per));
     }
 
     public void ReduceMax(int amount)
@@ -45,6 +60,11 @@ abstract public class PointController : MonoBehaviour
             maxPoint = minPoint;
 
         OnUpdateMaxPoint?.Invoke(maxPoint);
+    }
+
+    public void ReduceMax(float per)
+    {
+        ExpandMax((int)(maxPoint * per));
     }
 
     public void Reset()
