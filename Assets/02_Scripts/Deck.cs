@@ -63,9 +63,7 @@ public class Deck : MonoBehaviour
         {
             // 1. 덱이 비었는지 확인
             if (unusedCardList.Count == 0)
-            {                
-                Shuffle();
-
+            {
                 // 셔플 후에도 카드가 없다면 (총 보유 카드가 0장인 경우) 중단
                 if (unusedCardList.Count == 0)
                 {                    
@@ -79,9 +77,30 @@ public class Deck : MonoBehaviour
             // 3. 덱에서 제거하고 뽑은 목록에 추가
             unusedCardList.RemoveAt(0);
             drawnCards.Add(cardToDraw);
+
+            // 4. 카드를뽑았을때, 뽑을수있는카드가 0이라면 1초 뒤 셔플예약
+            if (unusedCardList.Count == 0 && !isShuffling)
+            {
+                StartCoroutine(AutoShuffleRoutine());
+            }
         }
 
         return drawnCards;
+    }
+
+    IEnumerator AutoShuffleRoutine()
+    {
+        // 중복 실행 방지 잠금
+        isShuffling = true;         
+
+        //덱 셔플 애니메이션 추가 가능
+        yield return new WaitForSeconds(1.0f); 
+
+        //셔플 실행
+        ShuffleLogic();
+
+        //잠금 해제
+        isShuffling = false;
     }
 
    
