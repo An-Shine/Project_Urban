@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class MousePointer : MonoBehaviour
 {
-    [SerializeField] private float zPosition = 0f;
+    [SerializeField] private float zPosition = 0.0f;
     
     private Camera mainCam;
 
     // GameObject 
-    private GameObject currentHoverdObject = null;
-    private GameObject mouseDownObject= null;
+    private GameObject currentHoveredObject = null;
+    private GameObject mouseDownObject = null;
 
     // Flags
     private bool isMouseDown = false;
@@ -20,52 +20,52 @@ public class MousePointer : MonoBehaviour
 
     private void Update()
     {
-        CheckMousHover();
+        CheckMouseHover();
         CheckMouseClick();
     }
 
-    private void CheckMousHover()
+    private void CheckMouseHover()
     {
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-        GameObject hoverdObject = null;
+        GameObject hoveredObject = null;
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo))
-            hoverdObject = hitInfo.collider.gameObject;
+            hoveredObject = hitInfo.collider.gameObject;
 
-        if (hoverdObject != currentHoverdObject)
+        if (hoveredObject != currentHoveredObject)
         {
-            if (currentHoverdObject != null)
-                MouseEvents.TriggerMouseExit(currentHoverdObject);
+            if (currentHoveredObject != null)
+                MouseEvents.TriggerMouseExit(currentHoveredObject);
 
-            if (hoverdObject != null)
-                MouseEvents.TriggerMouseEnter(hoverdObject);
+            if (hoveredObject != null)
+                MouseEvents.TriggerMouseEnter(hoveredObject);
 
-            currentHoverdObject = hoverdObject;
+            currentHoveredObject = hoveredObject;
         }
 
-        if (currentHoverdObject != null)
-            MouseEvents.TriggerMouseHover(currentHoverdObject);
+        if (currentHoveredObject != null)
+            MouseEvents.TriggerMouseHover(currentHoveredObject);
     }
 
     private void CheckMouseClick()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (currentHoverdObject != null)
-                MouseEvents.TriggerMouseDown(currentHoverdObject);
+            if (currentHoveredObject != null)
+                MouseEvents.TriggerMouseDown(currentHoveredObject);
 
             isMouseDown = true;
-            mouseDownObject = currentHoverdObject;
+            mouseDownObject = currentHoveredObject;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (isMouseDown && currentHoverdObject != null)
+            if (isMouseDown && currentHoveredObject != null)
             {
-                if (currentHoverdObject == mouseDownObject)
-                    MouseEvents.TriggerMouseClick(currentHoverdObject);
+                if (currentHoveredObject == mouseDownObject)
+                    MouseEvents.TriggerMouseClick(currentHoveredObject);
 
-                MouseEvents.TriggerMouseUp(currentHoverdObject);
+                MouseEvents.TriggerMouseUp(currentHoveredObject);
             }
 
             isMouseDown = false;
@@ -75,7 +75,7 @@ public class MousePointer : MonoBehaviour
 
     private void OnDisable()
     {
-        currentHoverdObject = null;
+        currentHoveredObject = null;
         mouseDownObject = null;
         isMouseDown = false;
     }
