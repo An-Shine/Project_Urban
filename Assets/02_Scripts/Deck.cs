@@ -33,7 +33,7 @@ public class Deck : MonoBehaviour
     //  usedCardList의 카드들을 unusedCardList로 옮긴 후 랜덤하게 섞음    
     public void Shuffle()
     {
-        // 1. 무덤(Used)에 있는 카드가 없으면 섞을 필요가 없음
+        // 1.used 에 있는 카드가 없으면 섞을 필요가 없음
         if (usedCardList.Count == 0 && unusedCardList.Count == 0)        {
             
             return;
@@ -63,8 +63,7 @@ public class Deck : MonoBehaviour
         {
             // 1. 덱이 비었는지 확인
             if (unusedCardList.Count == 0)
-            {
-                Debug.Log("덱이 비었습니다. 셔플을 시도합니다.");
+            {                
                 Shuffle();
 
                 // 셔플 후에도 카드가 없다면 (총 보유 카드가 0장인 경우) 중단
