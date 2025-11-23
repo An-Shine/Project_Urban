@@ -30,5 +30,7 @@ public abstract class Card : MonoBehaviour
     //제외 카드 여부
     public bool IsException { get; }
 
+    public int Cost => cost;
+
     abstract public int Use(Target target);
 }

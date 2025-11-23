@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6048637739734273389}
-  - component: {fileID: 4105328843374324246}
   - component: {fileID: 6361412815541674049}
+  - component: {fileID: 4105328843374324246}
   - component: {fileID: 1370648231654256737}
   - component: {fileID: 7326471067372000962}
   m_Layer: 0
@@ -35,21 +35,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4105328843374324246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5006558346281438224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a115e986f8aea7e4a9ce1f15a761f817, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShieldController
-  maxPoint: 500
-  minPoint: 0
-  curPoint: 0
 --- !u!114 &6361412815541674049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +49,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HpController
   maxPoint: 10
   minPoint: 0
-  curPoint: 10
+--- !u!114 &4105328843374324246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5006558346281438224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a115e986f8aea7e4a9ce1f15a761f817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShieldController
+  maxPoint: 500
+  minPoint: 0
 --- !u!114 &1370648231654256737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +77,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CostController
   maxPoint: 10
   minPoint: 0
-  curPoint: 10
 --- !u!114 &7326471067372000962
 MonoBehaviour:
   m_ObjectHideFlags: 0

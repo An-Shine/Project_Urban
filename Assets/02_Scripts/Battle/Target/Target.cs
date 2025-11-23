@@ -5,27 +5,20 @@ using UnityEngine.Events;
 [RequireComponent(typeof(ShieldController))]
 abstract public class Target : MonoBehaviour
 {
-    private HpController hpController;
-    private ShieldController shieldController;
+    protected HpController hpController;
+    protected ShieldController shieldController;
 
-    protected virtual void Awake()
-    {
-        hpController = GetComponent<HpController>();
-        shieldController = GetComponent<ShieldController>();
-
-        // TODO : 나중에 GameManager에서 받아서 HP 설정하기
-        hpController.ResetPoint();
-        
-        shieldController.ResetPoint();
-    }
+    public HpController HpController => hpController;
+    public ShieldController ShieldController => shieldController;
 
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
-    public UnityEvent<int, int> OnUpdateHp => hpController.OnUpdatePoint;
-    public UnityEvent<int> OnUpdateMaxHp => hpController.OnUpdateMaxPoint;
-    public UnityEvent<int, int> OnUpdateSheild => shieldController.OnUpdatePoint;
-
+    private void Awake()
+    {
+        Init();
+        Reset();
+    }
 
     public void Damage(int hitPoint)
     {
@@ -41,7 +34,7 @@ abstract public class Target : MonoBehaviour
         // 남은 데미지를 체력에 적용
         if (remainingDamage > 0)
             hpController.Decrease(remainingDamage);
-    
+
         if (hpController.CurrentPoint <= 0)
             OnDie?.Invoke();
         else
@@ -55,8 +48,15 @@ abstract public class Target : MonoBehaviour
         shieldController.Increase(shieldPoint);
     }
 
-    public virtual void Reset()
+    protected virtual void Init()
     {
+        hpController = GetComponent<HpController>();
+        shieldController = GetComponent<ShieldController>();
+    }
+
+    protected virtual void Reset()
+    {
+        hpController.Reset();
         shieldController.Reset();
     }
 }
