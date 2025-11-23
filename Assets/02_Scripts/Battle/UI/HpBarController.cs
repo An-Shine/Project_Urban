@@ -20,10 +20,5 @@ public class HpBarController : MonoBehaviour
 
         hpSlider.value = ratio;
     }
-
-    internal void SetHp(int current, int max)
-    {
-        if(max ==0) max = 1;
-        hpSlider.value = current/max;
-    }
+    
 }

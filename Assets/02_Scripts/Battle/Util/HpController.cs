@@ -12,7 +12,7 @@ public class HpController : PointController
         {
             if(hpBar != null)
             {
-                hpBar.SetHp(current, max);
+                hpBar.HPBar(current, max);
             }
         });
         Reset();
