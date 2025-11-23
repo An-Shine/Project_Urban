@@ -4,7 +4,7 @@ using UnityEngine.Events;
 abstract public class PointController : MonoBehaviour
 {
     [SerializeField] protected int maxPoint;
-    [SerializeField] protected int minPoint;
+    [SerializeField] protected int minPoint;   
 
     protected int curPoint;
 
@@ -22,7 +22,7 @@ abstract public class PointController : MonoBehaviour
         if (curPoint > maxPoint)
             curPoint = maxPoint;
 
-        OnUpdatePoint?.Invoke(curPoint);
+        OnUpdatePoint?.Invoke(curPoint, maxPoint);
     }
 
     public void Increase(float per)
@@ -37,7 +37,7 @@ abstract public class PointController : MonoBehaviour
         if (curPoint < minPoint)
             curPoint = minPoint;
 
-        OnUpdatePoint?.Invoke(curPoint);
+        OnUpdatePoint?.Invoke(curPoint, maxPoint);
     }
 
     public void Decrease(float per)
@@ -74,7 +74,7 @@ abstract public class PointController : MonoBehaviour
     public void Reset()
     {
         ResetPoint();
-        OnUpdatePoint?.Invoke(curPoint);
+        OnUpdatePoint?.Invoke(curPoint, maxPoint);
     }
 
     abstract protected void ResetPoint();
