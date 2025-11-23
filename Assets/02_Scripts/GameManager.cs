@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 class GameManager : Singleton<GameManager>
@@ -46,6 +47,7 @@ class GameManager : Singleton<GameManager>
         {
             if (selectedCard != null && gameObject.CompareTag("Enemy"))
             {
+                selectedCard.Use(gameObject.GetComponent<Target>());
                 gameObject.transform.localScale /= 1.25f;
             }
         });

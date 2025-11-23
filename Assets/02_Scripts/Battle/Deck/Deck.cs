@@ -5,29 +5,22 @@ using UnityEngine;
 public class Deck : MonoBehaviour
 {
     // 1. 현재 보유중인 전체 카드 리스트 (게임 전체의 내 덱 정보)
-    [SerializeField] List<Card> originCardList = new List<Card>();
+    [SerializeField] List<Card> originCardList = new();
 
     // 2. 사용하지 않은 카드 (뽑을 수 있는 덱)
-    [SerializeField] List<Card> unusedCardList = new List<Card>();
+    [SerializeField] List<Card> unusedCardList = new();
 
     // 3. 사용한 카드
-    [SerializeField] List<Card> usedCardList = new List<Card>();
+    [SerializeField] List<Card> usedCardList = new();
 
     // 셔플 중복 실행 방지
     private bool isShuffling = false;
 
-
     // 덱에 남은 카드 수
-    public int UnusedCardCount
-    {
-        get { return unusedCardList.Count; }
-    }
+    public int UnusedCardCount => unusedCardList.Count;
 
     // 사용한 카드 수
-    public int UsedCardCount
-    {
-        get { return usedCardList.Count; }
-    }
+    public int UsedCardCount =>  usedCardList.Count;
 
 
     // [ShuffleLogic] 실제 셔플 로직을 수행하는 내부 함수
@@ -144,12 +137,6 @@ public class Deck : MonoBehaviour
 
         // 덱(Origin)에 추가
         originCardList.Add(card);
-
-        // 현재 뽑을 덱(Unused)에도 즉시 추가
-        unusedCardList.Add(card);
-
-        // 덱에 새 카드가 들어왔으니 셔플
-        Shuffle();
     }
 
 
@@ -162,10 +149,6 @@ public class Deck : MonoBehaviour
         {
             originCardList.Remove(card);
         }
-
-        // 현재 게임 중인 리스트에서도 제거 (어디에 있을지 모르니 둘 다 확인)
-        if (unusedCardList.Contains(card)) unusedCardList.Remove(card);
-        if (usedCardList.Contains(card)) usedCardList.Remove(card);
     }
 
     // [ChangeCard] 선택한 카드와 덱의 카드를 변경한다
@@ -179,6 +162,7 @@ public class Deck : MonoBehaviour
     // 카드를 사용하고 사용된 카드로 보내는 기능 (외부에서 호출용)
     public void Discard(Card card)
     {
-        usedCardList.Add(card);
+        if (!card.IsException)
+            usedCardList.Add(card);
     }
 }
