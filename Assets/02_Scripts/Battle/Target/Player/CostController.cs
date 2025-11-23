@@ -1,6 +1,6 @@
 class CostController : PointController
 {
-    protected override void ResetPoint()
+    public override void ResetPoint()
     {
         curPoint = maxPoint;
     }

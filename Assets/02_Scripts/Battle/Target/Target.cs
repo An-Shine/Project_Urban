@@ -12,14 +12,19 @@ abstract public class Target : MonoBehaviour
     {
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
+
+        // TODO : 나중에 GameManager에서 받아서 HP 설정하기
+        hpController.ResetPoint();
+        
+        shieldController.ResetPoint();
     }
 
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
-    public UnityEvent<int> OnUpdateHp => hpController.OnUpdatePoint;
+    public UnityEvent<int, int> OnUpdateHp => hpController.OnUpdatePoint;
     public UnityEvent<int> OnUpdateMaxHp => hpController.OnUpdateMaxPoint;
-    public UnityEvent<int> OnUpdateSheild => shieldController.OnUpdatePoint;
+    public UnityEvent<int, int> OnUpdateSheild => shieldController.OnUpdatePoint;
 
 
     public void Damage(int hitPoint)
