@@ -16,14 +16,11 @@ public class BattleManager : SceneSingleton<BattleManager>
     public int CurrentTurn => curTurn;
     public UnityEvent OnBattleEnd = new();
 
-    private void Awake()
+    private void Start()
     {
         player = GameManager.Instacne.Player;
         player.Reset();
-    }
 
-    private void Start()
-    {
         MouseEvents.OnMouseDown.AddListener((gameObject) =>
         {
             if (gameObject.CompareTag("Card"))
