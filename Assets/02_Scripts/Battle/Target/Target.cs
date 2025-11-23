@@ -12,6 +12,11 @@ abstract public class Target : MonoBehaviour
     {
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
+
+        // TODO : 나중에 GameManager에서 받아서 HP 설정하기
+        hpController.ResetPoint();
+        
+        shieldController.ResetPoint();
     }
 
     public UnityEvent OnDie = new();

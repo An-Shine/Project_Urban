@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(ShieldController))]
+[RequireComponent(typeof(CostController))]
 public class Player : Target
 {
     // Component
@@ -15,6 +15,7 @@ public class Player : Target
     {
         base.Awake();   
         costController = GetComponent<CostController>();
+        costController.ResetPoint();
     }
 
     public override void Reset()
