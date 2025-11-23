@@ -5,6 +5,7 @@ public class Player : Target
 {
     // UI
     [SerializeField] private CostText costText;
+    [SerializeField] private HpBar hpBar;
 
     // Component
     private CostController costController;
@@ -18,8 +19,9 @@ public class Player : Target
     protected override void Init()
     {
         base.Init();
-
         costController = GetComponent<CostController>();
+
+        hpBar.Init(hpController);
         costText.Init(costController);
     }
 

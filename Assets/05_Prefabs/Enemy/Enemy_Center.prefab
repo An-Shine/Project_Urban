@@ -166,7 +166,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HpController
   maxPoint: 10
   minPoint: 0
-  hpBar: {fileID: 4670223083198603930}
 --- !u!114 &4229114669360425776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +198,7 @@ MonoBehaviour:
   OnDamaged:
     m_PersistentCalls:
       m_Calls: []
+  hpBar: {fileID: 4670223083198603930}
 --- !u!1 &2993497007679126081
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,8 +300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9893818449e5f1d4683199f240fd824b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HpBarController
-  hpController: {fileID: 0}
-  hpSlider: {fileID: 490757275441564942}
 --- !u!1 &6964993248437387771
 GameObject:
   m_ObjectHideFlags: 0

@@ -95,3 +95,5 @@ MonoBehaviour:
   OnDamaged:
     m_PersistentCalls:
       m_Calls: []
+  costText: {fileID: 0}
+  hpBar: {fileID: 0}

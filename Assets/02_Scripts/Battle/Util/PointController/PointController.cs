@@ -22,7 +22,7 @@ abstract public class PointController : MonoBehaviour
         if (curPoint > maxPoint)
             curPoint = maxPoint;
 
-        OnUpdatePoint?.Invoke(curPoint, maxPoint);
+        OnUpdatePoint?.Invoke(curPoint);
     }
 
     public void Increase(float per)
@@ -37,7 +37,7 @@ abstract public class PointController : MonoBehaviour
         if (curPoint < minPoint)
             curPoint = minPoint;
 
-        OnUpdatePoint?.Invoke(curPoint, maxPoint);
+        OnUpdatePoint?.Invoke(curPoint);
     }
 
     public void Decrease(float per)
@@ -74,7 +74,7 @@ abstract public class PointController : MonoBehaviour
     public void Reset()
     {
         ResetPoint();
-        OnUpdatePoint?.Invoke(curPoint, maxPoint);
+        OnUpdatePoint?.Invoke(curPoint);
     }
 
     abstract protected void ResetPoint();
