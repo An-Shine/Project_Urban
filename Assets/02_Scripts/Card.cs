@@ -16,7 +16,7 @@ public enum CardElement
 }
 
 [System.Serializable]
-public abstract class Card : MonoBehaviour
+public abstract class Card
 {
     //카드 기본 정보
     private string cardName;      // 카드 이름
