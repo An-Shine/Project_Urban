@@ -1,6 +1,6 @@
 public class ShieldController : PointController
 {
-    public override void ResetPoint()
+    protected override void ResetPoint()
     {
         curPoint = minPoint;
     }

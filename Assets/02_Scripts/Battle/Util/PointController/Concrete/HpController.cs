@@ -1,6 +1,6 @@
 public class HpController : PointController
 {
-    public override void ResetPoint()
+    protected override void ResetPoint()
     {
         curPoint = maxPoint;
     }
