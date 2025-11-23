@@ -22,9 +22,9 @@ abstract public class Target : MonoBehaviour
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
-    public UnityEvent<int> OnUpdateHp => hpController.OnUpdatePoint;
+    public UnityEvent<int, int> OnUpdateHp => hpController.OnUpdatePoint;
     public UnityEvent<int> OnUpdateMaxHp => hpController.OnUpdateMaxPoint;
-    public UnityEvent<int> OnUpdateSheild => shieldController.OnUpdatePoint;
+    public UnityEvent<int, int> OnUpdateSheild => shieldController.OnUpdatePoint;
 
 
     public void Damage(int hitPoint)

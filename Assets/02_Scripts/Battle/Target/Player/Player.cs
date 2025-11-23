@@ -8,7 +8,7 @@ public class Player : Target
     private CostController costController;
 
     // Event
-    public UnityEvent<int> OnUpdateCost => costController.OnUpdatePoint;
+    public UnityEvent<int, int> OnUpdateCost => costController.OnUpdatePoint;
     public UnityEvent<int> OnUdpateMaxCost => costController.OnUpdateMaxPoint;
 
     protected override void Awake()
