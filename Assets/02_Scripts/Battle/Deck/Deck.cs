@@ -71,6 +71,21 @@ public class Deck : MonoBehaviour
         isShuffling = false;
     }
 
+    public void SetOriginalDeck(List<Card> prefabList)
+    {
+        // 1. 기존 리스트 초기화
+        originCardList.Clear();
+        unusedCardList.Clear();
+        usedCardList.Clear();
+
+        // 2. 전달받은 프리팹 리스트를 내 원본 리스트로 복사
+        // (이제 originCardList는 '카드 설계도'들을 가지고 있습니다)
+        originCardList = new List<Card>(prefabList);       
+
+        // 3. 게임 시작 준비 (원본 -> 뽑을 덱으로 이동 및 셔플)
+        ResetDeck();
+    }
+
 
     // [DrawCard] 카드를 n장 뽑는다
     // 뽑을 수 있는 카드가 부족하면 ShuffleRoutine 실행
