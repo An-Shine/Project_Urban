@@ -191,7 +191,7 @@ public class Deck : MonoBehaviour
         }
         else
         {
-            Debug.LogError("무덤으로 보낼 프리팹을 찾을 수 없습니다.");
+            Debug.LogError("프리팹을 찾을 수 없습니다.");
         }
     }
 }
