@@ -31,6 +31,7 @@ public abstract class Card : MonoBehaviour
     public bool IsException { get; }
 
     public int Cost => cost;
+    public CardType Type => cardType;
 
     abstract public int Use(Target target);
 }

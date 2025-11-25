@@ -58,15 +58,15 @@ public class Deck : MonoBehaviour
 
     private void Start()
     {
-        // 2. 레시피(설정)를 보고 원본 덱(OriginCardList)을 만든다 
-        DeckRecipe();
+        // 2. 덱레시피를 보고 원본 덱(OriginCardList)을 만든다 
+        DeckMaking();
 
         // 3. 게임 시작 상태로 리셋
         ResetDeck();
     }
 
     // 덱 레시피 -> originCardList 변환 함수
-    private void DeckRecipe()
+    private void DeckMaking()
     {
         originCardList.Clear();
 
@@ -77,7 +77,7 @@ public class Deck : MonoBehaviour
             {
                 Card prefab = prefabDict[recipe.type];
 
-                // 설정된 수량(count)만큼 프리팹을 원본 리스트에 등록
+                // 설정된 수 만큼 프리팹을 원본 리스트에 등록
                 for (int i = 0; i < recipe.count; i++)
                 {
                     originCardList.Add(prefab);
@@ -92,23 +92,23 @@ public class Deck : MonoBehaviour
         Debug.Log($"[Deck] 초기 덱 구성 완료. 총 {originCardList.Count}장의 카드가 로드되었습니다.");
     }    
 
-    // [Shuffle] 즉시 덱을 섞는다
+    // 즉시 덱을 섞는다
     public void Shuffle()
     {
         // UsedCardList 에 카드가 없으면 섞을 필요 없음
-        if (usedCardList.Count == 0 && unusedCardList.Count > 0) return;
+       if (usedCardList.Count > 0)
+        {
+            unusedCardList.AddRange(usedCardList);
+            usedCardList.Clear();
+        }
 
-        // UsedCardList -> 덱으로 이동
-        unusedCardList.AddRange(usedCardList);
-        usedCardList.Clear();
-
-        // 랜덤 섞기
+        // 랜덤 섞기 
         for (int i = unusedCardList.Count - 1; i > 0; i--)
         {
             int rand = Random.Range(0, i + 1);
             Card temp = unusedCardList[i];
             unusedCardList[i] = unusedCardList[rand];
-            unusedCardList[rand] = temp;
+            unusedCardList[rand] = temp;        
         }
     }
 
@@ -176,8 +176,22 @@ public class Deck : MonoBehaviour
     }
 
     // 사용한 카드 UsedCardList 로 보내기
-    public void Discard(Card card)
+    public void Discard(Card usedCardInstance)
     {        
-        usedCardList.Add(card);
+        // 1. UsedCardList 의 타입을 가져옴
+        CardType type = usedCardInstance.Type;
+
+        // 2. 딕셔너리에서 원본 프리팹을 찾음
+        if (prefabDict.ContainsKey(type))
+        {
+            Card originalPrefab = prefabDict[type];
+            
+            // 3. 원본 프리팹을 usedCardList에 넣음
+            usedCardList.Add(originalPrefab);
+        }
+        else
+        {
+            Debug.LogError("무덤으로 보낼 프리팹을 찾을 수 없습니다.");
+        }
     }
 }
