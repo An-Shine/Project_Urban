@@ -40,7 +40,7 @@ abstract public class Target : MonoBehaviour
         else
             OnDamaged?.Invoke(shieldController.CurrentPoint > 0);
 
-        Debug.Log(hpController.CurrentPoint);
+        Debug.Log($"{gameObject.name} : {hpController.CurrentPoint}, hitPoint : {hitPoint}");
     }
 
     public void AddShield(int shieldPoint)

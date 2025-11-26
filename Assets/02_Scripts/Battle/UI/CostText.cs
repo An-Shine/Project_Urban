@@ -7,14 +7,10 @@ public class CostText : MonoBehaviour
     private Text costText;
     private int curCost;
     private int maxCost;
-
-    private void Awake()
-    {
-        costText = GetComponent<Text>();
-    }
-
+    
     public void Init(CostController costController)
     {
+        costText = GetComponent<Text>();
         curCost = costController.CurrentPoint;
         maxCost = costController.MaxPoint;
 

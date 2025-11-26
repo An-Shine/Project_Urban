@@ -1,14 +1,16 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CostController))]
+[RequireComponent(typeof(Deck))]
 public class Player : Target
 {
     // UI
     [SerializeField] private CostText costText;
     [SerializeField] private HpBar hpBar;
-    [SerializeField] private Deck deck;
     [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
     
+    // Deck Component
+    private Deck deck;
 
     // Component
     private CostController costController;
@@ -22,8 +24,12 @@ public class Player : Target
     protected override void Init()
     {
         base.Init();
+        hpController.Reset();
+        
         costController = GetComponent<CostController>();
+        deck = GetComponent<Deck>();
 
+        deck.Init();
         hpBar.Init(hpController);
         costText.Init(costController);
     }
@@ -92,6 +98,9 @@ public class Player : Target
 
     private void Update()
     {
+        if (!BattleManager.Instacne.IsPlayerTurn)
+            return;
+
         if (selectedCard != null)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

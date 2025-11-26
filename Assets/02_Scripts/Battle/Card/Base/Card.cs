@@ -2,10 +2,10 @@ using UnityEngine;
 
 public enum CardType
 {
-    AttackCard,  // 공격
-    DefenseCard, // 방어
-    BuffCard,    // 버프
-    DebuffCard   // 디버프
+    Attack,  // 공격
+    Defense, // 방어
+    Buff,    // 버프
+    Debuff   // 디버프
 }
 public enum CardElement
 {
@@ -16,11 +16,9 @@ public enum CardElement
 }
 
 // Prefab
-public abstract class Card : MonoBehaviour
+abstract public class Card : MonoBehaviour
 {
     //카드 기본 정보
-    [SerializeField] protected string cardName;      // 카드 이름
-    [SerializeField] protected CardType cardType;    // 카드 유형 
     [SerializeField] protected Sprite cardImage;     // (나중에 추가될 카드 이미지)
     [SerializeField] protected int cost;            // 코스트
     
@@ -31,7 +29,8 @@ public abstract class Card : MonoBehaviour
     public bool IsException { get; }
 
     public int Cost => cost;
-    public CardType Type => cardType;
 
+    abstract public CardName Name { get; }
+    abstract public CardType Type { get;}
     abstract public int Use(Target target);
 }
