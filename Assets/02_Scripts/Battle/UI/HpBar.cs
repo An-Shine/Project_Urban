@@ -9,13 +9,10 @@ public class HpBar : MonoBehaviour
     private int curHp;
     private int maxHp;
 
-    private void Awake()
-    {
-        hpSlider = GetComponent<Slider>();
-    }
-
     public void Init(HpController hpController)
     {
+        hpSlider = GetComponent<Slider>();
+        
         curHp = hpController.MaxPoint;
         maxHp = hpController.MaxPoint;
 

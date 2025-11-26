@@ -9,4 +9,9 @@ public class Enemy : Target
         base.Init();
         hpBar.Init(hpController);
     }
+
+    public void Attack(Player player)
+    {
+        player.Damage(1);
+    }
 }

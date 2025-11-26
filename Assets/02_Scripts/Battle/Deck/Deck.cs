@@ -1,168 +1,182 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
-    // 1. 현재 보유중인 전체 카드 리스트 (게임 전체의 내 덱 정보)
-    [SerializeField] List<Card> originCardList = new();
+    private readonly Dictionary<CardName, Card> prefabDict = new();
 
-    // 2. 사용하지 않은 카드 (뽑을 수 있는 덱)
-    [SerializeField] List<Card> unusedCardList = new();
+    // 초기 덱 레시피 
+    [SerializeField] private List<CardName> initialDeckRecipe = new();
 
-    // 3. 사용한 카드
-    [SerializeField] List<Card> usedCardList = new();
+    // 전체 카드 프리팹
+    [SerializeField] private List<Card> cardPrefabList = new();
 
-    // 셔플 중복 실행 방지
-    private bool isShuffling = false;
+    //핸드 설정
+    [SerializeField] private Transform handParent; // 카드가 생성되는 핸드 오브젝트
+    [SerializeField] private float cardSpacing = 2.5f; // 카드 간격
 
-    // 덱에 남은 카드 수
+    // 덱 딕셔너리
+
+    // 게임 데이터 
+    // 원본 덱 
+    [SerializeField] private List<CardName> originCardList = new();
+    // 뽑을 덱 
+    [SerializeField] private List<CardName> unusedCardList = new();
+    // 사용한 카드리스트
+    [SerializeField] private List<CardName> usedCardList = new();
+
+    //현재 핸드에 있는 카드리스트
+    private readonly List<Card> currentHandList = new List<Card>();
+
+
     public int UnusedCardCount => unusedCardList.Count;
+    public int UsedCardCount => usedCardList.Count;
 
-    // 사용한 카드 수
-    public int UsedCardCount =>  usedCardList.Count;
-
-
-    // [ShuffleLogic] 실제 셔플 로직을 수행하는 내부 함수
-    // usedCardList의 카드들을 unusedCardList로 옮긴 후 랜덤하게 섞음
-    private void ShuffleLogic()
+    private void SetPrefabMap()
     {
-        // 1. used 에 있는 카드가 없으면 섞을 필요가 없음
-        if (usedCardList.Count == 0)
+        // 2. 프리팹 리스트를 딕셔너리로 변환
+        prefabDict.Clear();
+        foreach (var card in cardPrefabList)
         {
-            return;
+            if (!prefabDict.ContainsKey(card.Name))
+            {
+                prefabDict.Add(card.Name, card);
+            }
+        }
+    }
+
+    public void Init()
+    {
+        SetPrefabMap();
+
+        // 2. 덱레시피를 보고 원본 덱(OriginCardList)을 만든다 
+        DeckMaking();
+
+        // 3. 게임 시작 상태로 리셋
+        ResetDeck();
+    }
+
+    // 덱 레시피 -> originCardList 변환 함수
+    private void DeckMaking()
+    {
+        originCardList.Clear();
+
+        foreach (var cardName in initialDeckRecipe)
+        {
+            // 딕셔너리에 해당 타입의 프리팹이 있는지 확인
+            originCardList.Add(cardName);
+            unusedCardList.Add(cardName);
+        }   
+
+        Debug.Log($"[Deck] 초기 덱 구성 완료. 총 {originCardList.Count}장의 카드가 로드되었습니다.");
+    }
+
+    // 즉시 덱을 섞는다
+    public void Shuffle()
+    {
+        // UsedCardList 에 카드가 없으면 섞을 필요 없음
+        if (usedCardList.Count > 0)
+        {
+            unusedCardList.AddRange(usedCardList);
+            usedCardList.Clear();
         }
 
-        // 2. 사용한 카드를 다시 덱으로 회수
-        unusedCardList.AddRange(usedCardList);
-        usedCardList.Clear();
-
-        // 3. 랜덤하게 섞기
+        // 랜덤 섞기 
         for (int i = unusedCardList.Count - 1; i > 0; i--)
         {
             int rand = Random.Range(0, i + 1);
-            Card temp = unusedCardList[i];
-            unusedCardList[i] = unusedCardList[rand];
-            unusedCardList[rand] = temp;
+            (unusedCardList[rand], unusedCardList[i]) = (unusedCardList[i], unusedCardList[rand]);
         }
     }
 
-    // [Shuffle] 즉시 덱을 섞는다
-    // 게임 시작이나 카드 추가 등 딜레이 없이 바로 섞어야 할 때 호출
-    public void Shuffle()
+    // 카드를 n장 뽑는다 > 화면에 생성 > 정렬
+    public void DrawCard(int amount)
     {
-        ShuffleLogic();
-    }
-
-    // [ShuffleRoutine] 딜레이 후 덱을 섞는 코루틴
-    // DrawCard 중 덱이 비었을 때 자연스러운 연출을 위해 사용
-    IEnumerator ShuffleRoutine()
-    {
-        // 중복 실행 방지 잠금
-        isShuffling = true;
-
-        // 덱 셔플 애니메이션 시간 대기 (1초)
-        yield return new WaitForSeconds(1.0f);
-
-        // 셔플 실행
-        ShuffleLogic();
-
-        // 잠금 해제
-        isShuffling = false;
-    }
-
-
-    // [DrawCard] 카드를 n장 뽑는다
-    // 뽑을 수 있는 카드가 부족하면 ShuffleRoutine 실행
-    public List<Card> DrawCard(int amount)
-    {
-        List<Card> drawnCards = new List<Card>();
-
         for (int i = 0; i < amount; i++)
         {
-            // 1. 덱이 비었는지 확인
             if (unusedCardList.Count == 0)
             {
-                // 셔플 중이 아니고 덱이 비었다면 셔플 예약 (한 번만 실행)
-                if (!isShuffling)
-                {
-                    StartCoroutine(ShuffleRoutine());
-                }
-                
-                // 카드가 없으므로 더 이상 뽑을 수 없음 -> 중단
-                break;
+                Shuffle();
+                if (unusedCardList.Count == 0) break;
             }
 
-            // 2. 덱의 맨 위 카드를 가져옴
-            Card cardToDraw = unusedCardList[0];
-
-            // 3. 덱에서 제거하고 뽑은 목록에 추가
-            unusedCardList.RemoveAt(0);
-            drawnCards.Add(cardToDraw);
-
-            // 4. 카드를 뽑은 직후, 남은 카드가 0장이라면 셔플 예약
-            if (unusedCardList.Count == 0 && !isShuffling)
-            {
-                StartCoroutine(ShuffleRoutine());
-            }
+            // 1. 데이터(프리팹) 꺼내기
+            CardName cardName = unusedCardList[^1];
+            unusedCardList.RemoveAt(unusedCardList.Count - 1);
+            // 2. 화면에 생성 (Instantiate)
+            Card newCard = Instantiate(prefabDict[cardName], handParent);
+            // 3. 핸드 리스트에 등록 (화면 관리용)
+            currentHandList.Add(newCard);
         }
 
-        return drawnCards;
+        // 4. 다 뽑았으면 정렬
+        AlignHand();
     }
 
+    //핸드 카드 정렬
+    private void AlignHand()
+    {
+        int count = currentHandList.Count;
+        if (count == 0) return;
 
-    // [ResetDeck] 덱을 초기 상태로 재설정
-    // 게임/스테이지 시작 시 originList를 기반으로 덱을 새로 구성
+        // 중앙 정렬 공식: -(전체너비 / 2) + (순서 * 간격)
+        float totalWidth = (count - 1) * cardSpacing;
+        float startX = -totalWidth / 2f;
+
+        for (int i = 0; i < count; i++)
+        {
+            float xPos = startX + (i * cardSpacing);
+
+            // Hand 오브젝트(부모) 기준 로컬 좌표로 배치
+            currentHandList[i].transform.localPosition = new Vector3(xPos, 0, 0);
+
+            // (옵션) 겹칠 때 순서 정리 (오른쪽이 위로 오게)
+            // currentHandList[i].GetComponent<SortingGroup>().sortingOrder = i; 
+        }
+    }
+    // 사용한 카드 UsedCardList 로 보내기
+    public void Discard(Card usedCard)
+    {
+        // 1. 데이터 처리: 원본 프리팹을 찾아 UsedCardList에 넣기
+        usedCardList.Add(usedCard.Name);
+
+        // 2. 핸드에서 제거
+        Debug.Assert(currentHandList.Contains(usedCard));
+        currentHandList.Remove(usedCard);
+
+        // 3. 사용한 카드 카드 오브젝트 제거
+        Destroy(usedCard.gameObject);
+
+        // 4. 다시 정렬
+        AlignHand();
+    }
+
+    // 원본 리스트를 기반으로 게임 덱 초기화
     public void ResetDeck()
     {
         unusedCardList.Clear();
         usedCardList.Clear();
 
-        // 원본 리스트(Origin)의 내용을 복사해서 unused로 가져옴
-        foreach (var card in originCardList)
-        {
-            unusedCardList.Add(card);
-        }
+        // Origin(프리팹 원본들)을 Unused로 복사
+        foreach (var cardName in originCardList)
+            unusedCardList.Add(cardName);
 
-        // 초기 셔플
+        // 섞기
         Shuffle();
     }
 
-
-    // [AddCard] 덱(원본, 현재 덱)에 카드를 추가
-    // 보상 등으로 카드를 얻었을 때 호출
-    public void AddCard(Card card)
+    // 카드 추가
+    public void AddCard(CardName cardName)
     {
-        if (card == null) return;
+        originCardList.Add(cardName);
+    }
 
-        // 덱(Origin)에 추가
-        originCardList.Add(card);
+    // 카드 제거
+    public void RemoveCard(CardName cardName)
+    {
+        if (originCardList.Contains(cardName)) 
+            originCardList.Remove(cardName);
     }
 
 
-    // [RemoveCard] 덱에서 카드를 제거한다
-    // 카드 제거 이벤트/상점 판매
-    public void RemoveCard(Card card)
-    {
-        // 원본 리스트에서 제거
-        if (originCardList.Contains(card))
-        {
-            originCardList.Remove(card);
-        }
-    }
-
-    // [ChangeCard] 선택한 카드와 덱의 카드를 변경한다
-    // oldCard를 제거하고 newCard를 추가
-    public void ChangeCard(Card oldCard, Card newCard)
-    {
-        RemoveCard(oldCard);
-        AddCard(newCard);
-    }
-
-    // 카드를 사용하고 사용된 카드로 보내는 기능 (외부에서 호출용)
-    public void Discard(Card card)
-    {
-        if (!card.IsException)
-            usedCardList.Add(card);
-    }
 }
