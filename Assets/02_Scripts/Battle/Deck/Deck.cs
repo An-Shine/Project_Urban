@@ -4,9 +4,14 @@ using UnityEngine;
 public class Deck : MonoBehaviour
 {
     private readonly Dictionary<CardName, Card> prefabDict = new();
-
+    [System.Serializable]
+    struct CardRecipe
+    {
+        public CardName name;
+        public int count;
+    }
     // 초기 덱 레시피 
-    [SerializeField] private List<CardName> initialDeckRecipe = new();
+    [SerializeField] private List<CardRecipe> initialDeckRecipe = new();
 
     // 전체 카드 프리팹
     [SerializeField] private List<Card> cardPrefabList = new();
@@ -61,12 +66,15 @@ public class Deck : MonoBehaviour
     {
         originCardList.Clear();
 
-        foreach (var cardName in initialDeckRecipe)
+        foreach (var recipe in initialDeckRecipe)
         {
             // 딕셔너리에 해당 타입의 프리팹이 있는지 확인
-            originCardList.Add(cardName);
-            unusedCardList.Add(cardName);
-        }   
+            for (int i = 0; i < recipe.count; i++)
+            {
+                originCardList.Add(recipe.name);
+                unusedCardList.Add(recipe.name);
+            }
+        }
 
         Debug.Log($"[Deck] 초기 덱 구성 완료. 총 {originCardList.Count}장의 카드가 로드되었습니다.");
     }
@@ -174,7 +182,7 @@ public class Deck : MonoBehaviour
     // 카드 제거
     public void RemoveCard(CardName cardName)
     {
-        if (originCardList.Contains(cardName)) 
+        if (originCardList.Contains(cardName))
             originCardList.Remove(cardName);
     }
 
