@@ -23,6 +23,10 @@ public class Deck : MonoBehaviour
     // 카드 프리팹 도감 
     public List<CardPrefabMapping> cardPrefabs = new List<CardPrefabMapping>();
 
+    //핸드 설정
+    [SerializeField] private Transform handParent; // 카드가 생성되는 핸드 오브젝트
+    [SerializeField] private float cardSpacing = 2.5f; // 카드 간격
+
     // 덱 딕셔너리
     private Dictionary<CardType, Card> prefabDict = new Dictionary<CardType, Card>();
     
@@ -37,6 +41,9 @@ public class Deck : MonoBehaviour
     // 사용한 카드리스트
     [SerializeField] private List<Card> usedCardList = new List<Card>();
 
+    //현재 핸드에 있는 카드리스트
+    private List<Card> currentHandList = new List<Card>();
+
    
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
@@ -45,7 +52,25 @@ public class Deck : MonoBehaviour
 
     private void Awake()
     {
-        // 1. 프리팹 리스트를 딕셔너리로 변환
+        //Hand 오브젝트 위치에 카드 프리펩 생성
+        // 1. Hand 오브젝트 찾기
+        if (handParent == null)
+        {
+            GameObject handObj = GameObject.Find("Hand"); // 이름으로 찾기
+            if (handObj != null)
+            {
+                handParent = handObj.transform;
+            }
+            else
+            {
+                // 없으면 새로 만들기
+                handObj = new GameObject("Hand");
+                handObj.transform.position = new Vector3(0, -4, 0); // 화면 하단
+                handParent = handObj.transform;
+            }
+        }
+
+        // 2. 프리팹 리스트를 딕셔너리로 변환
         prefabDict.Clear();
         foreach (var mapping in cardPrefabs)
         {
@@ -112,35 +137,81 @@ public class Deck : MonoBehaviour
         }
     }
 
-    // 카드를 n장 뽑는다
-    public List<Card> DrawCard(int amount)
+    // 카드를 n장 뽑는다 > 화면에 생성 > 정렬
+    public void DrawCard(int amount)
     {
-        List<Card> drawnCards = new List<Card>();
-
         for (int i = 0; i < amount; i++)
         {
-            // 1. 덱이 비었는지 확인
             if (unusedCardList.Count == 0)
             {
-                // 즉시 셔플
                 Shuffle();
-
-                // 셔플 후에도 없으면 중단
                 if (unusedCardList.Count == 0) break;
             }
 
-            // 2. 맨 뒤의 카드를 가져옴 
+            // 1. 데이터(프리팹) 꺼내기
             int lastIndex = unusedCardList.Count - 1;
-            Card cardPrefabToDraw = unusedCardList[lastIndex];
-
-            // 3. 리스트에서 제거
+            Card cardPrefab = unusedCardList[lastIndex];
             unusedCardList.RemoveAt(lastIndex);
+
+            // 2. 화면에 생성 (Instantiate)
+            Card newCard = Instantiate(cardPrefab, handParent);
             
-            // 4. 결과 리스트에 추가            
-            drawnCards.Add(cardPrefabToDraw);
+            // 3. 핸드 리스트에 등록 (화면 관리용)
+            currentHandList.Add(newCard);
         }
 
-        return drawnCards;
+        // 4. 다 뽑았으면 정렬
+        AlignHand();
+    }
+
+    //핸드 카드 정렬
+    private void AlignHand()
+    {
+        int count = currentHandList.Count;
+        if (count == 0) return;
+
+        // 중앙 정렬 공식: -(전체너비 / 2) + (순서 * 간격)
+        float totalWidth = (count - 1) * cardSpacing;
+        float startX = -totalWidth / 2f;
+
+        for (int i = 0; i < count; i++)
+        {
+            float xPos = startX + (i * cardSpacing);
+            
+            // Hand 오브젝트(부모) 기준 로컬 좌표로 배치
+            currentHandList[i].transform.localPosition = new Vector3(xPos, 0, 0);
+            
+            // (옵션) 겹칠 때 순서 정리 (오른쪽이 위로 오게)
+            // currentHandList[i].GetComponent<SortingGroup>().sortingOrder = i; 
+        }
+    }
+    // 사용한 카드 UsedCardList 로 보내기
+    public void Discard(Card usedCardInstance)
+    {        
+        // 1. 데이터 처리: 원본 프리팹을 찾아 UsedCardList에 넣기
+        CardType type = usedCardInstance.Type; 
+
+        if (prefabDict.ContainsKey(type))
+        {
+            Card originalPrefab = prefabDict[type];
+            usedCardList.Add(originalPrefab);
+        }
+        else
+        {
+            Debug.LogError("프리팹을 찾을 수 없습니다.");
+        }
+
+        // 2. 핸드에서 제거
+        if (currentHandList.Contains(usedCardInstance))
+        {
+            currentHandList.Remove(usedCardInstance);
+        }
+
+        // 3. 사용한 카드 프리펩 제거
+        Destroy(usedCardInstance.gameObject);
+
+        // 4. 다시 정렬
+        AlignHand();
     }
 
     // 원본 리스트를 기반으로 게임 덱 초기화
@@ -175,23 +246,5 @@ public class Deck : MonoBehaviour
         if (unusedCardList.Contains(card)) unusedCardList.Remove(card);
     }
 
-    // 사용한 카드 UsedCardList 로 보내기
-    public void Discard(Card usedCardInstance)
-    {        
-        // 1. UsedCardList 의 타입을 가져옴
-        CardType type = usedCardInstance.Type;
-
-        // 2. 딕셔너리에서 원본 프리팹을 찾음
-        if (prefabDict.ContainsKey(type))
-        {
-            Card originalPrefab = prefabDict[type];
-            
-            // 3. 원본 프리팹을 usedCardList에 넣음
-            usedCardList.Add(originalPrefab);
-        }
-        else
-        {
-            Debug.LogError("프리팹을 찾을 수 없습니다.");
-        }
-    }
+    
 }

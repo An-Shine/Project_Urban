@@ -6,6 +6,9 @@ public class Player : Target
     // UI
     [SerializeField] private CostText costText;
     [SerializeField] private HpBar hpBar;
+    [SerializeField] private Deck deck;
+    [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
+    
 
     // Component
     private CostController costController;
@@ -31,6 +34,8 @@ public class Player : Target
         // 새로운 전투 시작 시, HP는 리셋하지 않는다
         shieldController.Reset();
         costController.Reset();
+        
+        deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
     }
 
     private void Start()
