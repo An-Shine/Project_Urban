@@ -89,6 +89,14 @@ public class Player : Target
                 {
                     int cost = selectedCard.Use(gameObject.GetComponent<Target>());
                     costController.Decrease(cost);
+
+                    //핸드에서 카드 삭제
+                    if (deck != null)
+                    {
+                        deck.Discard(selectedCard); 
+                    }
+                    
+                    selectedCard = null;
                 }
                 
                 gameObject.transform.localScale /= 1.25f;

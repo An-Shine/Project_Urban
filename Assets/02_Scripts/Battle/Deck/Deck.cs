@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Deck : MonoBehaviour
 {
@@ -138,7 +139,7 @@ public class Deck : MonoBehaviour
             // Hand 오브젝트(부모) 기준 로컬 좌표로 배치
             currentHandList[i].transform.localPosition = new Vector3(xPos, 0, 0);
 
-            // (옵션) 겹칠 때 순서 정리 (오른쪽이 위로 오게)
+            // 겹칠 때 순서 정리 (오른쪽이 위로 오게)
             // currentHandList[i].GetComponent<SortingGroup>().sortingOrder = i; 
         }
     }
