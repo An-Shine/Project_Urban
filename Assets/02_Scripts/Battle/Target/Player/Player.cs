@@ -44,6 +44,15 @@ public class Player : Target
         deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
     }
 
+    public void OnPlayerTurnEnd()
+    {
+        base.OnTurnEnd();
+        if(deck != null)
+        {
+            deck.DiscardHand();    
+        }
+    }
+
     private void Start()
     {
         MouseEvents.OnMouseDown.AddListener((gameObject) =>
@@ -63,6 +72,7 @@ public class Player : Target
                 originPos = Vector3.zero;
                 selectedCard = null;
             }
+            
         });
 
         MouseEvents.OnMouseEnter.AddListener((gameObject) =>

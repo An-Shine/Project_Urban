@@ -48,6 +48,46 @@ abstract public class Target : MonoBehaviour
         shieldController.Increase(shieldPoint);
     }
 
+    [SerializeField] protected List<DoTDamage> dotList = new List<DoTDamage>();
+    [System.Serializable]
+    public class DoTDamage
+    {
+        public int damage;   // 틱당 데미지
+        public int turns;    // 남은 턴 수
+
+        public DoTDamage(int dmg, int t)
+        {
+            damage = dmg;
+            turns = t;
+        }
+    }
+
+    public void AddDoT(int damage, int turns)
+    {
+        dotList.Add(new DoTInfo(damage, turns));       
+    }
+
+    // 턴 종료 시 호출해서 데미지 처리 (BattleManager에서)
+    public void OnTurnEnd()
+    {        
+        for (int i = dotList.Count - 1; i >= 0; i--)
+        {
+            DoTInfo dot = dotList[i];
+
+            // 데미지 적용
+            Damage(dot.damage);
+
+            // 턴 차감
+            dot.turns--;
+
+            // 끝난 도트 데미지는 리스트에서 삭제
+            if (dot.turns <= 0)
+            {
+                dotList.RemoveAt(i);
+            }
+        }
+    }
+    
     protected virtual void Init()
     {
         hpController = GetComponent<HpController>();
@@ -58,5 +98,6 @@ abstract public class Target : MonoBehaviour
     {
         hpController.Reset();
         shieldController.Reset();
+        dotList.Clear();
     }
 }

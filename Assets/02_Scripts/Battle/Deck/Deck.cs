@@ -160,6 +160,15 @@ public class Deck : MonoBehaviour
         AlignHand();
     }
 
+    //턴끝나면 패의 카드 모두 버림
+    public void DiscardHand()
+    {
+        for (int i = currentHandList.Count - 1; i >= 0; i--)
+        {
+            Discard(currentHandList[i]);
+        }
+    }
+
     // 원본 리스트를 기반으로 게임 덱 초기화
     public void ResetDeck()
     {
