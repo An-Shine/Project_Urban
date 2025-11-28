@@ -44,6 +44,15 @@ public class Player : Target
         deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
     }
 
+    public void OnPlayerTurnEnd()
+    {
+        base.OnTurnEnd();
+        if(deck != null)
+        {
+            deck.DiscardHand();    
+        }
+    }
+
     private void Start()
     {
         MouseEvents.OnMouseDown.AddListener((gameObject) =>
@@ -63,6 +72,7 @@ public class Player : Target
                 originPos = Vector3.zero;
                 selectedCard = null;
             }
+            
         });
 
         MouseEvents.OnMouseEnter.AddListener((gameObject) =>
@@ -89,6 +99,14 @@ public class Player : Target
                 {
                     int cost = selectedCard.Use(gameObject.GetComponent<Target>());
                     costController.Decrease(cost);
+
+                    //핸드에서 카드 삭제
+                    if (deck != null)
+                    {
+                        deck.Discard(selectedCard); 
+                    }
+                    
+                    selectedCard = null;
                 }
                 
                 gameObject.transform.localScale /= 1.25f;

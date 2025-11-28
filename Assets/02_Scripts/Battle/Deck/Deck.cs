@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Deck : MonoBehaviour
 {
@@ -138,7 +139,7 @@ public class Deck : MonoBehaviour
             // Hand 오브젝트(부모) 기준 로컬 좌표로 배치
             currentHandList[i].transform.localPosition = new Vector3(xPos, 0, 0);
 
-            // (옵션) 겹칠 때 순서 정리 (오른쪽이 위로 오게)
+            // 겹칠 때 순서 정리 (오른쪽이 위로 오게)
             // currentHandList[i].GetComponent<SortingGroup>().sortingOrder = i; 
         }
     }
@@ -157,6 +158,15 @@ public class Deck : MonoBehaviour
 
         // 4. 다시 정렬
         AlignHand();
+    }
+
+    //턴끝나면 패의 카드 모두 버림
+    public void DiscardHand()
+    {
+        for (int i = currentHandList.Count - 1; i >= 0; i--)
+        {
+            Discard(currentHandList[i]);
+        }
     }
 
     // 원본 리스트를 기반으로 게임 덱 초기화

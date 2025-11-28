@@ -19,7 +19,7 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private void Start()
     {
-        player = GameManager.Instacne.Player;
+        player = GameManager.Instance.Player;
 
         float enemyXpos = -3.5f;
         for (int  i = 0 ; i < enemies.Length; i++)
@@ -37,6 +37,8 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     public void TurnEnd()
     {
+        player.OnPlayerTurnEnd();
+
         isPlayerTurn = false;
         curTurn++;
 
@@ -57,7 +59,17 @@ public class BattleManager : SceneSingleton<BattleManager>
             yield return new WaitForSeconds(0.5f);
             enemies[i].transform.localScale /= 1.2f;
         }
-
+        //적 턴 종료 시 도트데미지 적용 
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null && enemies[i].HpController.CurrentPoint > 0)
+            {
+                enemies[i].OnTurnEnd();
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        
+        player.Reset();
         isPlayerTurn = true;
     }
 }
