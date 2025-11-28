@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Ignite : Card // (AttackCard 상속받아도 됨)
+public class Ignite : Card 
 {   
     [SerializeField] private int initialDamage = 1; // 즉발 데미지
     [SerializeField] private int tickDamage = 1;    // 턴당 데미지

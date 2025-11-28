@@ -64,7 +64,7 @@ abstract public class Target : MonoBehaviour
 
     public void AddDoT(int damage, int turns)
     {
-        dotList.Add(new DoTInfo(damage, turns));       
+        dotList.Add(new DoTDamage(damage, turns));       
     }
 
     // 턴 종료 시 호출해서 데미지 처리 (BattleManager에서)
@@ -72,7 +72,7 @@ abstract public class Target : MonoBehaviour
     {        
         for (int i = dotList.Count - 1; i >= 0; i--)
         {
-            DoTInfo dot = dotList[i];
+            DoTDamage dot = dotList[i];
 
             // 데미지 적용
             Damage(dot.damage);

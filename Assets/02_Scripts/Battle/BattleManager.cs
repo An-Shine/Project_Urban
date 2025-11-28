@@ -67,6 +67,8 @@ public class BattleManager : SceneSingleton<BattleManager>
                 enemies[i].OnTurnEnd();
             }
         }
+        yield return new WaitForSeconds(0.5f);
+        
         player.Reset();
         isPlayerTurn = true;
     }
