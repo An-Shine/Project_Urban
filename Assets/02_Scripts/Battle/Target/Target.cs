@@ -13,7 +13,7 @@ abstract public class Target : MonoBehaviour
     protected HpController hpController;
     protected ShieldController shieldController;
     protected List<ConditionStatus> conditionStatusList = new();
-    
+
     // Property
     public HpController HpController => hpController;
     public ShieldController ShieldController => shieldController;
@@ -59,6 +59,31 @@ abstract public class Target : MonoBehaviour
     public void AddDoT(int damage, int turns)
     {
         conditionStatusList.Add(new DoTDamage(damage, turns));
+    }
+
+    public void ChangeElement(Element newElement)
+    {
+        this.element = newElement;
+    }
+
+    //빙결상태 여부 확인
+    public bool IsFrozen
+    {
+        get
+        {
+            foreach (var status in conditionStatusList)
+            {
+                if (status is FrozenStatus) return true;
+            }
+            return false;
+        }
+    }
+
+    // 빙결 상태 부여
+    public void AddFreeze(int turns)
+    {
+        // FrozenStatus 객체를 생성하여 상태 리스트에 추가
+        conditionStatusList.Add(new FrozenStatus(turns));        
     }
 
     protected virtual void Init()
