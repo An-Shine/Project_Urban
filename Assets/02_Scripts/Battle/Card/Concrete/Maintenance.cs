@@ -4,12 +4,14 @@ public class Maintenance : Card
 {     
     [SerializeField] private int drawCount = 2;
     public override CardName Name => CardName.Maintenance;
-    
+    public override CardType Type => CardType.Buff;
+
+
     public override int Use(Target target)
     {       
         if (target is Player player)
         {
-            player.DrawCards(drawCount);
+            player.DrawCard(drawCount);
         }       
         
         return cost;

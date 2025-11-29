@@ -1,16 +1,49 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 abstract public class PointController : MonoBehaviour
 {
     [SerializeField] protected int maxPoint;
-    [SerializeField] protected int minPoint;   
+    [SerializeField] protected int minPoint;
 
     protected int curPoint;
 
-    public int MaxPoint => maxPoint;
-    public int MinPoint => minPoint;
-    public int CurrentPoint => curPoint;
+    public int MaxPoint
+    {
+        get { return maxPoint;}
+        set
+        {
+            if (value < 0 || value < minPoint)
+                throw new ArgumentException();
+
+            maxPoint = value;
+        }
+    }
+
+    public int MinPoint
+    {
+        get { return minPoint;}
+        set
+        {
+            if (value < 0 || value > maxPoint)
+                throw new ArgumentException();
+
+            minPoint = value;
+        }
+    }
+
+    public int CurrentPoint
+    {
+        get { return curPoint; }
+        set
+        {
+            if (value < 0 || value > maxPoint || value < minPoint)
+                throw new ArgumentException();
+
+            curPoint = value;
+        }
+    }
 
     public UnityEvent<int> OnUpdatePoint { get; } = new();
     public UnityEvent<int> OnUpdateMaxPoint { get; } = new();
@@ -18,7 +51,7 @@ abstract public class PointController : MonoBehaviour
     public void Increase(int amount = 1)
     {
         curPoint += amount;
-        
+
         if (curPoint > maxPoint)
             curPoint = maxPoint;
 

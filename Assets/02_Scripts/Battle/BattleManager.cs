@@ -15,6 +15,9 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
+
+    // Event
+    public UnityEvent OnTurnEnd = new();
     public UnityEvent OnBattleEnd = new();
 
     private void Start()
@@ -37,7 +40,7 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     public void TurnEnd()
     {
-        player.OnPlayerTurnEnd();
+        OnTurnEnd?.Invoke();
 
         isPlayerTurn = false;
         curTurn++;
@@ -59,15 +62,6 @@ public class BattleManager : SceneSingleton<BattleManager>
             yield return new WaitForSeconds(0.5f);
             enemies[i].transform.localScale /= 1.2f;
         }
-        //적 턴 종료 시 도트데미지 적용 
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i] != null && enemies[i].HpController.CurrentPoint > 0)
-            {
-                enemies[i].OnTurnEnd();
-            }
-        }
-        yield return new WaitForSeconds(0.5f);
         
         player.Reset();
         isPlayerTurn = true;

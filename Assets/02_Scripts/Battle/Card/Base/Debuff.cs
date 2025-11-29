@@ -1,6 +1,4 @@
-using UnityEngine;
-abstract class Debuff : Card
+abstract public class Debuff : Card
 {
-    [SerializeField] protected int turns;
     public override CardType Type => CardType.Debuff;
 }

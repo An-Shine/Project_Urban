@@ -1,20 +1,28 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(HpController))]
 [RequireComponent(typeof(ShieldController))]
 abstract public class Target : MonoBehaviour
 {
+    // 
+    [SerializeField] protected Element element;
+
+    // Controller
     protected HpController hpController;
     protected ShieldController shieldController;
-
+    protected List<ConditionStatus> conditionStatusList = new();
+    
+    // Property
     public HpController HpController => hpController;
     public ShieldController ShieldController => shieldController;
 
+    // Evnet
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
-    private void Awake()
+    protected virtual void Start()
     {
         Init();
         Reset();
@@ -48,56 +56,33 @@ abstract public class Target : MonoBehaviour
         shieldController.Increase(shieldPoint);
     }
 
-    [SerializeField] protected List<DoTDamage> dotList = new List<DoTDamage>();
-    [System.Serializable]
-    public class DoTDamage
-    {
-        public int damage;   // 틱당 데미지
-        public int turns;    // 남은 턴 수
-
-        public DoTDamage(int dmg, int t)
-        {
-            damage = dmg;
-            turns = t;
-        }
-    }
-
     public void AddDoT(int damage, int turns)
     {
-        dotList.Add(new DoTDamage(damage, turns));       
+        conditionStatusList.Add(new DoTDamage(damage, turns));
     }
 
-    // 턴 종료 시 호출해서 데미지 처리 (BattleManager에서)
-    public void OnTurnEnd()
-    {        
-        for (int i = dotList.Count - 1; i >= 0; i--)
-        {
-            DoTDamage dot = dotList[i];
-
-            // 데미지 적용
-            Damage(dot.damage);
-
-            // 턴 차감
-            dot.turns--;
-
-            // 끝난 도트 데미지는 리스트에서 삭제
-            if (dot.turns <= 0)
-            {
-                dotList.RemoveAt(i);
-            }
-        }
-    }
-    
     protected virtual void Init()
     {
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
+
+        BattleManager.Instacne.OnTurnEnd.AddListener(TurnEndHandler);
     }
 
-    protected virtual void Reset()
+    private void TurnEndHandler()
+    {
+        foreach (var conditionStatus in conditionStatusList)
+        {
+            conditionStatus.Execute(this);
+        }
+
+        conditionStatusList.RemoveAll(status => status.RemainingTurn <= 0);
+    }
+
+    public virtual void Reset()
     {
         hpController.Reset();
         shieldController.Reset();
-        dotList.Clear();
+        conditionStatusList.Clear();
     }
 }

@@ -8,7 +8,7 @@ public class Player : Target
     [SerializeField] private CostText costText;
     [SerializeField] private HpBar hpBar;
     [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
-    
+
     // Deck Component
     private Deck deck;
 
@@ -25,36 +25,42 @@ public class Player : Target
     {
         base.Init();
         hpController.Reset();
-        
+
         costController = GetComponent<CostController>();
         deck = GetComponent<Deck>();
 
         deck.Init();
         hpBar.Init(hpController);
         costText.Init(costController);
+
+        BattleManager.Instacne.OnTurnEnd.AddListener(() =>
+        {
+            if (deck != null)
+            {
+                deck.DiscardHand();
+            }
+        });
     }
 
     // Target의 Awake에서 호출
-    protected override void Reset()
+    public override void Reset()
     {
         // 새로운 전투 시작 시, HP는 리셋하지 않는다
         shieldController.Reset();
         costController.Reset();
-        
+
         deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
     }
 
-    public void OnPlayerTurnEnd()
+    public void DrawCard(int amount)
     {
-        base.OnTurnEnd();
-        if(deck != null)
-        {
-            deck.DiscardHand();    
-        }
+        deck.DrawCard(amount);
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         MouseEvents.OnMouseDown.AddListener((gameObject) =>
         {
             if (gameObject.CompareTag("Card"))
@@ -72,7 +78,7 @@ public class Player : Target
                 originPos = Vector3.zero;
                 selectedCard = null;
             }
-            
+
         });
 
         MouseEvents.OnMouseEnter.AddListener((gameObject) =>
@@ -94,7 +100,7 @@ public class Player : Target
         MouseEvents.OnMouseUp.AddListener((gameObject) =>
         {
             if (selectedCard != null && gameObject.CompareTag("Enemy"))
-            {   
+            {
                 if (selectedCard.Cost <= costController.CurrentPoint)
                 {
                     int cost = selectedCard.Use(gameObject.GetComponent<Target>());
@@ -103,12 +109,12 @@ public class Player : Target
                     //핸드에서 카드 삭제
                     if (deck != null)
                     {
-                        deck.Discard(selectedCard); 
+                        deck.Discard(selectedCard);
                     }
-                    
+
                     selectedCard = null;
                 }
-                
+
                 gameObject.transform.localScale /= 1.25f;
             }
         });

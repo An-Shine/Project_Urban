@@ -25,14 +25,14 @@ public class Deck : MonoBehaviour
 
     // 게임 데이터 
     // 원본 덱 
-    [SerializeField] private List<CardName> originCardList = new();
+    private readonly List<CardName> originCardList = new();
     // 뽑을 덱 
-    [SerializeField] private List<CardName> unusedCardList = new();
+    private readonly List<CardName> unusedCardList = new();
     // 사용한 카드리스트
-    [SerializeField] private List<CardName> usedCardList = new();
+    private readonly List<CardName> usedCardList = new();
 
     //현재 핸드에 있는 카드리스트
-    private readonly List<Card> currentHandList = new List<Card>();
+    private readonly List<Card> currentHandList = new();
 
 
     public int UnusedCardCount => unusedCardList.Count;
@@ -73,7 +73,6 @@ public class Deck : MonoBehaviour
             for (int i = 0; i < recipe.count; i++)
             {
                 originCardList.Add(recipe.name);
-                unusedCardList.Add(recipe.name);
             }
         }
 
