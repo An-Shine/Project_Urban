@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System;
 
 [RequireComponent(typeof(HpController))]
 [RequireComponent(typeof(ShieldController))]
@@ -91,7 +92,11 @@ abstract public class Target : MonoBehaviour
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
 
-        BattleManager.Instacne.OnTurnEnd.AddListener(TurnEndHandler);
+        
+        if (BattleManager.Instance != null)
+        {
+            BattleManager.Instance.OnTurnEnd.AddListener(TurnEndHandler);
+        }        
     }
 
     private void TurnEndHandler()
@@ -109,5 +114,10 @@ abstract public class Target : MonoBehaviour
         hpController.Reset();
         shieldController.Reset();
         conditionStatusList.Clear();
+    }
+
+    internal void OnTurnEnd()
+    {
+        throw new NotImplementedException();
     }
 }

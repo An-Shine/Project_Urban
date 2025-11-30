@@ -4,7 +4,7 @@ public class SceneSingleton<T> : MonoBehaviour where T : Component
 {
     static private T instance;
 
-    static public T Instacne => instance;
+    static public T Instance => instance;
 
     private void Awake()
     {

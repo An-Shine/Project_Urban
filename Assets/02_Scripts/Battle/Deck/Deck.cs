@@ -17,13 +17,10 @@ public class Deck : MonoBehaviour
     // 전체 카드 프리팹
     [SerializeField] private List<Card> cardPrefabList = new();
 
-    //핸드 설정
+    // 핸드 설정
     [SerializeField] private Transform handParent; // 카드가 생성되는 핸드 오브젝트
     [SerializeField] private float cardSpacing = 2.5f; // 카드 간격
-
-    // 덱 딕셔너리
-
-    // 게임 데이터 
+    
     // 원본 덱 
     private readonly List<CardName> originCardList = new();
     // 뽑을 덱 
@@ -37,7 +34,27 @@ public class Deck : MonoBehaviour
 
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
+    public int OriginCardCount => originCardList.Count;
 
+
+    private void Awake()
+    {
+        SetPrefabMap();     
+    }
+
+    private void Start()
+    {
+       
+    }    
+
+    public void Init()
+    {
+        // 2. 덱레시피 대로 원본생성
+        DeckMaking();
+
+        // 3. 게임 시작 상태로 리셋
+        ResetDeck();
+    }
     private void SetPrefabMap()
     {
         // 2. 프리팹 리스트를 딕셔너리로 변환
@@ -49,17 +66,6 @@ public class Deck : MonoBehaviour
                 prefabDict.Add(card.Name, card);
             }
         }
-    }
-
-    public void Init()
-    {
-        SetPrefabMap();
-
-        // 2. 덱레시피를 보고 원본 덱(OriginCardList)을 만든다 
-        DeckMaking();
-
-        // 3. 게임 시작 상태로 리셋
-        ResetDeck();
     }
 
     // 덱 레시피 -> originCardList 변환 함수

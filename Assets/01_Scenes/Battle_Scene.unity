@@ -570,7 +570,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 606047937}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 659839290}
+        m_TargetAssemblyTypeName: SelectElement, Assembly-CSharp
+        m_MethodName: SelectFlame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &606047937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,6 +631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 659839289}
   - component: {fileID: 659839288}
+  - component: {fileID: 659839290}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -654,6 +667,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &659839290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659839287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26855f0f7b3cab4a89f7a9bf74d4afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectElement
+  selectPanel: {fileID: 2092083793}
+  player: {fileID: 1294601614}
 --- !u!1 &745188506
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,7 +864,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 865743929}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 659839290}
+        m_TargetAssemblyTypeName: SelectElement, Assembly-CSharp
+        m_MethodName: SelectGrass
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &865743929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1786,7 +1825,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1763795073}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 659839290}
+        m_TargetAssemblyTypeName: SelectElement, Assembly-CSharp
+        m_MethodName: SelectIce
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1763795073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2161,20 +2212,80 @@ PrefabInstance:
       objectReference: {fileID: 506069451}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: cardPrefabList.Array.size
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: 'cardPrefabList.Array.data[0]'
       value: 
-      objectReference: {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
+      objectReference: {fileID: 5344148364817041532, guid: 94f979278527b8a4ca4533192985939f, type: 3}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: 'cardPrefabList.Array.data[1]'
       value: 
+      objectReference: {fileID: 432324397302725491, guid: 7048a33e96d37444d810a467fe95ddb2, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[2]'
+      value: 
       objectReference: {fileID: 1805815576859258695, guid: 4101325afdd268c49ac2248ba3a1e66f, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2561733179583032160, guid: 4de36f1f88a5fda44aaca4e37ba9d404, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[4]'
+      value: 
+      objectReference: {fileID: -1464372918703495753, guid: 8b22f95859a565549a0faa52124cd97c, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[5]'
+      value: 
+      objectReference: {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[6]'
+      value: 
+      objectReference: {fileID: 5320993288656041092, guid: f92f0d859bc4db4458fbb502bb0f3025, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[7]'
+      value: 
+      objectReference: {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[8]'
+      value: 
+      objectReference: {fileID: 5344148364817041532, guid: 94f979278527b8a4ca4533192985939f, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[9]'
+      value: 
+      objectReference: {fileID: 432324397302725491, guid: 7048a33e96d37444d810a467fe95ddb2, type: 3}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[10]'
+      value: 
+      objectReference: {fileID: 1805815576859258695, guid: 4101325afdd268c49ac2248ba3a1e66f, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[11]'
+      value: 
+      objectReference: {fileID: 2561733179583032160, guid: 4de36f1f88a5fda44aaca4e37ba9d404, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[12]'
+      value: 
+      objectReference: {fileID: -1464372918703495753, guid: 8b22f95859a565549a0faa52124cd97c, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[13]'
+      value: 
+      objectReference: {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[14]'
+      value: 
+      objectReference: {fileID: 5320993288656041092, guid: f92f0d859bc4db4458fbb502bb0f3025, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[15]'
+      value: 
+      objectReference: {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
+    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
+      propertyPath: 'cardPrefabList.Array.data[16]'
+      value: 
+      objectReference: {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: 'initialDeckRecipe.Array.data[3]'
       value: 2

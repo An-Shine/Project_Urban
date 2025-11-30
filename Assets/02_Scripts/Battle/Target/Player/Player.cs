@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CostController))]
@@ -9,7 +10,6 @@ public class Player : Target
     [SerializeField] private HpBar hpBar;
     [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
 
-    // Deck Component
     private Deck deck;
 
     // Component
@@ -28,28 +28,40 @@ public class Player : Target
 
         costController = GetComponent<CostController>();
         deck = GetComponent<Deck>();
+        
+        if (hpBar != null) hpBar.Init(hpController);
+        if (costText != null) costText.Init(costController);
+        if(deck != null) deck.Init();
 
-        deck.Init();
-        hpBar.Init(hpController);
-        costText.Init(costController);
-
-        BattleManager.Instacne.OnTurnEnd.AddListener(() =>
+        if (BattleManager.Instance != null)
         {
-            if (deck != null)
-            {
-                deck.DiscardHand();
-            }
-        });
+            BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
+        }
     }
 
-    // Target의 Awake에서 호출
+    private void HandleTurnEnd()
+    {        
+        if (deck != null)
+        {
+            deck.DiscardHand();
+        }            
+    }
+
+    // Target의 Awake에서 호출 -> BattleManager.StartBattle에서 호출
     public override void Reset()
-    {
-        // 새로운 전투 시작 시, HP는 리셋하지 않는다
+    {        
         shieldController.Reset();
         costController.Reset();
 
-        deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
+        // 덱이 준비되었을 때만 드로우
+        if (deck != null)
+        {
+            // 뽑기 전에 덱을 리셋해야 추가된 카드가 반영
+            deck.ResetDeck(); 
+            
+            // 그 다음 뽑기
+            deck.DrawCard(startingDrawCount);   
+        }
     }
 
     public void DrawCard(int amount)
@@ -60,7 +72,7 @@ public class Player : Target
     protected override void Start()
     {
         base.Start();
-
+       
         MouseEvents.OnMouseDown.AddListener((gameObject) =>
         {
             if (gameObject.CompareTag("Card"))
@@ -78,7 +90,6 @@ public class Player : Target
                 originPos = Vector3.zero;
                 selectedCard = null;
             }
-
         });
 
         MouseEvents.OnMouseEnter.AddListener((gameObject) =>
@@ -105,33 +116,37 @@ public class Player : Target
                 {
                     int cost = selectedCard.Use(gameObject.GetComponent<Target>());
                     costController.Decrease(cost);
-
-                    //핸드에서 카드 삭제
+                   
                     if (deck != null)
                     {
                         deck.Discard(selectedCard);
                     }
 
                     selectedCard = null;
-                }
-
+                }                
                 gameObject.transform.localScale /= 1.25f;
             }
         });
     }
 
     private void Update()
-    {
-        if (!BattleManager.Instacne.IsPlayerTurn)
-            return;
+    {        
+        if (BattleManager.Instance == null) return;
+
+        if (!BattleManager.Instance.IsPlayerTurn) return;
 
         if (selectedCard != null)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = -1;
-
-            selectedCard.transform.position = mousePos;
+            if (Camera.main != null)
+            {
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.z = -1;
+                selectedCard.transform.position = mousePos;
+            }
         }
+    }    
+    internal void OnPlayerTurnEnd()
+    {
     }
-
+       
 }
