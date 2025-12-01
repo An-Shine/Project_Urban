@@ -216,64 +216,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5984736736063832964, guid: d9facb9f95dd6954a86851380662f46c, type: 3}
   m_PrefabInstance: {fileID: 6679089621268843890}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &93965243
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 390.95453
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 156.29408
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048776908165795839, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7138447040532560346, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
-      propertyPath: m_Name
-      value: CardPrefab
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3642f4a333892e4469dd1b84ec3ad6b9, type: 3}
 --- !u!1 &506069450
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,7 +276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aced5f5b861efa84aaebcf8cde391c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  player: {fileID: 1294601614}
+  mainPlayer: {fileID: 0}
+  player: {fileID: 0}
 --- !u!4 &659839289
 Transform:
   m_ObjectHideFlags: 0
@@ -1086,43 +1029,19 @@ PrefabInstance:
       objectReference: {fileID: 506069451}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: cardPrefabList.Array.size
-      value: 8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: 'cardPrefabList.Array.data[0]'
       value: 
-      objectReference: {fileID: -2718185836164027489, guid: c1df7726fc35cc7468263fdcc1821094, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[1]'
-      value: 
-      objectReference: {fileID: -1465831915233388154, guid: 4c316c0767037704eb1fb2899f709019, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[2]'
-      value: 
-      objectReference: {fileID: -1772036552621023413, guid: b4525616561c8404daecaa95f5a729b4, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[3]'
-      value: 
-      objectReference: {fileID: -1083534053151282155, guid: 88022d1ec44e086469a9a3ca089698bd, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[4]'
-      value: 
-      objectReference: {fileID: 1682876434260103043, guid: 497e7a0a94bf2a7469c0a989d9bb3e69, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[5]'
-      value: 
       objectReference: {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[6]'
-      value: 
-      objectReference: {fileID: 4493257747658455124, guid: c2af1532dc5284d48939c86c71a8d8bb, type: 3}
-    - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
-      propertyPath: 'cardPrefabList.Array.data[7]'
+      propertyPath: 'cardPrefabList.Array.data[1]'
       value: 
       objectReference: {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: 'initialDeckRecipe.Array.data[3]'
@@ -1138,15 +1057,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.data[0].name
-      value: 5
+      value: 103
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.data[1].name
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.data[0].count
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8323974516582909579, guid: be2342991434b8d499c65efc20efc70e, type: 3}
       propertyPath: initialDeckRecipe.Array.data[1].count
@@ -1486,4 +1405,3 @@ SceneRoots:
   - {fileID: 745188510}
   - {fileID: 1416196958}
   - {fileID: 1547858874}
-  - {fileID: 93965243}

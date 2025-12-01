@@ -24,7 +24,7 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private void Start()
     {
-        player = GameManager.Instance.Player;
+
 
         float enemyXpos = -3.5f;
         for (int  i = 0 ; i < enemies.Length; i++)
@@ -57,6 +57,8 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private IEnumerator ExecuteEnemyActionRoutine()
     {
+        player = GameManager.Instance.Player;
+
         for (int i = 0 ; i < enemies.Length; i++)
         {
             enemies[i].Attack(player);

@@ -67,5 +67,9 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Project_Urban.slnx"
+    "dotnet.defaultSolution": "Project_Urban.slnx",
+    "cSpell.words": [
+        "Behaviour",
+        "Dont"
+    ]
 }

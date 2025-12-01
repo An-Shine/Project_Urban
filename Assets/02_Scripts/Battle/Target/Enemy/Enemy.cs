@@ -12,6 +12,6 @@ public class Enemy : Target
 
     public void Attack(Player player)
     {
-        player.Damage(1);
+         player.Damage(1);
     }
 }

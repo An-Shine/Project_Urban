@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager>
 {
-    public Player mainPlayer;
     [SerializeField] private Player player;
 
     public Player Player => player;

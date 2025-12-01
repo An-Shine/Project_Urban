@@ -33,17 +33,6 @@ public class Player : Target
         deck.Init();
         hpBar.Init(hpController);
         costText.Init(costController);
-
-            if (BattleManager.Instance != null) 
-            {
-                BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
-            }
-
-            // BattleManager가 나를 찾을 수 있도록, GameManager에 나를 등록합니다.
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.mainPlayer = this;
-            }
     }
 
     // Target의 Awake에서 호출
