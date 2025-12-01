@@ -58,6 +58,17 @@ public class Deck : MonoBehaviour
         // 2. 덱레시피를 보고 원본 덱(OriginCardList)을 만든다 
         DeckMaking();
 
+        //게임매니저에서 추가카드를 받아와서 추가
+        if (GameManager.Instance != null && GameManager.Instance.SelectedBonusCards.Count > 0)
+        {
+            foreach (var cardName in GameManager.Instance.SelectedBonusCards)
+            {
+                // 원본 덱 리스트에 추가
+                originCardList.Add(cardName);
+            }
+            Debug.Log($"[Deck] 속성 보너스 카드 추가됨! (현재 총 {originCardList.Count}장)");
+        }
+
         // 3. 게임 시작 상태로 리셋
         ResetDeck();
     }

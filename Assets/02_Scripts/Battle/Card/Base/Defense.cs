@@ -1,5 +1,5 @@
 using UnityEngine;
-abstract class Defense : Card
+public abstract class Defense : Card
 {
     [SerializeField] protected int armor;
 
