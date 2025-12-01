@@ -6,7 +6,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(ShieldController))]
 abstract public class Target : MonoBehaviour
 {
-    // 
     [SerializeField] protected Element element;
 
     // Controller
@@ -18,9 +17,12 @@ abstract public class Target : MonoBehaviour
     public HpController HpController => hpController;
     public ShieldController ShieldController => shieldController;
 
-    // Evnet
+    // Event
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
+
+    // Status    
+    protected bool isStun = false;
 
     protected virtual void Start()
     {
@@ -56,35 +58,12 @@ abstract public class Target : MonoBehaviour
         shieldController.Increase(shieldPoint);
     }
 
-    public void AddDoT(int damage, int turns)
-    {
-        conditionStatusList.Add(new DoTDamage(damage, turns));
-    }
+    public void AddConditionStatus(ConditionStatus conditionStatus)
+    {   
+        conditionStatusList.Add(conditionStatus);
 
-    // 현재 빙결 상태인지 확인
-    public bool IsFrozen
-    {
-        get
-        {
-            foreach (var status in conditionStatusList)
-            {
-                if (status is FrozenStatus) return true;
-            }
-            return false;
-        }
-    }
-
-    // 빙결 상태를 추가
-    public void AddFreeze(int turns)
-    {
-        conditionStatusList.Add(new FrozenStatus(turns));       
-    }
-
-    public void ChangeElement(Element newElement)
-    {        
-        if (this.element == newElement) return;
-        this.element = newElement;       
-        
+        if (conditionStatus is Stun)
+            isStun = true;
     }
 
     protected virtual void Init()
@@ -103,6 +82,16 @@ abstract public class Target : MonoBehaviour
         }
 
         conditionStatusList.RemoveAll(status => status.RemainingTurn <= 0);
+
+        isStun = false;
+        foreach (var conditionStatus in conditionStatusList)
+        {
+            if (conditionStatus is Stun)
+            {
+                isStun = true;    
+                break;
+            }
+        }
     }
 
     public virtual void Reset()

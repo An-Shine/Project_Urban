@@ -10,9 +10,7 @@ public class FlameBarrier : Defense
 
         // 속성 변경
         if (target is Player player)
-        {
-            player.ChangeElement(Element.Flame);
-        }
+            player.ShieldElement = Element.Flame;
 
         return cost;
     }

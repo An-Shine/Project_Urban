@@ -11,9 +11,7 @@ public class IceShield : Defense
 
         // 2. 속성 변경
         if (target is Player player)
-        {
-            player.ChangeElement(Element.Ice);            
-        }
+            player.ShieldElement = Element.Ice;
 
         return cost;
     }

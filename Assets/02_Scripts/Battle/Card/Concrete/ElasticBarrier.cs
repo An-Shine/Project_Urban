@@ -11,9 +11,7 @@ public class ElasticBarrier : Defense
 
         // 2. 속성 변경
         if (target is Player player)
-        {
-            player.ChangeElement(Element.Grass);           
-        }
+            player.ShieldElement = Element.Grass;       
 
         return cost;
     }

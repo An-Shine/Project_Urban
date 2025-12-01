@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GlacialWedge : Attack
 {
-    [SerializeField] private int freezeTurn = 1; // 빙결 지속 턴 
+    [SerializeField] private int remainingTurn = 1; // 빙결 지속 턴 
 
     public override CardName Name => CardName.GlacialWedge;
 
@@ -12,7 +12,7 @@ public class GlacialWedge : Attack
         target.Damage(damage);
 
         // 2. 빙결 상태 적용         
-        target.AddFreeze(freezeTurn);
+        target.AddConditionStatus(new Stun(remainingTurn));
 
         return cost;
     }

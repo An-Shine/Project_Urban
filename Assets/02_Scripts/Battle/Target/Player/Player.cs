@@ -11,7 +11,6 @@ public class Player : Target
 
     // Deck Component
     private Deck deck;
-    public Player mainPlayer { get; set; }
 
     // Component
     private CostController costController;
@@ -20,6 +19,8 @@ public class Player : Target
     // Card
     private Card selectedCard;
     private Vector3 originPos;
+
+    public Element ShieldElement { get; set; } = Element.None;
 
     // Target의 Awake에서 호출
     protected override void Init()
@@ -48,14 +49,6 @@ public class Player : Target
     public void DrawCard(int amount)
     {
         deck.DrawCard(amount);
-    }
-
-    private void HandleTurnEnd()
-    {
-        if (deck != null)
-        {
-            deck.DiscardHand();
-        }
     }
 
     protected override void Start()
@@ -119,6 +112,8 @@ public class Player : Target
                 gameObject.transform.localScale /= 1.25f;
             }
         });
+
+        BattleManager.Instance.OnTurnEnd.AddListener(() => deck.DiscardHand());
     }
 
     private void Update()
