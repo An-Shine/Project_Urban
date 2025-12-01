@@ -19,6 +19,8 @@ public class BattleManager : SceneSingleton<BattleManager>
     // Event
     public UnityEvent OnTurnEnd = new();
     public UnityEvent OnBattleEnd = new();
+    
+        
 
     private void Start()
     {

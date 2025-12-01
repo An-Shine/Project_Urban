@@ -11,6 +11,7 @@ public class Player : Target
 
     // Deck Component
     private Deck deck;
+    public Player mainPlayer { get; set; }
 
     // Component
     private CostController costController;
@@ -33,13 +34,16 @@ public class Player : Target
         hpBar.Init(hpController);
         costText.Init(costController);
 
-        BattleManager.Instacne.OnTurnEnd.AddListener(() =>
-        {
-            if (deck != null)
+            if (BattleManager.Instance != null) 
             {
-                deck.DiscardHand();
+                BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
             }
-        });
+
+            // BattleManager가 나를 찾을 수 있도록, GameManager에 나를 등록합니다.
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.mainPlayer = this;
+            }
     }
 
     // Target의 Awake에서 호출
@@ -55,6 +59,14 @@ public class Player : Target
     public void DrawCard(int amount)
     {
         deck.DrawCard(amount);
+    }
+
+    private void HandleTurnEnd()
+    {
+        if (deck != null)
+        {
+            deck.DiscardHand();
+        }
     }
 
     protected override void Start()
@@ -122,7 +134,7 @@ public class Player : Target
 
     private void Update()
     {
-        if (!BattleManager.Instacne.IsPlayerTurn)
+        if (!BattleManager.Instance.IsPlayerTurn)
             return;
 
         if (selectedCard != null)

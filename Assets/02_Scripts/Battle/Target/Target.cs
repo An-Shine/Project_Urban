@@ -61,12 +61,38 @@ abstract public class Target : MonoBehaviour
         conditionStatusList.Add(new DoTDamage(damage, turns));
     }
 
+    // 현재 빙결 상태인지 확인
+    public bool IsFrozen
+    {
+        get
+        {
+            foreach (var status in conditionStatusList)
+            {
+                if (status is FrozenStatus) return true;
+            }
+            return false;
+        }
+    }
+
+    // 빙결 상태를 추가
+    public void AddFreeze(int turns)
+    {
+        conditionStatusList.Add(new FrozenStatus(turns));       
+    }
+
+    public void ChangeElement(Element newElement)
+    {        
+        if (this.element == newElement) return;
+        this.element = newElement;       
+        
+    }
+
     protected virtual void Init()
     {
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
 
-        BattleManager.Instacne.OnTurnEnd.AddListener(TurnEndHandler);
+        BattleManager.Instance.OnTurnEnd.AddListener(TurnEndHandler);
     }
 
     private void TurnEndHandler()
