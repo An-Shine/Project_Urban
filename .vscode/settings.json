@@ -70,6 +70,8 @@
     "dotnet.defaultSolution": "Project_Urban.slnx",
     "cSpell.words": [
         "Behaviour",
-        "Dont"
+        "Debuff",
+        "Dont",
+        "Lerp"
     ]
 }

@@ -7,7 +7,7 @@ public class BattleManager : SceneSingleton<BattleManager>
     // Player
     private int curTurn;
     private bool isPlayerTurn = true;
-    private Player player;
+    [SerializeField] private Player player;
 
     [SerializeField] private Transform enemyZone;
     [SerializeField] private Enemy enemyPrefab;
@@ -24,6 +24,10 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private void Start()
     {
+        if (player == null)
+        {
+            player = FindFirstObjectByType<Player>(); 
+        }
 
 
         float enemyXpos = -3.5f;
@@ -57,7 +61,7 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private IEnumerator ExecuteEnemyActionRoutine()
     {
-        player = GameManager.Instance.Player;
+        //player = GameManager.Instance.Player;
 
         for (int i = 0 ; i < enemies.Length; i++)
         {
