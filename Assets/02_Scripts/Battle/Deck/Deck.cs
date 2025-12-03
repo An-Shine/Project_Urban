@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using System.Collections;
 
 public class Deck : MonoBehaviour
 {
@@ -19,6 +21,13 @@ public class Deck : MonoBehaviour
     //핸드 설정
     [SerializeField] private Transform handParent; // 카드가 생성되는 핸드 오브젝트
     [SerializeField] private float cardSpacing = 2.5f; // 카드 간격
+
+    [SerializeField] private float maxHandWidth = 12.0f;  //최대 핸드 너비
+    [SerializeField] private float drawDelay = 0.2f;    //카드 드로우 간격
+    [SerializeField] private float discardDelay = 0.1f; //턴끝나고 카드 버리는 간격
+
+    [SerializeField] private Transform deckSpawnPoint; 
+    [SerializeField] private Transform discardPoint;
 
     // 덱 딕셔너리
 
@@ -108,7 +117,13 @@ public class Deck : MonoBehaviour
     }
 
     // 카드를 n장 뽑는다 > 화면에 생성 > 정렬
-    public void DrawCard(int amount)
+   public void DrawCard(int amount)
+    {
+        StartCoroutine(DrawCardRoutine(amount));
+    }
+
+    // 드로우 로직 (한 장씩 생성)
+    private IEnumerator DrawCardRoutine(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -118,17 +133,28 @@ public class Deck : MonoBehaviour
                 if (unusedCardList.Count == 0) break;
             }
 
-            // 1. 데이터(프리팹) 꺼내기
-            CardName cardName = unusedCardList[^1];
+            // 1. 데이터 꺼내기
+            CardName cardName = unusedCardList[unusedCardList.Count - 1];
             unusedCardList.RemoveAt(unusedCardList.Count - 1);
-            // 2. 화면에 생성 (Instantiate)
-            Card newCard = Instantiate(prefabDict[cardName], handParent);
-            // 3. 핸드 리스트에 등록 (화면 관리용)
-            currentHandList.Add(newCard);
-        }
 
-        // 4. 다 뽑았으면 정렬
-        AlignHand();
+            // 2. 5시 방향(deckSpawnPoint)에서 생성            
+            Vector3 spawnPos = (deckSpawnPoint != null) ? deckSpawnPoint.position : handParent.position;
+            
+            // 월드 좌표(position)는 5시 방향 유지
+            Card newCard = Instantiate(prefabDict[cardName], spawnPos, Quaternion.identity, handParent);
+            
+            // 위치 고정
+            newCard.transform.position = spawnPos;
+
+            // 3. 리스트 추가
+            currentHandList.Add(newCard);
+
+            // 4. 한 장 나올 때마다 정렬 갱신
+            AlignHand();
+
+            // 5. 다음 카드 뽑기 전 대기
+            yield return new WaitForSeconds(drawDelay);
+        }
     }
 
     //핸드 카드 정렬
@@ -137,19 +163,30 @@ public class Deck : MonoBehaviour
         int count = currentHandList.Count;
         if (count == 0) return;
 
-        // 중앙 정렬 공식: -(전체너비 / 2) + (순서 * 간격)
-        float totalWidth = (count - 1) * cardSpacing;
-        float startX = -totalWidth / 2f;
+        float currentSpacing = cardSpacing;
+        float totalRequiredWidth = (count - 1) * cardSpacing;
+
+        // 카드갯수가 많아지면 > 간격을 줄여서 겹쳐서 배치
+        if (totalRequiredWidth > maxHandWidth && count > 1)
+        {
+            currentSpacing = maxHandWidth / (count - 1);
+        }
+
+        float startX = -((count - 1) * currentSpacing) / 2f;
 
         for (int i = 0; i < count; i++)
         {
-            float xPos = startX + (i * cardSpacing);
+            if (currentHandList[i] == null) continue;
 
-            // Hand 오브젝트(부모) 기준 로컬 좌표로 배치
-            currentHandList[i].transform.localPosition = new Vector3(xPos, 0, 0);
+            //전체 너비 재계산
+            float xPos = startX + (i * currentSpacing);
+            Vector3 targetPos = new Vector3(xPos, 0, -i * 0.1f);
 
-            // 겹칠 때 순서 정리 (오른쪽이 위로 오게)
-            // currentHandList[i].GetComponent<SortingGroup>().sortingOrder = i; 
+            currentHandList[i].MoveTo(targetPos);
+
+            // 렌더링 순서 정리(오른쪽 카드가 위로오게)
+            SortingGroup sg = currentHandList[i].GetComponent<SortingGroup>();
+            if (sg != null) sg.sortingOrder = i;
         }
     }
     // 사용한 카드 UsedCardList 로 보내기
@@ -169,12 +206,58 @@ public class Deck : MonoBehaviour
         AlignHand();
     }
 
-    //턴끝나면 패의 카드 모두 버림
+    //턴 끝나면 핸드에있는 카드 다 버리는 함수
+    public void RemoveUsedCard(Card usedCard)
+    {
+        if (usedCard == null) return;
+
+        // 1. 데이터 처리
+        usedCardList.Add(usedCard.Name);
+
+        // 2. 리스트에서 제거
+        if (currentHandList.Contains(usedCard))
+            currentHandList.Remove(usedCard);
+
+        // 3. 정렬
+        AlignHand();
+
+        // 4. 연출 및 파괴
+        if (discardPoint != null)
+        {
+            Vector3 targetPos = handParent.InverseTransformPoint(discardPoint.position);
+            
+            usedCard.MoveTo(targetPos, () => 
+            { 
+                Destroy(usedCard.gameObject); 
+            });
+        }
+        else
+        {
+            Destroy(usedCard.gameObject);
+        }
+    }
+
+    // 턴 종료 시 핸드 버리기 (코루틴)
     public void DiscardHand()
     {
-        for (int i = currentHandList.Count - 1; i >= 0; i--)
+        StartCoroutine(DiscardHandRoutine());
+    }
+
+    // 한 장씩 버리는 로직
+    private IEnumerator DiscardHandRoutine()
+    {
+        // 핸드에 카드가 남아있는 동안 계속 반복
+        while (currentHandList.Count > 0)
         {
-            Discard(currentHandList[i]);
+            // 맨 뒤(오른쪽) 카드부터 버립니다.
+            int lastIndex = currentHandList.Count - 1;
+            Card card = currentHandList[lastIndex];
+
+            // 카드 제거 요청 
+            RemoveUsedCard(card);
+
+            // 다음 카드 버리기 전 대기
+            yield return new WaitForSeconds(discardDelay);
         }
     }
 

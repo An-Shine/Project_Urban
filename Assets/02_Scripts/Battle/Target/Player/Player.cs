@@ -38,6 +38,20 @@ public class Player : Target
         deck.Init();
         hpBar.Init(hpController);
         costText.Init(costController);
+
+        if (BattleManager.Instance != null)
+        {
+            BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
+        }
+    }
+
+    private void HandleTurnEnd()
+    {        
+        if (deck != null)
+        {
+            // 남은 카드를 모두 무덤으로 날려보냄
+            deck.DiscardHand();
+        }            
     }
 
     // Target의 Awake에서 호출
