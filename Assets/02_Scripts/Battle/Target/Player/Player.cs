@@ -4,21 +4,25 @@ using UnityEngine;
 [RequireComponent(typeof(Deck))]
 public class Player : Target
 {
+    [Header("Initial Settings")]
+    [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
+
     // UI
+    [Header("UI Object")]
     [SerializeField] private CostText costText;
     [SerializeField] private HpBar hpBar;
-    [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
+
+    [Header("Mouse Pointer Object")]
+    [SerializeField] private MousePointer mousePointer;
+
 
     // Deck Component
     private Deck deck;
+    private Card prevSelectedCard;
 
     // Component
     private CostController costController;
     public CostController CostController => costController;
-
-    // Card
-    private Card selectedCard;
-    private Vector3 originPos;
 
     public Element ShieldElement { get; set; } = Element.None;
 
@@ -69,79 +73,108 @@ public class Player : Target
     {
         base.Start();
 
-        MouseEvents.OnMouseDown.AddListener((gameObject) =>
-        {
-            if (gameObject.CompareTag("Card"))
-            {
-                selectedCard = gameObject.GetComponent<Card>();
-                originPos = gameObject.transform.position;
-            }
-        });
+        // Card Event
+        mousePointer.OnCardSelect.AddListener(HandleCardSelect);
+        mousePointer.OnCardUnSelect.AddListener(HandleCardUnSelect);
+        mousePointer.OnCardEnter.AddListener(HandleCardEnter);
+        mousePointer.OnCardExit.AddListener(HandleCardExit);
 
-        MouseEvents.OnMouseUp.AddListener((gameObject) =>
-        {
-            if (selectedCard != null && gameObject.CompareTag("Card"))
-            {
-                selectedCard.transform.position = originPos;
-                originPos = Vector3.zero;
-                selectedCard = null;
-            }
+        // Enemy Event
+        mousePointer.OnEnemySelect.AddListener(HandleEnemySelect);
+        mousePointer.OnEnemyEnter.AddListener(HandleEnemyEnter);
+        mousePointer.OnEnemyExit.AddListener(HandleEnemyExit);
 
-        });
-
-        MouseEvents.OnMouseEnter.AddListener((gameObject) =>
-        {
-            if (selectedCard != null && gameObject.CompareTag("Enemy"))
-            {
-                gameObject.transform.localScale *= 1.25f;
-            }
-        });
-
-        MouseEvents.OnMouseExit.AddListener((gameObject) =>
-        {
-            if (selectedCard != null && gameObject.CompareTag("Enemy"))
-            {
-                gameObject.transform.localScale /= 1.25f;
-            }
-        });
-
-        MouseEvents.OnMouseUp.AddListener((gameObject) =>
-        {
-            if (selectedCard != null && gameObject.CompareTag("Enemy"))
-            {
-                if (selectedCard.Cost <= costController.CurrentPoint)
-                {
-                    int cost = selectedCard.Use(gameObject.GetComponent<Target>());
-                    costController.Decrease(cost);
-
-                    //핸드에서 카드 삭제
-                    if (deck != null)
-                    {
-                        deck.Discard(selectedCard);
-                    }
-
-                    selectedCard = null;
-                }
-
-                gameObject.transform.localScale /= 1.25f;
-            }
-        });
-
+        // Turn Event
         BattleManager.Instance.OnTurnEnd.AddListener(() => deck.DiscardHand());
     }
 
-    private void Update()
+    private void HandleCardSelect(Card card)
     {
-        if (!BattleManager.Instance.IsPlayerTurn)
-            return;
-
-        if (selectedCard != null)
+        // 이미 선택된 카드를 다시 클릭한 경우
+        if (prevSelectedCard == card)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = -1;
+            // 자신에게 사용하는 카드인 경우, 선택된 카드를 다시 클릭하면 사용된다.
+            if (card.Type == CardType.Defense || card.Type == CardType.Buff)
+            {
+                card.Use(this);
+                deck.Discard(card);
+                mousePointer.ClearSelection();
+                prevSelectedCard = null;
 
-            selectedCard.transform.position = mousePos;
+                Debug.Log($"Use Card To Player : {card.name}");
+                Debug.Log($"Cur Shield : {shieldController.CurrentPoint}");
+                
+                return;
+            }
+            
+            // 전체 공격 혹은 전체 디버프 처리
+            else if (card.Type == CardType.Attack || card.Type == CardType.Debuff)
+            {
+                return; // 아직 미처리
+            }
+
+            return;
         }
+
+        // 새로운 카드 선택
+        if (prevSelectedCard != null)
+        {
+            prevSelectedCard.UnHover();
+            card.Hover();
+        }
+        
+        prevSelectedCard = card;
     }
 
+    private void HandleCardEnter(Card card)
+    {
+        if (prevSelectedCard == null)
+            card.Hover();
+    }
+
+    private void HandleCardExit(Card card)
+    {
+        if (prevSelectedCard == null)
+            card.UnHover();
+    }
+
+    private void HandleCardUnSelect(Card card)
+    {
+        if (card != null)
+            card.UnHover();
+        
+        prevSelectedCard = null;
+    }
+
+    private void HandleEnemySelect(Enemy enemy)
+    {
+        Card selectedCard = mousePointer.SelectedCard;
+        if (selectedCard == null) return;
+        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
+
+        selectedCard.Use(enemy);
+        enemy.UnHover();
+        deck.Discard(selectedCard);
+
+        Debug.Log($"Use Card To Enemy : {selectedCard.name}");
+        mousePointer.ClearSelection();
+    }
+
+    private void HandleEnemyEnter(Enemy enemy)
+    {
+        Card selectedCard = mousePointer.SelectedCard;
+        if (selectedCard == null) return;
+        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
+
+        enemy.Hover();
+    }
+
+    private void HandleEnemyExit(Enemy enemy)
+    {
+        Card selectedCard = mousePointer.SelectedCard;
+        if (selectedCard == null) return;
+        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
+
+        enemy.UnHover();
+    }
 }

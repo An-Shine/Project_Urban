@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8722774033953244461}
   - component: {fileID: 4934051836479890614}
   - component: {fileID: 6109157307790009158}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Strike
   m_TagString: Card
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: deef614f103234a47b02059f37161c0f, type: 2}
+  - {fileID: 2100000, guid: 3761cd51e2e437d4481e380bb8623bd6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d983163050e06448838bc2b73022f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Strike
-  cardImage: {fileID: 0}
+  element: 0
   cost: 1
   damage: 1

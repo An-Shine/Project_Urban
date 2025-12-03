@@ -287,6 +287,4 @@ public class Deck : MonoBehaviour
         if (originCardList.Contains(cardName))
             originCardList.Remove(cardName);
     }
-
-
 }

@@ -25,8 +25,18 @@ abstract public class Card : MonoBehaviour
 
     public int Cost => cost;
 
+    public void Hover()
+    {
+        gameObject.transform.localScale *= 1.2f;
+    }
+
+    public void UnHover()
+    {
+        gameObject.transform.localScale /= 1.2f;
+    }
+
     abstract public CardName Name { get; }
-    abstract public CardType Type { get;}
+    abstract public CardType Type { get; }
     abstract public int Use(Target target);
 
     // 이동 코루틴
