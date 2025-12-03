@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8722774033953244461}
   - component: {fileID: 4934051836479890614}
   - component: {fileID: -660675104704934426}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ignite
   m_TagString: Card
   m_Icon: {fileID: 0}
@@ -129,4 +129,4 @@ MonoBehaviour:
   cost: 2
   damage: 3
   burnDamage: 1
-  duration: 3
+  remainingTurn: 3

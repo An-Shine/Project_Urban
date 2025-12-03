@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8304533553668061323}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,8 +51,8 @@ GameObject:
   - component: {fileID: 1393778424824694819}
   - component: {fileID: 4229114669360425776}
   - component: {fileID: 2591530897267189075}
-  m_Layer: 0
-  m_Name: Enemy_Center
+  m_Layer: 7
+  m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,9 +66,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2856355108988666343}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.75, y: 3.5, z: 1}
+  m_LocalScale: {x: 1.5, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 55326193112991319}
@@ -192,13 +192,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70df47b7c00fcdf4b8beb9312bedff37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  element: 0
   OnDie:
     m_PersistentCalls:
       m_Calls: []
   OnDamaged:
     m_PersistentCalls:
       m_Calls: []
-  hpBar: {fileID: 4670223083198603930}
+  hpBar: {fileID: 8582539147822481884}
+  selectedArrow: {fileID: 3515555034441816934}
 --- !u!1 &2993497007679126081
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,8 +211,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8474802601156156465}
   - component: {fileID: 490757275441564942}
-  - component: {fileID: 4670223083198603930}
-  m_Layer: 5
+  - component: {fileID: 8582539147822481884}
+  m_Layer: 7
   m_Name: Enemy_HpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +290,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4670223083198603930
+--- !u!114 &8582539147822481884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -299,7 +301,82 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9893818449e5f1d4683199f240fd824b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HpBarController
+  m_EditorClassIdentifier: Assembly-CSharp::HpBar
+--- !u!1 &3997018410110691740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8885720216733313841}
+  - component: {fileID: 1653046015516349212}
+  - component: {fileID: 3515555034441816934}
+  m_Layer: 7
+  m_Name: Selected
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8885720216733313841
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997018410110691740}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 55326193112991319}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 60, y: 25}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &1653046015516349212
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997018410110691740}
+  m_CullTransparentMesh: 1
+--- !u!114 &3515555034441816934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997018410110691740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6964993248437387771
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +389,7 @@ GameObject:
   - component: {fileID: 200658409981209977}
   - component: {fileID: 7208222436295788085}
   - component: {fileID: 3812999857377978602}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,6 +408,7 @@ RectTransform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 8885720216733313841}
   - {fileID: 8474802601156156465}
   m_Father: {fileID: 4690104006554611462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -413,7 +491,7 @@ GameObject:
   - component: {fileID: 1848913647066606772}
   - component: {fileID: 7898993330614885852}
   - component: {fileID: 4487776830552682864}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

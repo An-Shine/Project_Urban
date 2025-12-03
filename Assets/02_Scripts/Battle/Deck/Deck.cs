@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Deck : MonoBehaviour
 {
@@ -205,6 +204,4 @@ public class Deck : MonoBehaviour
         if (originCardList.Contains(cardName))
             originCardList.Remove(cardName);
     }
-
-
 }

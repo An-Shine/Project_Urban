@@ -5,7 +5,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(HpController))]
 [RequireComponent(typeof(ShieldController))]
 abstract public class Target : MonoBehaviour
-{
+{   
+    [Header("Initial Settings")]
     [SerializeField] protected Element element;
 
     // Controller
@@ -18,11 +19,13 @@ abstract public class Target : MonoBehaviour
     public ShieldController ShieldController => shieldController;
 
     // Event
+    [Header("Event")]
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
     // Status    
     protected bool isStun = false;
+    public bool IsStun => isStun;
 
     protected virtual void Start()
     {

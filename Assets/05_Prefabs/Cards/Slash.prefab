@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8722774033953244461}
   - component: {fileID: 4934051836479890614}
   - component: {fileID: 5320993288656041092}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Slash
   m_TagString: Card
   m_Icon: {fileID: 0}
@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df3e773a37b70e4abf597420dc63935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Slash
-  cardImage: {fileID: 0}
+  element: 0
   cost: 2
   damage: 3

@@ -24,8 +24,6 @@ public class BattleManager : SceneSingleton<BattleManager>
 
     private void Start()
     {
-
-
         float enemyXpos = -3.5f;
         for (int  i = 0 ; i < enemies.Length; i++)
         {
@@ -61,6 +59,10 @@ public class BattleManager : SceneSingleton<BattleManager>
 
         for (int i = 0 ; i < enemies.Length; i++)
         {
+            if (enemies[i].IsStun)
+                continue;
+
+            // Enemy Attack Animation 
             enemies[i].Attack(player);
             enemies[i].transform.localScale *= 1.2f;
             yield return new WaitForSeconds(0.5f);
