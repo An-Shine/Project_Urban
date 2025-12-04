@@ -50,11 +50,12 @@ abstract public class Card : MonoBehaviour
     public void MoveTo(Vector3 targetLocalPos, UnityAction onComplete = null)
     {
         if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-
+        
+        OriginPos = targetLocalPos;
         moveCoroutine = StartCoroutine(MoveRoutine(targetLocalPos, onComplete));
     }
 
-    private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 0.3f)
+    private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 1.0f)
     {
         float time = 0;
         Vector3 startPos = transform.localPosition;
