@@ -17,11 +17,10 @@ public class BattleManager : SceneSingleton<BattleManager>
     public bool IsPlayerTurn => isPlayerTurn;
 
     // Event
+    public UnityEvent OnTurnStart = new();
     public UnityEvent OnTurnEnd = new();
     public UnityEvent OnBattleEnd = new();
     
-        
-
     private void Start()
     {
         float enemyXpos = -3.5f;
@@ -36,8 +35,11 @@ public class BattleManager : SceneSingleton<BattleManager>
 
             enemyXpos += 3.5f;
         }
+
+        OnTurnStart?.Invoke();
     }
 
+    // UI로 호출
     public void TurnEnd()
     {
         OnTurnEnd?.Invoke();
@@ -58,8 +60,8 @@ public class BattleManager : SceneSingleton<BattleManager>
         //player = GameManager.Instance.Player;
 
         for (int i = 0 ; i < enemies.Length; i++)
-        {
-            if (enemies[i].IsStun)
+        {   
+            if (enemies[i].IsStun())
                 continue;
 
             // Enemy Attack Animation 
@@ -69,7 +71,7 @@ public class BattleManager : SceneSingleton<BattleManager>
             enemies[i].transform.localScale /= 1.2f;
         }
         
-        player.Reset();
         isPlayerTurn = true;
+        OnTurnStart?.Invoke();
     }
 }

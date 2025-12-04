@@ -1,7 +1,8 @@
 using UnityEngine;
 
+[RequireComponent(typeof(HpController))]
+[RequireComponent(typeof(ShieldController))]
 [RequireComponent(typeof(CostController))]
-[RequireComponent(typeof(Deck))]
 public class Player : Target
 {
     [Header("Initial Settings")]
@@ -15,9 +16,8 @@ public class Player : Target
     [Header("Mouse Pointer Object")]
     [SerializeField] private MousePointer mousePointer;
 
-
     // Deck Component
-    private Deck deck;
+    [SerializeField] private Deck deck;
     private Card prevSelectedCard;
 
     // Component
@@ -25,53 +25,24 @@ public class Player : Target
     public CostController CostController => costController;
 
     public Element ShieldElement { get; set; } = Element.None;
+    public Deck Deck => deck;
 
-    // Target의 Awake에서 호출
-    protected override void Init()
+    private void Awake()
     {
-        base.Init();
-        hpController.Reset();
-
+        hpController = GetComponent<HpController>();
+        shieldController = GetComponent<ShieldController>();
         costController = GetComponent<CostController>();
-        deck = GetComponent<Deck>();
 
-        deck.Init();
+        // UI Init
         hpBar.Init(hpController);
         costText.Init(costController);
-
-        if (BattleManager.Instance != null)
-        {
-            BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
-        }
     }
 
-    private void HandleTurnEnd()
-    {        
-        if (deck != null)
-        {
-            // 남은 카드를 모두 무덤으로 날려보냄
-            deck.DiscardHand();
-        }            
-    }
-
-    // Target의 Awake에서 호출
-    public override void Reset()
+    private void Start()
     {
-        // 새로운 전투 시작 시, HP는 리셋하지 않는다
-        shieldController.Reset();
-        costController.Reset();
-
-        deck.DrawCard(startingDrawCount);   //설정된 갯수만큼 드로우
-    }
-
-    public void DrawCard(int amount)
-    {
-        deck.DrawCard(amount);
-    }
-
-    protected override void Start()
-    {
-        base.Start();
+        // Turn Event
+        BattleManager.Instance.OnTurnStart.AddListener(HandleTurnStart);
+        BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
 
         // Card Event
         mousePointer.OnCardSelect.AddListener(HandleCardSelect);
@@ -83,9 +54,20 @@ public class Player : Target
         mousePointer.OnEnemySelect.AddListener(HandleEnemySelect);
         mousePointer.OnEnemyEnter.AddListener(HandleEnemyEnter);
         mousePointer.OnEnemyExit.AddListener(HandleEnemyExit);
+    }
 
-        // Turn Event
-        BattleManager.Instance.OnTurnEnd.AddListener(() => deck.DiscardHand());
+    private void HandleTurnStart()
+    {
+        if (IsStun())
+            BattleManager.Instance.TurnEnd();
+
+        deck.Draw(startingDrawCount);
+    }
+
+    private void HandleTurnEnd()
+    {
+        deck.DiscardAll();
+        costController.Reset();
     }
 
     private void HandleCardSelect(Card card)
@@ -103,10 +85,10 @@ public class Player : Target
 
                 Debug.Log($"Use Card To Player : {card.name}");
                 Debug.Log($"Cur Shield : {shieldController.CurrentPoint}");
-                
+
                 return;
             }
-            
+
             // 전체 공격 혹은 전체 디버프 처리
             else if (card.Type == CardType.Attack || card.Type == CardType.Debuff)
             {
@@ -122,7 +104,7 @@ public class Player : Target
             prevSelectedCard.UnHover();
             card.Hover();
         }
-        
+
         prevSelectedCard = card;
     }
 
@@ -144,7 +126,7 @@ public class Player : Target
 
         if (selectedCard != null)
             selectedCard.UnHover();
-        
+
         mousePointer.ClearSelection();
         prevSelectedCard = null;
     }
@@ -153,7 +135,7 @@ public class Player : Target
     {
         if (!CanTargetEnemy())
             return;
-        
+
         Card selectedCard = mousePointer.SelectedCard;
         selectedCard.Use(enemy);
 
@@ -181,5 +163,17 @@ public class Player : Target
         if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return false;
 
         return true;
+    }
+
+    public void Reset()
+    {
+        // 새로운 전투 시작 시, HP는 리셋하지 않는다
+        shieldController.Reset();
+        costController.Reset();
+    }
+
+    public void DrawCard(int amount)
+    {
+        deck.Draw(amount);
     }
 }

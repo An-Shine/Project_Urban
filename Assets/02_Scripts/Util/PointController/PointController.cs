@@ -48,6 +48,11 @@ abstract public class PointController : MonoBehaviour
     public UnityEvent<int> OnUpdatePoint { get; } = new();
     public UnityEvent<int> OnUpdateMaxPoint { get; } = new();
 
+    private void Awake()
+    {
+        ResetPoint();
+    }
+
     public void Increase(int amount = 1)
     {
         curPoint += amount;

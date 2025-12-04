@@ -23,16 +23,6 @@ abstract public class Target : MonoBehaviour
     public UnityEvent OnDie = new();
     public UnityEvent<bool> OnDamaged = new();
 
-    // Status    
-    protected bool isStun = false;
-    public bool IsStun => isStun;
-
-    protected virtual void Start()
-    {
-        Init();
-        Reset();
-    }
-
     public void Damage(int hitPoint)
     {
         // 방패로 데미지 흡수
@@ -64,43 +54,16 @@ abstract public class Target : MonoBehaviour
     public void AddConditionStatus(ConditionStatus conditionStatus)
     {   
         conditionStatusList.Add(conditionStatus);
-
-        if (conditionStatus is Stun)
-            isStun = true;
     }
 
-    protected virtual void Init()
+    public bool IsStun()
     {
-        hpController = GetComponent<HpController>();
-        shieldController = GetComponent<ShieldController>();
-
-        BattleManager.Instance.OnTurnEnd.AddListener(TurnEndHandler);
-    }
-
-    private void TurnEndHandler()
-    {
-        foreach (var conditionStatus in conditionStatusList)
+        foreach (ConditionStatus status in conditionStatusList)
         {
-            conditionStatus.Execute(this);
+            if (status is Stun)
+                return true;
         }
 
-        conditionStatusList.RemoveAll(status => status.RemainingTurn <= 0);
-
-        isStun = false;
-        foreach (var conditionStatus in conditionStatusList)
-        {
-            if (conditionStatus is Stun)
-            {
-                isStun = true;    
-                break;
-            }
-        }
-    }
-
-    public virtual void Reset()
-    {
-        hpController.Reset();
-        shieldController.Reset();
-        conditionStatusList.Clear();
+        return false;
     }
 }
