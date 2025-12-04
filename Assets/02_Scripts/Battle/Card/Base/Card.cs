@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Events;
 
 public enum CardType
 {
@@ -17,41 +18,44 @@ abstract public class Card : MonoBehaviour
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
     
-    // 특수 카드 여부
-    public bool IsSpecial { get; }
+    // 이동 코루틴
+    private Coroutine moveCoroutine;
 
-    //제외 카드 여부
-    public bool IsException { get; }
 
+    // 카드 정보 관련
+    public bool IsSpecial { get; }      // 특수 카드 여부 
+    public bool IsException { get; }     //제외 카드 여부
+
+    // Property
     public int Cost => cost;
+    public Vector3 OriginPos { get; set; } = new();
+    public bool IsEntered { get; set; } = false;
 
     public void Hover()
     {
-        gameObject.transform.localScale *= 1.2f;
+        transform.localScale *= 1.2f;
+        
+        Vector3 newPos = OriginPos;
+        newPos.z = -2.0f;
+        transform.localPosition = newPos;
     }
 
     public void UnHover()
     {
-        gameObject.transform.localScale /= 1.2f;
+        transform.localScale /= 1.2f;
+        transform.localPosition = OriginPos;
     }
 
-    abstract public CardName Name { get; }
-    abstract public CardType Type { get; }
-    abstract public int Use(Target target);
-
-    // 이동 코루틴
-    private Coroutine moveCoroutine;
-
     // 목표 위치로 부드럽게 이동하는 함수
-    public void MoveTo(Vector3 targetLocalPos, Action onComplete = null)
+    public void MoveTo(Vector3 targetLocalPos, UnityAction onComplete = null)
     {
         if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+
         moveCoroutine = StartCoroutine(MoveRoutine(targetLocalPos, onComplete));
     }
 
-    private IEnumerator MoveRoutine(Vector3 targetPos, Action onComplete)
+    private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 0.3f)
     {
-        float duration = 0.3f; // 이동 시간
         float time = 0;
         Vector3 startPos = transform.localPosition;
 
@@ -67,7 +71,9 @@ abstract public class Card : MonoBehaviour
 
         // 도착 후 실행할 행동(파괴 등)이 있다면 실행
         onComplete?.Invoke();
-    }
+    }    
 
-    
+    abstract public CardName Name { get; }
+    abstract public CardType Type { get; }
+    abstract public int Use(Target target);
 }

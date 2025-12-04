@@ -140,41 +140,46 @@ public class Player : Target
 
     private void HandleCardUnSelect(Card card)
     {
-        if (card != null)
-            card.UnHover();
+        Card selectedCard = mousePointer.SelectedCard;
+
+        if (selectedCard != null)
+            selectedCard.UnHover();
         
+        mousePointer.ClearSelection();
         prevSelectedCard = null;
     }
 
     private void HandleEnemySelect(Enemy enemy)
     {
+        if (!CanTargetEnemy())
+            return;
+        
         Card selectedCard = mousePointer.SelectedCard;
-        if (selectedCard == null) return;
-        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
-
         selectedCard.Use(enemy);
+
         enemy.UnHover();
         deck.Discard(selectedCard);
-
-        Debug.Log($"Use Card To Enemy : {selectedCard.name}");
         mousePointer.ClearSelection();
     }
 
     private void HandleEnemyEnter(Enemy enemy)
     {
-        Card selectedCard = mousePointer.SelectedCard;
-        if (selectedCard == null) return;
-        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
-
-        enemy.Hover();
+        if (CanTargetEnemy())
+            enemy.Hover();
     }
 
     private void HandleEnemyExit(Enemy enemy)
     {
-        Card selectedCard = mousePointer.SelectedCard;
-        if (selectedCard == null) return;
-        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return;
+        if (CanTargetEnemy())
+            enemy.UnHover();
+    }
 
-        enemy.UnHover();
+    private bool CanTargetEnemy()
+    {
+        Card selectedCard = mousePointer.SelectedCard;
+        if (selectedCard == null) return false;
+        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return false;
+
+        return true;
     }
 }

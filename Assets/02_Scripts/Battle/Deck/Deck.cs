@@ -180,13 +180,18 @@ public class Deck : MonoBehaviour
 
             //전체 너비 재계산
             float xPos = startX + (i * currentSpacing);
-            Vector3 targetPos = new Vector3(xPos, 0, -i * 0.1f);
+            Vector3 targetPos = new(xPos, 0, -i * 0.1f);
+            
+            int idx = i;
+            currentHandList[i].MoveTo(targetPos, () =>
+            {
+                currentHandList[idx].OriginPos = targetPos;
+            });
 
-            currentHandList[i].MoveTo(targetPos);
-
+            // 일단 필요없어보임
             // 렌더링 순서 정리(오른쪽 카드가 위로오게)
-            SortingGroup sg = currentHandList[i].GetComponent<SortingGroup>();
-            if (sg != null) sg.sortingOrder = i;
+            // SortingGroup sg = currentHandList[i].GetComponent<SortingGroup>();
+            // if (sg != null) sg.sortingOrder = i;
         }
     }
     // 사용한 카드 UsedCardList 로 보내기
