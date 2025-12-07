@@ -35,14 +35,16 @@ public class Player : Target
         costController = GetComponent<CostController>();
         deck = GetComponent<Deck>();
 
-        deck.Init();
-        hpBar.Init(hpController);
-        costText.Init(costController);
+        
+        if(deck != null) deck.Init();
+        if(hpBar != null) hpBar.Init(hpController);
+        if(costText != null) costText.Init(costController);
 
         if (BattleManager.Instance != null)
         {
             BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
         }
+        
     }
 
     private void HandleTurnEnd()

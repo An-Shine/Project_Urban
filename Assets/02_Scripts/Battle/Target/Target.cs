@@ -74,7 +74,12 @@ abstract public class Target : MonoBehaviour
         hpController = GetComponent<HpController>();
         shieldController = GetComponent<ShieldController>();
 
-        BattleManager.Instance.OnTurnEnd.AddListener(TurnEndHandler);
+       // Main_UI에서 Player 프리펩에서 Deck 정보만 빼오는용도로 쓰려고함
+       // 배틀매니저 존재확인 후 연결
+        if (BattleManager.Instance != null)
+        {
+            BattleManager.Instance.OnTurnEnd.AddListener(TurnEndHandler);
+        }
     }
 
     private void TurnEndHandler()

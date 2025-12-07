@@ -292,4 +292,20 @@ public class Deck : MonoBehaviour
         if (originCardList.Contains(cardName))
             originCardList.Remove(cardName);
     }
+
+    // StoreUI 에서 카드확인 용도
+    public List<CardName> StoreUICardNames()
+    {
+        return new List<CardName>(prefabDict.Keys);
+    }
+
+    // 카드 이름으로 프리팹을 찾아주는 함수    
+    public Card GetCardPrefab(CardName name)
+    {
+        if (prefabDict.ContainsKey(name))
+        {
+            return prefabDict[name];
+        }
+        return null;
+    }
 }
