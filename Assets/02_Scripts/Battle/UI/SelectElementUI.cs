@@ -5,7 +5,8 @@ public class SelectManager : MonoBehaviour
 {
     // 1. Flame 속성 선택 버튼 연결
     public void OnClickFlame()
-    {        
+    {   
+        GameManager.Instance.SelectedElement = Element.Flame;
         GameManager.Instance.SetBonusCards(CardName.Ignite, CardName.FlameBarrier);
         
         GoToBattleScene();
@@ -14,6 +15,7 @@ public class SelectManager : MonoBehaviour
     // 2. Ice 속성 선택 버튼 연결
     public void OnClickIce()
     {
+        GameManager.Instance.SelectedElement = Element.Ice;
         GameManager.Instance.SetBonusCards(CardName.GlacialWedge, CardName.IceShield);
         GoToBattleScene();
     }
@@ -21,6 +23,7 @@ public class SelectManager : MonoBehaviour
     // 3. Grass 속성 선택 버튼 연결
     public void OnClickGrass()
     {
+        GameManager.Instance.SelectedElement = Element.Grass;
         GameManager.Instance.SetBonusCards(CardName.DoubleEdgedSword, CardName.ElasticBarrier);
         GoToBattleScene();
     }

@@ -72,6 +72,8 @@
         "Behaviour",
         "Debuff",
         "Dont",
-        "Lerp"
+        "interactable",
+        "Lerp",
+        "UGUI"
     ]
 }
