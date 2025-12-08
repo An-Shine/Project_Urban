@@ -335,10 +335,7 @@ public class Deck : MonoBehaviour
                 resultList.Add(name);
             }
         }
-
         return resultList;
-        // 확인된 속성의 카드프리펩 생성로직
-    
     }    
     
 }
