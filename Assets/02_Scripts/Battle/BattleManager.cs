@@ -7,37 +7,31 @@ public class BattleManager : SceneSingleton<BattleManager>
     // Player
     private int curTurn;
     private bool isPlayerTurn = true;
-    [SerializeField] private Player player;
+    private int earnedCoin;
 
-    [SerializeField] private Transform enemyZone;
-    [SerializeField] private Enemy enemyPrefab;
-    private readonly Enemy [] enemies = new Enemy[3];
-
+    public Player Player => GameManager.Instance.Player;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
 
     // Event
+    public UnityEvent OnTurnStart = new();
     public UnityEvent OnTurnEnd = new();
     public UnityEvent OnBattleEnd = new();
     
-        
-
     private void Start()
     {
-        float enemyXpos = -3.5f;
-        for (int  i = 0 ; i < enemies.Length; i++)
-        {
-            enemies[i] = Instantiate(
-                enemyPrefab,
-                enemyZone.position + new Vector3(enemyXpos, 0, 0),
-                Quaternion.identity,
-                enemyZone
-            );
-
-            enemyXpos += 3.5f;
-        }
+        OnBattleEnd.AddListener(HandleBattleEnd);
+        OnTurnStart?.Invoke();
     }
 
+    private void HandleBattleEnd()
+    {
+        // 보상 UI 활성화하기
+        Debug.Log("Battle End!");
+        GameManager.Instance.AddCoin(earnedCoin);
+    }
+
+    // UI로 호출
     public void TurnEnd()
     {
         OnTurnEnd?.Invoke();
@@ -45,31 +39,16 @@ public class BattleManager : SceneSingleton<BattleManager>
         isPlayerTurn = false;
         curTurn++;
 
-        ExecuteEnemyAction();
-    }
-
-    private void ExecuteEnemyAction()
-    {
-        StartCoroutine(ExecuteEnemyActionRoutine());
-    }
-
-    private IEnumerator ExecuteEnemyActionRoutine()
-    {
-        //player = GameManager.Instance.Player;
-
-        for (int i = 0 ; i < enemies.Length; i++)
+        EnemyManager.Instance.ExecuteEnemyAction(() =>
         {
-            if (enemies[i].IsStun)
-                continue;
+            isPlayerTurn = true;
+            OnTurnStart?.Invoke();
+        });
+    }
 
-            // Enemy Attack Animation 
-            enemies[i].Attack(player);
-            enemies[i].transform.localScale *= 1.2f;
-            yield return new WaitForSeconds(0.5f);
-            enemies[i].transform.localScale /= 1.2f;
-        }
-        
-        player.Reset();
-        isPlayerTurn = true;
+    public void AddCoin(int amount)
+    {
+        earnedCoin += amount;
+        Debug.Log($"Current Coin : {earnedCoin}");
     }
 }
