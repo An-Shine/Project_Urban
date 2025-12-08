@@ -49,45 +49,15 @@ public class StoreUI : MonoBehaviour
     private void CreateCardPool()
     {
         availableCardPool.Clear();
+        if (deck == null) return;
 
-        if(deck == null) return;
-
-        // 1. 덱에 등록된 모든 카드 이름 가져옴
-        List<CardName> allRegisteredCards = deck.StoreUICardNames();
-                
-        if (allRegisteredCards.Count == 0)
-        {            
-            return;
-        }
-
-        // 2. GameManager 에서 현재 속성 받아옴
+        // 1. 현재 속성 확인
         Element currentElement = Element.None;
-        if(GameManager.Instance !=  null)
-        {
+        if (GameManager.Instance != null)
             currentElement = GameManager.Instance.SelectedElement;
-        }        
 
-        // 속성에 따른 카드네임 ID 범위설정
-        int minId = 0;
-        int maxId = 99;
-
-        switch (currentElement)
-        {
-            case Element.Flame : minId = 100; maxId = 199; break;
-            case Element.Ice : minId = 200; maxId = 299; break;
-            case Element.Grass : minId = 300; maxId = 399; break;
-        }       
-
-        //Id 범위 안에 있는 카드만 리스트에서 확인
-        foreach(CardName name in allRegisteredCards)
-        {
-            int id = (int)name;
-            if(id >= minId && id <= maxId)
-            {
-                availableCardPool.Add(name);
-                
-            }
-        }
+        // 2. Deck의 공용 함수
+        availableCardPool = deck.GetCardsByElement(currentElement);        
     }
 
     // 슬롯에 랜덤카드배치 함수

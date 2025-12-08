@@ -26,19 +26,13 @@ public class RewardCardList : MonoBehaviour
         // UI에 맞게 위치/크기/레이어 조정
         currentCardObject.transform.localPosition = new Vector3(0, 0, -500f);
         currentCardObject.transform.localRotation = Quaternion.identity;
-        currentCardObject.transform.localScale = new Vector3(130.0f, 200.0f, 1.0f); // 크기 조절
+        currentCardObject.transform.localScale = new Vector3(200.0f, 350.0f, 1.0f); // 크기 조절
         ChangeLayersRecursively(currentCardObject, "UI"); // UI 레이어로 변경
 
-        UnityEngine.Rendering.SortingGroup sg = currentCardObject.GetComponent<UnityEngine.Rendering.SortingGroup>();
-        if (sg != null)
+        var sg = currentCardObject.GetComponent<UnityEngine.Rendering.SortingGroup>();
+        if (sg != null) 
         {
-            sg.sortingLayerName = "Default"; 
-            sg.sortingOrder = 2000; // 아주 높은 값으로 설정 (UI보다 위에 오게)
-        }
-        else
-        {
-            var sr = currentCardObject.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.sortingOrder = 2000;
+            sg.sortingOrder = 3000; // 아주 높은 값
         }
         
         // 3. 버튼 연결

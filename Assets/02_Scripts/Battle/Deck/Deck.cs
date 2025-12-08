@@ -308,4 +308,37 @@ public class Deck : MonoBehaviour
         }
         return null;
     }
+
+    // 덱의 속성을 확인하고 그 속성에 맞는 카드 프리펩을 랜덤으로 가져오기위함
+    public List<CardName> GetCardsByElement(Element element)
+    {
+        List<CardName> resultList = new List<CardName>();
+        List<CardName> allCards = new List<CardName>(prefabDict.Keys); // 전체 덱
+
+        // 1. 범위 설정
+        int minId = 0;
+        int maxId = 99;
+
+        switch (element)
+        {
+            case Element.Flame: minId = 100; maxId = 199; break;
+            case Element.Ice:   minId = 200; maxId = 299; break;
+            case Element.Grass: minId = 300; maxId = 399; break;
+        }
+
+        // 2. 필터링
+        foreach (CardName name in allCards)
+        {
+            int id = (int)name;
+            if (id >= minId && id <= maxId)
+            {
+                resultList.Add(name);
+            }
+        }
+
+        return resultList;
+        // 확인된 속성의 카드프리펩 생성로직
+    
+    }    
+    
 }
