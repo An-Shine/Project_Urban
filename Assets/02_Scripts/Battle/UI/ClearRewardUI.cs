@@ -44,7 +44,7 @@ public class ClearRewardUI : MonoBehaviour
         }
 
         // 3. Deck에게 해당 속성 카드 목록 달라고 요청
-        List<CardName> candidateCards = deck.GetCardsByElement(currentElement);
+        List<CardName> candidateCards = CardFactory.Instance.GetCardsByElement(currentElement);
 
         // 4. 랜덤으로 3장 뽑아서 슬롯에 배치
         for (int i = 0; i < slots.Length; i++)
@@ -55,7 +55,7 @@ public class ClearRewardUI : MonoBehaviour
                 CardName pickedName = candidateCards[randomIndex];
 
                 // 프리팹 가져오기
-                Card prefab = deck.GetCardPrefab(pickedName);
+                Card prefab = CardFactory.Instance.GetCardPrefab(pickedName);
                 
                 // 슬롯 세팅
                 slots[i].gameObject.SetActive(true);

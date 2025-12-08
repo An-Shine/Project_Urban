@@ -77,6 +77,7 @@ public class Deck : MonoBehaviour
     public void Draw(int amount)
     {
         tempCardList.Clear();
+        
         for (int i = 0; i < amount; i++)
             tempCardList.Add(GetNextCardName());
 

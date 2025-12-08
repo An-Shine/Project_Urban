@@ -3,7 +3,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
 public class ConditionStatusView : MonoBehaviour
 {
     private Text costText;

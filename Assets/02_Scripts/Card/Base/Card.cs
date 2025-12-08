@@ -49,10 +49,11 @@ abstract public class Card : MonoBehaviour
     // 목표 위치로 부드럽게 이동하는 함수
     public void MoveTo(Vector3 targetLocalPos, UnityAction onComplete = null)
     {
-        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+        // if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         
         OriginPos = targetLocalPos;
-        moveCoroutine = StartCoroutine(MoveRoutine(targetLocalPos, onComplete));
+        transform.localPosition = targetLocalPos;
+        // moveCoroutine = StartCoroutine(MoveRoutine(targetLocalPos, onComplete));
     }
 
     private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 1.0f)

@@ -86,8 +86,9 @@ abstract public class Enemy : Target
 
     public void MoveTo(Vector3 targetPos, UnityAction onComplete = null)
     {
-        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-        moveCoroutine = StartCoroutine(MoveRoutine(targetPos, onComplete));
+        // if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+        // moveCoroutine = StartCoroutine(MoveRoutine(targetPos, onComplete));
+        transform.localPosition = targetPos;
     }
 
     private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 0.5f)
