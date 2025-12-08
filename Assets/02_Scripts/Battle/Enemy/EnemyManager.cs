@@ -77,6 +77,8 @@ public class EnemyManager : SceneSingleton<EnemyManager>
             // Enemy Attack Animation 
             
             enemy.Action();
+
+            // Enemy Anim
             enemy.transform.localScale *= 1.2f;
             yield return new WaitForSeconds(0.5f);
             enemy.transform.localScale /= 1.2f;

@@ -5,11 +5,12 @@ using UnityEngine.Events;
 public class BattleManager : SceneSingleton<BattleManager>
 {
     // Player
+    [SerializeField] private Player player;
     private int curTurn;
     private bool isPlayerTurn = true;
     private int earnedCoin;
 
-    public Player Player => GameManager.Instance.Player;
+    public Player Player => player;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
 

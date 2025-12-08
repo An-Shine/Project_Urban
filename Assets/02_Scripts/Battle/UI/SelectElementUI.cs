@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // 씬 이동을 위해 필수
 
 public class SelectManager : MonoBehaviour
 {
+    private Dictionary<Element, CardName[]> elementCardMaps = new();
+
     // 1. Flame 속성 선택 버튼 연결
     public void OnClickFlame()
     {   

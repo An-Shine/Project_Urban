@@ -8,8 +8,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/01_Scenes/Main_UI.unity
+  - enabled: 0
+    path: Assets/01_Scenes/Map_Scene.unity
     guid: a5cd035932a12054b95dacecbc3a2c67
   - enabled: 1
     path: Assets/01_Scenes/Battle_Scene.unity

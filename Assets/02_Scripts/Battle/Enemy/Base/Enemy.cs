@@ -59,6 +59,8 @@ abstract public class Enemy : Target
     {   
         List<EnemyAction> actions = actionMap[actionPattern[actionIdx]];
         enemyAction = actions[Random.Range(0, actions.Count)];
+
+        // UI 표시
         nextActionText.SetNextActionText(enemyAction.ToString());
         
         actionIdx = (actionIdx + 1) % actionPattern.Count;
@@ -86,9 +88,8 @@ abstract public class Enemy : Target
 
     public void MoveTo(Vector3 targetPos, UnityAction onComplete = null)
     {
-        // if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-        // moveCoroutine = StartCoroutine(MoveRoutine(targetPos, onComplete));
-        transform.localPosition = targetPos;
+        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+        moveCoroutine = StartCoroutine(MoveRoutine(targetPos, onComplete));
     }
 
     private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 0.5f)

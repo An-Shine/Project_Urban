@@ -12,10 +12,7 @@ public class DoubleEdgedSword : Attack
         target.Damage(damage);
 
         // 2. 반동 데미지        
-        if (GameManager.Instance != null && GameManager.Instance.Player != null)
-        {            
-            GameManager.Instance.Player.Damage(selfDamage);
-        }
+        BattleManager.Instance.Player.Damage(selfDamage);
 
         // 3. 코스트 반환
         return cost;

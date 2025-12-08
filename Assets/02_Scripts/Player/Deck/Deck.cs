@@ -11,7 +11,7 @@ public class Deck : MonoBehaviour
 
     }
     // 초기 덱 레시피 
-    [Header("InitialDeckRecipe")]
+    [Header("Initial Deck Recipe")]
     [SerializeField] private List<CardRecipe> initialDeckRecipe = new();
 
     //핸드 설정
