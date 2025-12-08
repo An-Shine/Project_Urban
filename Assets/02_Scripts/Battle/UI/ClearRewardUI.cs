@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ClearRewardUI : MonoBehaviour
 {
-    [Header("연결")]
     [SerializeField] private RewardCardList[] slots; // 슬롯 3개
     [SerializeField] private GameObject rewardPanel; // UI 전체
     [SerializeField] private GameObject clearRewardObject;  //SelectRewardCard 누르면 꺼지는 오브젝트
@@ -72,11 +72,17 @@ public class ClearRewardUI : MonoBehaviour
     // 카드 선택 시 (RewardCardList에서 호출)
     public void OnRewardSelected(CardName cardName)
     { 
+        Debug.Log($" 클리어보상카드 선택완료 : {cardName}");
         // 덱에 추가
         deck.AddCard(cardName);
 
         // UI 끄기 및 다음 진행
-        rewardPanel.SetActive(false);
-        // BattleManager.Instance.GoToNextMap(); // (추후 구현)
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.IsStageSelectMode = true;
+        }
+
+        // Main_UI 씬으로 이동
+        SceneManager.LoadScene("Main_UI");
     }
 }
