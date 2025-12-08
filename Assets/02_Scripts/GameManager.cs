@@ -5,6 +5,7 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private Player player;
     [SerializeField] private List<Card> allCardPrefabs = new List<Card>();
+    private int coin;
 
     public Player Player => player;
 
@@ -66,4 +67,8 @@ public class GameManager : Singleton<GameManager>
         return result;
     }
 
+    public void AddCoin(int amount)
+    {
+        coin += amount;
+    }
 }
