@@ -1,14 +1,18 @@
+using UnityEngine;
+
 public enum ActionType
 {
     Attack,  // 공격
-    Defense, // 방어
+    Protect, // 방어
     Buff,    // 버프
     Debuff   // 디버프
 }
 
 
-abstract public class EnemyAction
+abstract public class EnemyAction : ScriptableObject
 {
-    abstract public ActionType ActionType { get; }
+    abstract public ActionType Type { get; }
     abstract public Element Element { get; }
+
+    abstract public void Execute(Target target);
 } 

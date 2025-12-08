@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private Player player;
+    private int coin;
 
     public Player Player => player;
 
@@ -15,5 +16,10 @@ public class GameManager : Singleton<GameManager>
         SelectedBonusCards.Clear();
         SelectedBonusCards.Add(card1);
         SelectedBonusCards.Add(card2);
+    }
+
+    public void AddCoin(int amount)
+    {
+        coin += amount;
     }
 }

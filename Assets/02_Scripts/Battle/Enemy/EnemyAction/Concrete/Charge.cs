@@ -1,17 +1,15 @@
-public class Charge : EnemyAction, IExecute
-{
-    private readonly int damage = 6;
+using UnityEngine;
 
-    public override ActionType ActionType => ActionType.Attack;
+[CreateAssetMenu(fileName = "Charge", menuName = "Enemy/Actions/Charge")]
+public class Charge : EnemyAction
+{
+    [SerializeField] private int damage = 6;
+
+    public override ActionType Type => ActionType.Attack;
 
     public override Element Element => Element.None;
 
-    public bool CanExecute(Target target)
-    {
-        return target is Player;
-    }
-
-    public void Execute(Target target)
+    public override void Execute(Target target)
     {
         target.Damage(damage);
     }

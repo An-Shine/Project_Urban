@@ -1,35 +1,41 @@
 using System;
-using UnityEngine;
 using UnityEngine.Events;
 
-abstract public class PointController : MonoBehaviour
+public static class PointControllerFactory
 {
-    [SerializeField] protected int maxPoint;
-    [SerializeField] protected int minPoint;
+    public static HpController CreateHp(int max) => new(max, max);
+    public static ProtectController CreateProtect(int max) => new(max, 0);
+    public static CostController CreateCost(int max) => new(max, max);
+    public static TurnController CreateTurn(int max) => new(max, max);
+}
 
-    protected int curPoint;
+public class PointController
+{
+    private int maxPoint;
+    private int initPoint;
+    private int curPoint;
+
+    public PointController(int maxPoint, int initPoint)
+    {
+        this.maxPoint = maxPoint;
+        this.initPoint = initPoint;
+        this.curPoint = initPoint;
+    }
+
+    public void Reset()
+    {
+        curPoint = initPoint;
+    }
 
     public int MaxPoint
     {
         get { return maxPoint;}
         set
         {
-            if (value < 0 || value < minPoint)
+            if (value < 0)
                 throw new ArgumentException();
 
             maxPoint = value;
-        }
-    }
-
-    public int MinPoint
-    {
-        get { return minPoint;}
-        set
-        {
-            if (value < 0 || value > maxPoint)
-                throw new ArgumentException();
-
-            minPoint = value;
         }
     }
 
@@ -38,20 +44,14 @@ abstract public class PointController : MonoBehaviour
         get { return curPoint; }
         set
         {
-            if (value < 0 || value > maxPoint || value < minPoint)
+            if (value < 0 || value > maxPoint)
                 throw new ArgumentException();
 
             curPoint = value;
         }
     }
 
-    public UnityEvent<int> OnUpdatePoint { get; } = new();
-    public UnityEvent<int> OnUpdateMaxPoint { get; } = new();
-
-    private void Awake()
-    {
-        ResetPoint();
-    }
+    public UnityEvent<int, int> OnUpdate { get; } = new();
 
     public void Increase(int amount = 1)
     {
@@ -60,7 +60,7 @@ abstract public class PointController : MonoBehaviour
         if (curPoint > maxPoint)
             curPoint = maxPoint;
 
-        OnUpdatePoint?.Invoke(curPoint);
+        OnUpdate?.Invoke(curPoint, maxPoint);
     }
 
     public void Increase(float per)
@@ -72,10 +72,10 @@ abstract public class PointController : MonoBehaviour
     {
         curPoint -= amount;
 
-        if (curPoint < minPoint)
-            curPoint = minPoint;
+        if (curPoint < 0)
+            curPoint = 0;
 
-        OnUpdatePoint?.Invoke(curPoint);
+        OnUpdate?.Invoke(curPoint, maxPoint);
     }
 
     public void Decrease(float per)
@@ -86,7 +86,7 @@ abstract public class PointController : MonoBehaviour
     public void ExpandMax(int amount)
     {
         maxPoint += amount;
-        OnUpdateMaxPoint?.Invoke(maxPoint);
+        OnUpdate?.Invoke(curPoint, maxPoint);
     }
 
     public void ExpandMax(float per)
@@ -98,22 +98,14 @@ abstract public class PointController : MonoBehaviour
     {
         maxPoint -= amount;
 
-        if (maxPoint < minPoint)
-            maxPoint = minPoint;
+        if (maxPoint < 0)
+            maxPoint = 0;
 
-        OnUpdateMaxPoint?.Invoke(maxPoint);
+        OnUpdate?.Invoke(curPoint, maxPoint);
     }
 
     public void ReduceMax(float per)
     {
         ExpandMax((int)(maxPoint * per));
     }
-
-    public void Reset()
-    {
-        ResetPoint();
-        OnUpdatePoint?.Invoke(curPoint);
-    }
-
-    abstract protected void ResetPoint();
 }

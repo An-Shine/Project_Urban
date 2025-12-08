@@ -1,49 +1,26 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HpController))]
-[RequireComponent(typeof(ShieldController))]
-[RequireComponent(typeof(CostController))]
 public class Player : Target
 {
-    [Header("Initial Settings")]
+    [Header("Player Settings")]
+    [SerializeField] private int maxCost;
     [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
 
-    // UI
-    [Header("UI Object")]
-    [SerializeField] private CostText costText;
-    [SerializeField] private HpBar hpBar;
+    [Header("Player View")]
+    [SerializeField] protected CostView costView;
 
-    [Header("Mouse Pointer Object")]
+    [Header("Mouse Pointer")]
     [SerializeField] private MousePointer mousePointer;
 
-    // Deck Component
+    [Header("Deck")]
     [SerializeField] private Deck deck;
-    private Card prevSelectedCard;
-
-    // Component
-    private CostController costController;
-    public CostController CostController => costController;
-
-    public Element ShieldElement { get; set; } = Element.None;
     public Deck Deck => deck;
+
+    public CostController Cost { get; private set; }
+    private Card prevSelectedCard;
 
     private void Awake()
     {
-        hpController = GetComponent<HpController>();
-        shieldController = GetComponent<ShieldController>();
-        costController = GetComponent<CostController>();
-
-        // UI Init
-        hpBar.Init(hpController);
-        costText.Init(costController);
-    }
-
-    private void Start()
-    {
-        // Turn Event
-        BattleManager.Instance.OnTurnStart.AddListener(HandleTurnStart);
-        BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
-
         // Card Event
         mousePointer.OnCardSelect.AddListener(HandleCardSelect);
         mousePointer.OnCardUnSelect.AddListener(HandleCardUnSelect);
@@ -54,6 +31,22 @@ public class Player : Target
         mousePointer.OnEnemySelect.AddListener(HandleEnemySelect);
         mousePointer.OnEnemyEnter.AddListener(HandleEnemyEnter);
         mousePointer.OnEnemyExit.AddListener(HandleEnemyExit);
+
+        Hp = PointControllerFactory.CreateHp(maxHp);
+        Protect = PointControllerFactory.CreateProtect(maxProtect);
+        Cost = PointControllerFactory.CreateCost(maxCost);
+
+    }
+
+    private void Start()
+    {
+        // Turn Event
+        BattleManager.Instance.OnTurnStart.AddListener(HandleTurnStart);
+        BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
+
+        hpView.Bind(Hp);
+        protectView.Bind(Protect);
+        costView.Bind(Cost);
     }
 
     private void HandleTurnStart()
@@ -67,7 +60,6 @@ public class Player : Target
     private void HandleTurnEnd()
     {
         deck.DiscardAll();
-        costController.Reset();
     }
 
     private void HandleCardSelect(Card card)
@@ -84,7 +76,7 @@ public class Player : Target
                 prevSelectedCard = null;
 
                 Debug.Log($"Use Card To Player : {card.name}");
-                Debug.Log($"Cur Shield : {shieldController.CurrentPoint}");
+                Debug.Log($"Cur Shield : {Protect.CurrentPoint}");
 
                 return;
             }
@@ -168,8 +160,6 @@ public class Player : Target
     public void Reset()
     {
         // 새로운 전투 시작 시, HP는 리셋하지 않는다
-        shieldController.Reset();
-        costController.Reset();
     }
 
     public void DrawCard(int amount)

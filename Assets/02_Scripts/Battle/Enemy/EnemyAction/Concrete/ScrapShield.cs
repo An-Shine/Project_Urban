@@ -1,18 +1,17 @@
-public class ScrapShield : EnemyAction, IExecute
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ScrapShield", menuName = "Enemy/Actions/ScrapShield")]
+public class ScrapShield : EnemyAction
 {
-    private readonly int shield = 15;
-    private readonly int remainingTurn = 2;
-    public override ActionType ActionType => ActionType.Defense;
+    [SerializeField] private int shield = 15;
+    [SerializeField] private int remainingTurn = 2;
+    public override ActionType Type => ActionType.Protect;
     public override Element Element => Element.None;
 
-    public bool CanExecute(Target target)
-    {
-        return target is Enemy;
-    }
 
-    public void Execute(Target target)
+    public override void Execute(Target target)
     {
-        target.AddShield(shield);
-        target.AddConditionStatus(new ArmorBreak(remainingTurn));
+        target.AddProtect(shield);
+        target.AddConditionStatus(new Broken(remainingTurn));
     }
 }

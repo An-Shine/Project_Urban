@@ -2,58 +2,68 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(HpController))]
-[RequireComponent(typeof(ShieldController))]
 abstract public class Target : MonoBehaviour
-{   
-    [Header("Initial Settings")]
+{
+    [Header("Base Settings")]
+    [SerializeField] protected int maxHp;
+    [SerializeField] protected int maxProtect;
     [SerializeField] protected Element element;
 
-    // Controller
-    protected HpController hpController;
-    protected ShieldController shieldController;
+    [Header("Base View Settings")]
+    [SerializeField] protected HpView hpView;
+    [SerializeField] protected ProtectView protectView;
+    [SerializeField] protected ConditionStatusView conditionStatusView;
+
+    // 버프-디버프 관리
     protected List<ConditionStatus> conditionStatusList = new();
-    
+
     // Property
-    public HpController HpController => hpController;
-    public ShieldController ShieldController => shieldController;
+    public HpController Hp { get; protected set; }
+    public ProtectController Protect { get; protected set; }
+
+    public Element Element
+    {
+        get { return element; }
+        set { element = value; }
+    }
 
     // Event
-    [Header("Event")]
-    public UnityEvent OnDie = new();
-    public UnityEvent<bool> OnDamaged = new();
+    public UnityEvent<Target> OnDead { get; } = new();
+    public UnityEvent<Target, bool> OnDamaged { get; } = new();
+
 
     public void Damage(int hitPoint)
     {
         // 방패로 데미지 흡수
-        int shieldPoints = shieldController.CurrentPoint;
+        int shieldPoints = Protect.CurrentPoint;
         int damageToShield = Mathf.Min(shieldPoints, hitPoint);
         int remainingDamage = hitPoint - damageToShield;
 
         // 방패에 데미지 적용
         if (damageToShield > 0)
-            shieldController.Decrease(damageToShield);
+            Protect.Decrease(damageToShield);
 
         // 남은 데미지를 체력에 적용
         if (remainingDamage > 0)
-            hpController.Decrease(remainingDamage);
+            Hp.Decrease(remainingDamage);
 
-        if (hpController.CurrentPoint <= 0)
-            OnDie?.Invoke();
+        if (Hp.CurrentPoint <= 0)
+            OnDead?.Invoke(this);
         else
-            OnDamaged?.Invoke(shieldController.CurrentPoint > 0);
+            OnDamaged?.Invoke(this, Protect.CurrentPoint > 0);
 
-        Debug.Log($"{gameObject.name} : {hpController.CurrentPoint}, hitPoint : {hitPoint}");
+        Debug.Log($"{gameObject.name} : {Hp.CurrentPoint}, hitPoint : {hitPoint}");
     }
 
-    public void AddShield(int shieldPoint)
+    public void AddProtect(int protectPoint)
     {
-        shieldController.Increase(shieldPoint);
+        Protect.Increase(protectPoint);
     }
 
     public void AddConditionStatus(ConditionStatus conditionStatus)
-    {   
+    {
         conditionStatusList.Add(conditionStatus);
+        conditionStatusView?.UpdateView(conditionStatusList);
     }
 
     public bool IsStun()

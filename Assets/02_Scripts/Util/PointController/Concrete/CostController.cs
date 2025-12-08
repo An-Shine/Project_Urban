@@ -1,7 +1,4 @@
 public class CostController : PointController
 {
-    protected override void ResetPoint()
-    {
-        curPoint = maxPoint;
-    }
+    public CostController(int maxPoint, int initPoint) : base(maxPoint, initPoint) {}
 }
