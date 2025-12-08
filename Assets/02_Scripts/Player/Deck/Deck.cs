@@ -52,11 +52,11 @@ public class Deck : MonoBehaviour
 
         // 데모때는 주석 풀기
         // 초기 속성카드
-        // foreach (var cardName in GameManager.Instance.SelectedBonusCards)
-        // {
-        //     originCardList.Add(cardName);
-        // }
-        // Debug.Log($"[Deck] 속성 보너스 카드 추가됨! (현재 총 {originCardList.Count}장)");
+        foreach (var cardName in GameManager.Instance.SelectedBonusCards)
+        {
+            originCardList.Add(cardName);
+        }
+        Debug.Log($"[Deck] 속성 보너스 카드 추가됨! (현재 총 {originCardList.Count}장)");
     }
 
     public void Shuffle()
