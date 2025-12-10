@@ -17,6 +17,7 @@ abstract public class Card : MonoBehaviour
     //카드 기본 정보
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
+    [SerializeField] protected int price = 100;           // 상점 구매가격
     
     // 이동 코루틴
     private Coroutine moveCoroutine;
@@ -28,6 +29,7 @@ abstract public class Card : MonoBehaviour
 
     // Property
     public int Cost => cost;
+    public int Price => price;
     public Vector3 OriginPos { get; set; } = new();
     public bool IsEntered { get; set; } = false;
 

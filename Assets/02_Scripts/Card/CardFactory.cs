@@ -54,5 +54,25 @@ public class CardFactory : Singleton<CardFactory>
             }
         }
         return resultList;
+    }
+    // 전체 카드중 랜덤으로 중복없이 N장 뽑는 함수(상점용)
+    public List<Card> GetRandomCards(int count)
+    {
+        List<Card> result = new List<Card>();
+        List<Card> pool = new List<Card>(cardPrefabList);
+
+        for (int i = 0; i < count; i++)
+        {
+            if (pool.Count == 0) break;
+
+            int randomIndex = Random.Range(0, pool.Count);
+            result.Add(pool[randomIndex]);
+            
+            // 중복 방지
+            pool.RemoveAt(randomIndex);
+        }
+
+        return result;
     }    
+    
 }

@@ -21,14 +21,37 @@ public class Deck : MonoBehaviour
     private readonly List<CardName> originCardList = new();     // 원본 덱 
     private readonly List<CardName> unusedCardList = new();     // 뽑을 덱 
     private readonly List<CardName> usedCardList = new();       // 사용한 카드리스트
-    private readonly List<CardName> tempCardList = new(12);         // 카드 임시 버퍼
+    private readonly List<CardName> tempCardList = new(12);         // 카드 임시 버퍼    
 
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
+    public int OriginCount => originCardList.Count; //상점에서 덱 장수 확인용
 
     private void Awake()
     {
-        DeckMaking();
+        // 1. GameManager가 있고, 저장된 전역 덱(GlobalDeck)이 있는 경우 -> 그거 가져옴
+        if (GameManager.Instance != null && GameManager.Instance.GlobalDeck.Count > 0)
+        {
+            originCardList.Clear();
+            
+            // ★ 중요: 리스트를 그대로 가져오면 안되고 '복사'해야 합니다.
+            // (배틀 중에 소멸/변화가 원본에 영향을 주지 않도록)
+            originCardList.AddRange(GameManager.Instance.GlobalDeck);
+            
+            Debug.Log($" GameManager에서 덱 로드 완료! ({originCardList.Count}장)");
+        }
+        else
+        {
+            // 2. 저장된 덱이 없는 경우 (첫 시작 or 에디터 테스트) -> 초기 레시피로 생성
+            DeckMaking();
+
+            // 처음 만든 이 덱을 GameManager에 '원본'으로 등록해둠
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SetInitialDeck(originCardList);
+                Debug.Log(" 초기 덱을 GameManager에 등록했습니다.");
+            }
+        }
 
         foreach (var cardName in originCardList)
             unusedCardList.Add(cardName);
@@ -132,6 +155,15 @@ public class Deck : MonoBehaviour
     public void AddCard(CardName cardName)
     {
         originCardList.Add(cardName);
+        Debug.Log($" '{cardName}' 카드가 추가되었습니다.");
+        Debug.Log($" 총 카드 개수: {originCardList.Count}장");
+    }
+
+    //상점에서 구매한 카드 추가용
+    public void AddCard(Card card)
+    {
+        Debug.Log($"🔍 [4단계] Deck.AddCard(Card객체) 도착! 카드이름: {card.Name}");
+        AddCard(card.Name); 
     }
 
     // 카드 제거

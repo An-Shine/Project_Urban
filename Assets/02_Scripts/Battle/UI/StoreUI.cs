@@ -1,97 +1,152 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class StoreUI : MonoBehaviour
-{
-    [SerializeField] private Deck deck;
-    [SerializeField] private StoreCardList[] slots;
+{ 
+    [Header("카드 구역 연결")]
+    [SerializeField] private Transform gridParent;   // 슬롯들이 생성될 그리드
+    [SerializeField] private GameObject slotPrefab;  // 카드만 보여줄 슬롯 프리팹
 
-    [SerializeField] private int cardPrice = 100;       //카드 비용
-    [SerializeField] private int rerollCost = 50;       //리롤 비용
+    [Header("버튼 구역 연결 (수동 배치한 것들)")]
+    // ★ 여기에 미리 만든 버튼 6개를 순서대로 넣으세요!
+    [SerializeField] private Button[] buyButtons;
+    [SerializeField] private TextMeshProUGUI[] buttonTexts; // 버튼 안의 텍스트들도 순서대로!
 
-    private List<CardName> availableCardPool = new List<CardName>();
+    [Header("UI 표시")]
+    [SerializeField] private TextMeshProUGUI coinText;
+
+    [Header("구매 팝업")]
+    [SerializeField] private GameObject confirmPopup;
+    [SerializeField] private TextMeshProUGUI popupText;
+    [SerializeField] private Button yesButton;
+    [SerializeField] private Button noButton;
+
+    [Header("덱 확인 기능")]
+    [SerializeField] private Button deckCheckButton; // 덱 확인버튼
+    [SerializeField] private DeckCheckUI deckCheckUI; // 아까 만든 팝업 스크립트
+
+    // 구매 진행 중 임시 저장 변수
+    private Card targetCard;           // 살 카드 정보
+    private StoreCardSlot targetSlot;  // 그 카드가 있는 슬롯 (회색으로 바꾸려고)
+    private int targetIndex;           // 몇 번째 버튼인지 (버튼 끄려고)
+
+
+    private List<StoreCardSlot> spawnedSlots = new List<StoreCardSlot>(); // 생성된 슬롯들 관리
 
     private void Start()
-    {   
-        //Player 에서 Deck 찾기
-        if(deck == null)
-        {
-            var player = FindFirstObjectByType<Player>();
-            if(player != null) 
-            {
-                deck = player.GetComponent<Deck>();               
-            }            
-
-        if(deck != null)
-        {    
-            InitStore();        //초기화
-        }
+    {
+        // 시작 시 테스트
+        UpdateCoinUI();
+        // OpenStore(); 
     }
-}
+
+    public void OpenStore()
+    {
+        gameObject.SetActive(true);
+        InitStore();
+    }
 
     private void InitStore()
     {
-        // 1. 속성에 맞는 카드풀 생성        
-        CreateCardPool();
+        UpdateCoinUI();
 
-        // 2. 각 슬롯에 랜덤 카드 배치
-        foreach(var slot in slots)
+        // 1. 기존 슬롯 다 지우기 & 리스트 초기화
+        foreach (Transform child in gridParent) Destroy(child.gameObject);
+        spawnedSlots.Clear();
+
+        // 2. 카드 가져오기
+        if (CardFactory.Instance == null) return;
+        List<Card> shopCards = CardFactory.Instance.GetRandomCards(6);
+
+        // 3. 카드 슬롯 생성 및 버튼 연결
+        for (int i = 0; i < 6; i++)
         {
-            if(slot != null)SetRandomCardToSlot(slot);
+            // 카드 슬롯 생성
+            if (i < shopCards.Count)
+            {
+                GameObject slotObj = Instantiate(slotPrefab, gridParent);
+                StoreCardSlot slotScript = slotObj.GetComponent<StoreCardSlot>();
+                slotScript.Setup(shopCards[i]); // 카드 그림만 세팅
+                spawnedSlots.Add(slotScript);   // 리스트에 저장해둠
+            }
+
+            // 버튼 세팅
+            if (i < shopCards.Count)
+            {
+                Card cardData = shopCards[i]; // 이 버튼이 담당할 카드
+
+                // 버튼 텍스트 가격으로 변경
+                buttonTexts[i].text = $"{cardData.Price} G";
+                buyButtons[i].interactable = true; // 버튼 활성화
+
+                // 클릭 이벤트 연결
+                int index = i;
+                buyButtons[i].onClick.RemoveAllListeners();
+                buyButtons[i].onClick.AddListener(() => OnClickBuyButton(cardData, index));
+            }
+            else
+            {
+                // 카드가 6장보다 적으면 남는 버튼은 꺼두기
+                buyButtons[i].gameObject.SetActive(false);
+            }
+            deckCheckButton.onClick.AddListener(() => deckCheckUI.OpenDeckView());
         }
-            
-            
-        
+
+        // 팝업 초기화
+        confirmPopup.SetActive(false);
+        yesButton.onClick.RemoveAllListeners();
+        yesButton.onClick.AddListener(OnBuyConfirmed);
+        noButton.onClick.RemoveAllListeners();
+        noButton.onClick.AddListener(() => confirmPopup.SetActive(false));
     }
 
-    // 현재 선택된 속성에 따라 등장할 카드리스트를 작성하는 함수
-    private void CreateCardPool()
-    {
-        availableCardPool.Clear();
-        if (deck == null) return;
-
-        // 1. 현재 속성 확인
-        Element currentElement = Element.None;
-        if (GameManager.Instance != null)
-            currentElement = GameManager.Instance.SelectedElement;
-
-        // 2. Deck의 공용 함수
-        availableCardPool = CardFactory.Instance.GetCardsByElement(currentElement);        
+    private void UpdateCoinUI()
+    {        
+        coinText.text = $"{GameManager.Instance.CurrentCoin} G";
     }
 
-    // 슬롯에 랜덤카드배치 함수
-    public void SetRandomCardToSlot(StoreCardList slot)
+    // 버튼을 눌렀을 때 (팝업 띄우기)
+    private void OnClickBuyButton(Card card, int index)
     {
-        if(availableCardPool.Count == 0) return;
+        targetCard = card;
+        targetIndex = index;
+        targetSlot = spawnedSlots[index]; // 해당 위치의 슬롯 스크립트 가져오기
 
-        // 1. 카드이름 리스트에서 랜덤선택
-        int randomIndex = Random.Range(0, availableCardPool.Count);
-        CardName pickedName = availableCardPool[randomIndex];
+        // 팝업 텍스트 설정
+        popupText.text = $"\"{card.Name}\"\n{card.Price} G\n buy?";
 
-        // 2. Deck 에서 카드 프리펩 가져오기
-        Card prefab = CardFactory.Instance.GetCardPrefab(pickedName);
+        confirmPopup.SetActive(true);
+        confirmPopup.transform.SetAsLastSibling();
 
-        // 3. 슬롯 UI 세팅
-        if(prefab != null)
+        //confirmPopup.transform.localPosition = new Vector3(0, 0, -500f);
+    }
+
+    // 눌렀을 때 (실제 구매)
+    private void OnBuyConfirmed()
+    {
+        // GameManager한테 카드구매요청
+        if (GameManager.Instance != null && GameManager.Instance.UseCoin(targetCard.Price))
         {
-            slot.StoreSetting(this, prefab, cardPrice);           
+            Debug.Log($" 카드구매성공 (-{targetCard.Price} G)");
+
+            // 1. 덱(GameManager)에 카드 추가
+            GameManager.Instance.AddCardToGlobalDeck(targetCard.Name); 
+
+            // 2. UI 매진 처리
+            buyButtons[targetIndex].interactable = false;
+            buttonTexts[targetIndex].text = "Sold Out";
+            if (targetSlot != null) targetSlot.SetSoldOutVisual();
+            
+            // 3. 팝업 닫기
+            confirmPopup.SetActive(false);
         }
-        
-    }
-
-    // 카드구매 함수
-    public void BuyCard(CardName cardName, int price, StoreCardList slot)
-    {
-        //TODO : 카드 구매 필요골드 확인로직 필요함
-        deck.AddCard(cardName);
-        slot.SetSoldOut();
-    }
-
-    // 슬롯 리롤 함수
-    public void RerollSlot(StoreCardList slot)
-    {
-        //TODO : 리롤 필요골드 확인로직 필요함
-        SetRandomCardToSlot(slot);
+        else
+        {
+            // 돈이 부족하거나 GameManager가 없을 때
+            Debug.Log($"결제 실패! (내 돈: {GameManager.Instance.CurrentCoin} / 가격: {targetCard.Price})");
+            confirmPopup.SetActive(false);
+        }
     }
 }

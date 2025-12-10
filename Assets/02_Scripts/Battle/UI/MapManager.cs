@@ -14,14 +14,12 @@ public class MapManager : MonoBehaviour
 
     [Header("UI 패널 연결")]
     [SerializeField] private GameObject shelterUI; // 휴식 UI
-    [SerializeField] private GameObject storeUI;   // 상점 UI
+    [SerializeField] private GameObject Store_UI;   // 상점 UI
     [SerializeField] private GameObject selectElementUI; // 속성 선택 UI
     [SerializeField] private GameObject stageSelectUI;
 
     private void Start()
-    {        
-        if (GameManager.Instance == null) return;        
-
+    {
         bool isReturning = GameManager.Instance.IsStageSelectMode;    
 
         if (isReturning)
@@ -53,7 +51,8 @@ public class MapManager : MonoBehaviour
     // 3. Store 버튼 기능
     public void OnClickStore()
     {
-        storeUI.SetActive(true);        
+        Store_UI.SetActive(true);  
+        stageSelectUI.SetActive(false);
     }
 
     // 4. Boss 버튼 기능
@@ -62,6 +61,7 @@ public class MapManager : MonoBehaviour
         SceneManager.LoadScene("Battle_Scene");
     }
     
+
        
     
 }
