@@ -364,6 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff29cc8a5b63b840903cfcb75ea36fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Defend
+  cardImage: {fileID: 21300000, guid: 12e1743c0db79ed4bb122c52e96d7994, type: 3}
   element: 0
   cost: 1
   armor: 5

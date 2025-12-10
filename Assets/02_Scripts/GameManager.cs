@@ -6,11 +6,10 @@ public class GameManager : Singleton<GameManager>
     public List<CardName> SelectedBonusCards { get; private set; } = new List<CardName>();
 
     // 카드를 저장하는 함수
-    public void SetBonusCards(CardName card1, CardName card2)
+    public void SetBonusCards(IEnumerable<CardName> cardNames)
     {
         SelectedBonusCards.Clear();
-        SelectedBonusCards.Add(card1);
-        SelectedBonusCards.Add(card2);
+        SelectedBonusCards.AddRange(cardNames);
     }
 
     //플레이어가 처음에 선택한 속성 저장(StoreUI 용)

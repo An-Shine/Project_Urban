@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System;
 using UnityEngine.Events;
 
 public enum CardType
@@ -15,12 +14,12 @@ public enum CardType
 abstract public class Card : MonoBehaviour
 {
     //카드 기본 정보
+    [SerializeField] private Sprite cardImage;
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
     
     // 이동 코루틴
     private Coroutine moveCoroutine;
-
 
     // 카드 정보 관련
     public bool IsSpecial { get; }      // 특수 카드 여부 
@@ -30,6 +29,7 @@ abstract public class Card : MonoBehaviour
     public int Cost => cost;
     public Vector3 OriginPos { get; set; } = new();
     public bool IsEntered { get; set; } = false;
+    public Sprite CardImage => cardImage;
 
     public void Hover()
     {

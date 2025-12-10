@@ -1764,6 +1764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146b00c5c5dfaaa4baba935f6a793ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectManager
+  cards: 6700000069000000cd000000cc0000002c01000032010000
 --- !u!224 &1697882374 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1558218276233529771, guid: cb2671d2cb7ce834da4318a7a9464d52, type: 3}

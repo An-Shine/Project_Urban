@@ -36,6 +36,8 @@ public class Player : Target
         Protect = PointControllerFactory.CreateProtect(maxProtect);
         Cost = PointControllerFactory.CreateCost(maxCost);
 
+        // 죽으면 종료처리
+        OnDead.AddListener(HandleDead);
     }
 
     private void Start()
@@ -146,6 +148,11 @@ public class Player : Target
     {
         if (CanTargetEnemy())
             enemy.UnHover();
+    }
+
+    private void HandleDead(Target target)
+    {
+        BattleManager.Instance.OnBattleEnd.Invoke(false);
     }
 
     private bool CanTargetEnemy()

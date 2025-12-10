@@ -55,7 +55,7 @@ public class EnemyManager : SceneSingleton<EnemyManager>
         AlignEnemies();
 
         if (enemies.Count == 0)
-            BattleManager.Instance.OnBattleEnd?.Invoke();
+            BattleManager.Instance.OnBattleEnd?.Invoke(true);
 
         BattleManager.Instance.AddCoin(CalcCoin(target as Enemy));
     }

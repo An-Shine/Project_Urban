@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 44825359670463697}
   - component: {fileID: 8883883904589120857}
+  - component: {fileID: 4413832332143457282}
   m_Layer: 5
   m_Name: HpBar
   m_TagString: Untagged
@@ -125,6 +126,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4413832332143457282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5984736736063832964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9893818449e5f1d4683199f240fd824b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HpBar
 --- !u!1 &6615309368255194376
 GameObject:
   m_ObjectHideFlags: 0

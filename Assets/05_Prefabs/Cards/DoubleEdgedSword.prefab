@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87361b11296cbb444ab0da351fff3ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoubleEdgedSword
+  cardImage: {fileID: 0}
   element: 3
   cost: 2
   damage: 3

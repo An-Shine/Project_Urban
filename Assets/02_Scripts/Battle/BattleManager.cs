@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,11 +12,12 @@ public class BattleManager : SceneSingleton<BattleManager>
     public Player Player => player;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
+    public int EarnedCoin => earnedCoin;
 
     // Event
     public UnityEvent OnTurnStart = new();
     public UnityEvent OnTurnEnd = new();
-    public UnityEvent OnBattleEnd = new();
+    public UnityEvent<bool> OnBattleEnd = new();
     
     private void Start()
     {
@@ -25,9 +25,8 @@ public class BattleManager : SceneSingleton<BattleManager>
         OnTurnStart?.Invoke();
     }
 
-    private void HandleBattleEnd()
+    private void HandleBattleEnd(bool isSuccess)
     {
-        // 보상 UI 활성화하기
         Debug.Log("Battle End!");
         GameManager.Instance.AddCoin(earnedCoin);
     }
