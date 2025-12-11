@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class DoubleEdgedSword : Attack
+public class DoubleEdged : Attack
 {
     [SerializeField] private int selfDamage = 3; // 나에게 입힐 데미지
 
-    public override CardName Name => CardName.DoubleEdgedSword;
+    public override CardName Name => CardName.DoubleEdged;
 
     public override int Use(Target target)
     {

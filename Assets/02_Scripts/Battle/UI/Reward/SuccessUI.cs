@@ -2,23 +2,23 @@ using UnityEngine;
 
 public class SuccessUI : MonoBehaviour
 {
-    [SerializeField] private RewardUI resultUI;
+    [SerializeField] private RewardUI rewardUI;
     [SerializeField] private CardSelectUI cardSelectUI;
 
     private void Awake()
     {
-        ShowResult();
+        ShowReward();
     }
 
-    public void ShowResult()
+    public void ShowReward()
     {
-        resultUI.gameObject.SetActive(true);
+        rewardUI.gameObject.SetActive(true);
         cardSelectUI.gameObject.SetActive(false);
     }    
 
     public void ShowCardSelect()
     {
-        resultUI.gameObject.SetActive(false);
+        rewardUI.gameObject.SetActive(false);
         cardSelectUI.gameObject.SetActive(true);
     }
 }

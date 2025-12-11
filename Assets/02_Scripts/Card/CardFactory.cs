@@ -23,6 +23,11 @@ public class CardFactory : Singleton<CardFactory>
         return Instantiate(cardPrefabMap[cardName], spawnPos, Quaternion.identity, hand);
     }
 
+    public Sprite GetCardSprite(CardName cardName)
+    {
+        return cardPrefabMap[cardName].GetComponent<SpriteRenderer>().sprite;
+    }
+
     public Card GetCardPrefab(CardName cardName)
     {
         return cardPrefabMap[cardName];

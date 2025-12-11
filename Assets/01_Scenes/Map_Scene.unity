@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9b8201287d094a34099f5cd6f0d8d14f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b503ff25975384d49bf65c0f43e4c1bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -260,7 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7be82c47fbd951442badd4b3792686b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StoreUI
-  deck: {fileID: 0}
   slots: []
   cardPrice: 100
   rerollCost: 50
@@ -304,6 +303,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aced5f5b861efa84aaebcf8cde391c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  initialDeckRecipe:
+  - name: 0
+    count: 5
+  - name: 5
+    count: 5
 --- !u!4 &154001031
 Transform:
   m_ObjectHideFlags: 0
@@ -1695,7 +1699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1807,7 +1811,6 @@ MonoBehaviour:
   - {fileID: -1083534053151282155, guid: 88022d1ec44e086469a9a3ca089698bd, type: 3}
   - {fileID: 1682876434260103043, guid: 497e7a0a94bf2a7469c0a989d9bb3e69, type: 3}
   - {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
-  - {fileID: 5320993288656041092, guid: f92f0d859bc4db4458fbb502bb0f3025, type: 3}
   - {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
 --- !u!4 &1742541501
 Transform:
@@ -1932,7 +1935,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:

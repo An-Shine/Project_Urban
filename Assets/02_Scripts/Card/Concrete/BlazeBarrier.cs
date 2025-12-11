@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class FlameBarrier : Defense 
+public class BlazeBarrier : Defense 
 {    
-    public override CardName Name => CardName.FlameBarrier;
+    public override CardName Name => CardName.BlazeBarrier;
     public override int Use(Target target)
     {
         target.AddProtect(armor);

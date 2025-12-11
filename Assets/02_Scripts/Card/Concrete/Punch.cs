@@ -1,6 +1,6 @@
-class DirtyStrike : Attack
+class Punch : Attack
 {
-    public override CardName Name => CardName.DirtyStrike;
+    public override CardName Name => CardName.Punch;
 
     public override int Use(Target target)
     {

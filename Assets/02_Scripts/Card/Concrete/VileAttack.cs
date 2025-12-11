@@ -1,6 +1,6 @@
-class Strike : Attack
+class VileAttack : Attack
 {
-    public override CardName Name => CardName.Strike;
+    public override CardName Name => CardName.VileAttack;
 
     public override int Use(Target target)
     {

@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class Ignite : Debuff
+public class Ignition : Debuff
 {   
     [SerializeField] private int damage = 5;
     [SerializeField] private int burnDamage = 1; // 도트 데미지
     [SerializeField] private int remainingTurn = 3;
 
-    public override CardName Name => CardName.Ignite;
+    public override CardName Name => CardName.Ignition;
 
     public override int Use(Target target)
     {

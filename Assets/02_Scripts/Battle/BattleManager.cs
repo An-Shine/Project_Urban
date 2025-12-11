@@ -5,11 +5,13 @@ public class BattleManager : SceneSingleton<BattleManager>
 {
     // Player
     [SerializeField] private Player player;
+    [SerializeField] private Hand hand;
     private int curTurn;
     private bool isPlayerTurn = true;
     private int earnedCoin;
 
     public Player Player => player;
+    public Hand Hand => hand;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
     public int EarnedCoin => earnedCoin;

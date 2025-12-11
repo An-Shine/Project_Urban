@@ -1,63 +1,38 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Deck : MonoBehaviour
+public class Deck 
 {
-    [System.Serializable]
-    struct CardRecipe
-    {
-        public CardName name;
-        public int count;
-
-    }
-    // 초기 덱 레시피 
-    [Header("Initial Deck Recipe")]
-    [SerializeField] private List<CardRecipe> initialDeckRecipe = new();
-
-    //핸드 설정
-    [Header("Hand Object")]
-    [SerializeField] private Hand hand;
-
     private readonly List<CardName> originCardList = new();     // 원본 덱 
     private readonly List<CardName> unusedCardList = new();     // 뽑을 덱 
     private readonly List<CardName> usedCardList = new();       // 사용한 카드리스트
     private readonly List<CardName> tempCardList = new(12);         // 카드 임시 버퍼
 
+    private Hand hand = null;
+    
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
 
-    private void Awake()
+    public Hand Hand
     {
-        DeckMaking();
+        get
+        {
+            hand = hand != null ? hand : BattleManager.Instance.Hand;
+            return hand;
+        }
+    }
 
-        foreach (var cardName in originCardList)
-            unusedCardList.Add(cardName);
+    public Deck(IEnumerable<CardName> cardRecipes)
+    {
+        foreach (CardName name in cardRecipes)
+        {
+            originCardList.Add(name);
+            unusedCardList.Add(name);
+        }
 
         Shuffle();
     }
 
-    // 덱 레시피 -> originCardList 변환 함수
-    private void DeckMaking()
-    {
-        originCardList.Clear();
-
-        foreach (var recipe in initialDeckRecipe)
-        {
-            for (int i = 0; i < recipe.count; i++)
-            {
-                originCardList.Add(recipe.name);
-            }
-        }
-        Debug.Log($"[Deck] 초기 덱 구성 완료. 총 {originCardList.Count}장의 카드가 로드되었습니다.");
-
-        // 데모때는 주석 풀기
-        // 초기 속성카드
-        foreach (var cardName in GameManager.Instance.SelectedBonusCards)
-        {
-            originCardList.Add(cardName);
-        }
-        Debug.Log($"[Deck] 속성 보너스 카드 추가됨! (현재 총 {originCardList.Count}장)");
-    }
 
     public void Shuffle()
     {
@@ -81,12 +56,12 @@ public class Deck : MonoBehaviour
         for (int i = 0; i < amount; i++)
             tempCardList.Add(GetNextCardName());
 
-        hand.AddCards(tempCardList);
+        Hand.AddCards(tempCardList);
     }
 
     public void Draw()
     {
-        hand.AddCard(GetNextCardName());
+        Hand.AddCard(GetNextCardName());
     }
 
     private CardName GetNextCardName()
@@ -104,17 +79,17 @@ public class Deck : MonoBehaviour
     public void Discard(Card usedCard)
     {
         usedCardList.Add(usedCard.Name);
-        hand.RemoveCard(usedCard);
+        Hand.RemoveCard(usedCard);
     }
 
     public void DiscardAll()
     {
-        foreach (Card card in hand.CurHand)
+        foreach (Card card in Hand.CurHand)
         {
             usedCardList.Add(card.Name);
         }
 
-        hand.RemoveAll();
+        Hand.RemoveAll();
     }
 
     public void ResetDeck()
