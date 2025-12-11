@@ -1785,7 +1785,7 @@ GameObject:
   - component: {fileID: 1742541501}
   - component: {fileID: 1742541500}
   m_Layer: 0
-  m_Name: CardFactory
+  m_Name: CardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1803,15 +1803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16bbd2ab3440283478dcf9bc5ed002f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardFactory
-  cardPrefabList:
-  - {fileID: 4493257747658455124, guid: c2af1532dc5284d48939c86c71a8d8bb, type: 3}
-  - {fileID: -2718185836164027489, guid: c1df7726fc35cc7468263fdcc1821094, type: 3}
-  - {fileID: -1465831915233388154, guid: 4c316c0767037704eb1fb2899f709019, type: 3}
-  - {fileID: -1772036552621023413, guid: b4525616561c8404daecaa95f5a729b4, type: 3}
-  - {fileID: -1083534053151282155, guid: 88022d1ec44e086469a9a3ca089698bd, type: 3}
-  - {fileID: 1682876434260103043, guid: 497e7a0a94bf2a7469c0a989d9bb3e69, type: 3}
-  - {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
-  - {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
+  cardData: {fileID: 11400000, guid: 352b2212eb8d1f0479d2abe2aa07dbac, type: 2}
 --- !u!4 &1742541501
 Transform:
   m_ObjectHideFlags: 0

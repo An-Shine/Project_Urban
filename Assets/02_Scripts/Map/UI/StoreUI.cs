@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class StoreUI : MonoBehaviour
 {
@@ -57,20 +58,21 @@ public class StoreUI : MonoBehaviour
             currentElement = GameManager.Instance.SelectedElement;
 
         // 2. Deck의 공용 함수
-        availableCardPool = CardFactory.Instance.GetCardsByElement(currentElement);        
+        var map = CardManager.Instance.GetCardsByElement(currentElement);     
+        availableCardPool = map.Select((pair) => pair.Value.cardName).ToList();   
     }
 
     // 슬롯에 랜덤카드배치 함수
     public void SetRandomCardToSlot(StoreCardList slot)
     {
-        if(availableCardPool.Count == 0) return;
+        if(availableCardPool.Count == 0) return;  
 
         // 1. 카드이름 리스트에서 랜덤선택
         int randomIndex = Random.Range(0, availableCardPool.Count);
         CardName pickedName = availableCardPool[randomIndex];
 
         // 2. Deck 에서 카드 프리펩 가져오기
-        Card prefab = CardFactory.Instance.GetCardPrefab(pickedName);
+        Card prefab = CardManager.Instance.GetCardPrefab(pickedName);
 
         // 3. 슬롯 UI 세팅
         if(prefab != null)

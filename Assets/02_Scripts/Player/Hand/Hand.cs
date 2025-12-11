@@ -51,7 +51,7 @@ public class Hand : MonoBehaviour
 
     private void InternalAddCard(CardName cardName)
     {
-        Card newCard = CardFactory.Instance.CreateCard(cardName, cardSpawnPoint.position, transform);
+        Card newCard = CardManager.Instance.CreateCard(cardName, cardSpawnPoint.position, transform);
         curHand.Add(newCard);
     }
 

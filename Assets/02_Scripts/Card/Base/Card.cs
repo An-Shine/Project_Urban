@@ -14,7 +14,6 @@ public enum CardType
 abstract public class Card : MonoBehaviour
 {
     //카드 기본 정보
-    [SerializeField] private Sprite cardImage;
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
     
@@ -29,7 +28,6 @@ abstract public class Card : MonoBehaviour
     public int Cost => cost;
     public Vector3 OriginPos { get; set; } = new();
     public bool IsEntered { get; set; } = false;
-    public Sprite CardImage => cardImage;
 
     public void Hover()
     {
