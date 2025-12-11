@@ -25,7 +25,7 @@ public class MousePointer : MonoBehaviour
     // Enemy
     private Enemy hoveredEnemy;
 
-    private readonly RaycastHit[] raycastHitBuffer = new RaycastHit[1];
+    private readonly RaycastHit2D[] raycastHitBuffer = new RaycastHit2D[1];
 
     // Card Event 
     public UnityEvent<Card> OnCardSelect { get; set; } = new();
@@ -43,6 +43,26 @@ public class MousePointer : MonoBehaviour
     public void ClearSelection()
     {
         selectedCard = null;
+        ClearHoveredCard();
+        ClearHoveredEnemy();
+    }
+
+    private void ClearHoveredCard()
+    {
+        if (hoveredCard != null)
+        {
+            OnCardExit?.Invoke(hoveredCard);
+            hoveredCard = null;
+        }
+    }
+
+    private void ClearHoveredEnemy()
+    {
+        if (hoveredEnemy != null)
+        {
+            OnEnemyExit?.Invoke(hoveredEnemy);
+            hoveredEnemy = null;
+        }
     }
 
     private void Awake()
@@ -57,6 +77,13 @@ public class MousePointer : MonoBehaviour
 
     private void Update()
     {
+        if (!BattleManager.Instance.IsPlayerTurn)
+        {
+            ClearHoveredCard();
+            ClearHoveredEnemy();
+            return;
+        }
+
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         currentMouseRay = mainCam.ScreenPointToRay(mousePosition);
     }
@@ -152,6 +179,8 @@ public class MousePointer : MonoBehaviour
 
     private bool RayCast(LayerMask layerMask)
     {
-        return Physics.RaycastNonAlloc(currentMouseRay, raycastHitBuffer, MAX_DISTANCE, layerMask) > 0;
+        Vector2 origin = currentMouseRay.origin;
+        Vector2 direction = currentMouseRay.direction;
+        return Physics2D.RaycastNonAlloc(origin, direction, raycastHitBuffer, MAX_DISTANCE, layerMask) > 0;
     } 
 }

@@ -1,6 +1,6 @@
-class Shot : Attack
+class Shooting : Attack
 {
-    public override CardName Name => CardName.Shot;
+    public override CardName Name => CardName.Shooting;
 
     public override int Use(Target target)
     {

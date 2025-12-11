@@ -20,7 +20,7 @@ public class SelectManager : MonoBehaviour
         }
     }
 
-    public void SelectElement (Element element)
+    public void SelectElement(Element element)
     {
         GameManager.Instance.SelectedElement = element;
         GameManager.Instance.SetBonusCards(elementCardMaps[element]);
@@ -30,18 +30,18 @@ public class SelectManager : MonoBehaviour
 
     public void OnClickFlame()
     {
-        SelectElement (Element.Flame);
+        SelectElement(Element.Flame);
     }
 
     // 2. Ice 속성 선택 버튼 연결
     public void OnClickIce()
     {
-       SelectElement (Element.Ice);
+       SelectElement(Element.Ice);
     }
 
     // 3. Grass 속성 선택 버튼 연결
     public void OnClickGrass()
     {
-       SelectElement (Element.Grass);
+       SelectElement(Element.Grass);
     }
 }

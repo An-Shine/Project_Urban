@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab6cdcf9c7179d45a98811ddc77e517, type: 3}
+  m_Name: CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  spriteBasePath: 03_Images/Cards
+  prefabBasePath: 05_Prefabs/Cards
+  useElementFolder: 1
+  cards:
+  - cardName: 0
+    cardSprite: {fileID: 21300000, guid: 24391036af2e88c44ac97ad497c9b6bd, type: 3}
+    element: 0
+    isSpecial: 0
+    cardPrefab: {fileID: 6109157307790009158, guid: 84dc2cec793e937468c15a56ff7b4a1d, type: 3}
+    description: "\uC801\uC5D0 \uB370\uBBF8\uC9C0 5 \uBD80\uC5EC"
+  - cardName: 5
+    cardSprite: {fileID: 21300000, guid: d0b3b32ac9572db4a916af4c00b552d8, type: 3}
+    element: 0
+    isSpecial: 0
+    cardPrefab: {fileID: 4493257747658455124, guid: c2af1532dc5284d48939c86c71a8d8bb, type: 3}
+    description: "\uC801\uC758 \uB370\uBBF8\uC9C0 \uACF5\uACA9\uC744 5\uB9CC\uD07C
+      \uBC29\uC5B4."
+  - cardName: 103
+    cardSprite: {fileID: 21300000, guid: 9c5158d61e68c8a429cab4702116841a, type: 3}
+    element: 100
+    isSpecial: 0
+    cardPrefab: {fileID: -660675104704934426, guid: 1edb3ea496054b343a83f48b6b74e570, type: 3}
+    description: "\uB370\uBBF8\uC9C0+\uD654\uC0C1(\uB514\uBC84\uD5045)"
+  - cardName: 105
+    cardSprite: {fileID: 21300000, guid: ec4717de087335d4d93be20498cac02e, type: 3}
+    element: 100
+    isSpecial: 0
+    cardPrefab: {fileID: -1772036552621023413, guid: b4525616561c8404daecaa95f5a729b4, type: 3}
+    description: "\uBC29\uC5B4+\uC815\uD654\uC758 \uC190\uAE38(\uBC84\uD5043)"
+  - cardName: 204
+    cardSprite: {fileID: 21300000, guid: a04fba5351d3ebe4ba6888bd17eb6ac2, type: 3}
+    element: 200
+    isSpecial: 0
+    cardPrefab: {fileID: -1083534053151282155, guid: 88022d1ec44e086469a9a3ca089698bd, type: 3}
+    description: "\uB370\uBBF8\uC9C0+\uB3D9\uACB0(\uB514\uBC84\uD5048)"
+  - cardName: 205
+    cardSprite: {fileID: 21300000, guid: 60f9278c179b3734ca22bc5229b84600, type: 3}
+    element: 200
+    isSpecial: 0
+    cardPrefab: {fileID: 1682876434260103043, guid: 497e7a0a94bf2a7469c0a989d9bb3e69, type: 3}
+    description: "\uBC29\uC5B4+\uB0C9\uAE30\uC758 \uAC00\uD638(\uBC84\uD5047)"
+  - cardName: 300
+    cardSprite: {fileID: 21300000, guid: 89506e7528f95bb4b990f6e56ed1b5ee, type: 3}
+    element: 300
+    isSpecial: 0
+    cardPrefab: {fileID: -2718185836164027489, guid: c1df7726fc35cc7468263fdcc1821094, type: 3}
+    description: "\uB370\uBBF8\uC9C0+\uD50C\uB808\uC774\uC5B4\uC5D0 \uB370\uBBF8\uC9C0"
+  - cardName: 306
+    cardSprite: {fileID: 21300000, guid: 9a181b1b4c8e87d41a4420a96b47fd6c, type: 3}
+    element: 300
+    isSpecial: 0
+    cardPrefab: {fileID: -1465831915233388154, guid: 4c316c0767037704eb1fb2899f709019, type: 3}
+    description: "\uBC29\uC5B4+\uC0DD\uCCB4 \uBC18\uC751 \uC7A5\uAC11(\uBC84\uD50411)+\uD50C\uB808\uC774\uC5B4\uB97C
+      \uACF5\uACA9\uD55C \uC801\uC5D0 \uC57D\uD654(\uB514\uBC84\uD5040)2&\uD30C\uAC11(\uB514\uBC84\uD5041)2"

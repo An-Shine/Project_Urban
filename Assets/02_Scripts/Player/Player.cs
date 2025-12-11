@@ -12,12 +12,19 @@ public class Player : Target
     [Header("Mouse Pointer")]
     [SerializeField] private MousePointer mousePointer;
 
-    [Header("Deck")]
-    [SerializeField] private Deck deck;
-    public Deck Deck => deck;
+    private Card prevSelectedCard;
+    private Deck deck;
 
     public CostController Cost { get; private set; }
-    private Card prevSelectedCard;
+    public Deck Deck 
+    {
+        get 
+        {
+            deck ??= GameManager.Instance.Deck;
+                
+            return deck;
+        }
+    }
 
     private void Awake()
     {
@@ -56,12 +63,12 @@ public class Player : Target
         if (IsStun())
             BattleManager.Instance.TurnEnd();
 
-        deck.Draw(startingDrawCount);
+        Deck.Draw(startingDrawCount);
     }
 
     private void HandleTurnEnd()
     {
-        deck.DiscardAll();
+        Deck.DiscardAll();
     }
 
     private void HandleCardSelect(Card card)
@@ -73,7 +80,7 @@ public class Player : Target
             if (card.Type == CardType.Defense || card.Type == CardType.Buff)
             {
                 card.Use(this);
-                deck.Discard(card);
+                Deck.Discard(card);
                 mousePointer.ClearSelection();
                 prevSelectedCard = null;
 
@@ -134,7 +141,7 @@ public class Player : Target
         selectedCard.Use(enemy);
 
         enemy.UnHover();
-        deck.Discard(selectedCard);
+        Deck.Discard(selectedCard);
         mousePointer.ClearSelection();
     }
 
@@ -171,6 +178,6 @@ public class Player : Target
 
     public void DrawCard(int amount)
     {
-        deck.Draw(amount);
+        Deck.Draw(amount);
     }
 }
