@@ -11,6 +11,6 @@ public class ReturnToMain : MonoBehaviour
         }
 
         // 씬 이동
-        SceneManager.LoadScene("Main_UI");
+        SceneManager.LoadScene("Map_Scene_AKH");
     }
 }
