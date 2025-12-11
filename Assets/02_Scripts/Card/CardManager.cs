@@ -21,6 +21,12 @@ public class CardManager : Singleton<CardManager>
         return cardData.GetCardPrefab(cardName);
     }
 
+    public List<CardName> GetAllCardNames()
+    {
+        //전체카드목록 호출용
+        return cardData.GetAllCardNames();
+    }
+
     public Dictionary<CardName, CardDataEntry> GetCardsByElement(Element element)
     {
         return cardData.GetCardsByElement(element);

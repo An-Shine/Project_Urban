@@ -115,4 +115,10 @@ public class Deck
         if (originCardList.Contains(cardName))
             originCardList.Remove(cardName);
     }
+    
+    // 현재 덱에있는 모든 카드 목록 전달용
+    public List<CardName> GetAllCards()
+    {
+        return new List<CardName>(originCardList);
+    }
 }
