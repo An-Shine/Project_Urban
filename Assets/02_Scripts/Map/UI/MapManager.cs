@@ -17,6 +17,14 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject storeUI;   // 상점 UI
     [SerializeField] private GameObject selectElementUI; // 속성 선택 UI
     [SerializeField] private GameObject stageSelectUI;
+    [SerializeField] private GameObject CloseStoreUIButton; //상점 UI 닫기버튼
+
+    [SerializeField] private GameObject enchantPopup;    // 카드강화 UI
+    [SerializeField] private GameObject removePopup;     // 카드제거 UI
+    [SerializeField] private GameObject DeckCheckPanel;  // 덱 확인 UI  
+    [SerializeField] private GameObject BuyCardPopup;    // 카드구매 UI
+    [SerializeField] private GameObject CardEnchantRemovePanel; //카드강화,제거용 덱확인 패널      
+    
 
     private void Start()
     {        
@@ -61,7 +69,44 @@ public class MapManager : MonoBehaviour
     {
         SceneManager.LoadScene("Battle_Scene");
     }
+
+    public void OpenEnchantPopup()
+    {
+        enchantPopup.SetActive(true);        
+    }
+
+    // 2. 제거 팝업 열기
+    public void OpenRemovePopup()
+    {
+        removePopup.SetActive(true);
+    }
+
+    // 3. 덱 확인 패널 열기
+    public void OpenDeckCheckPanel()
+    {
+        DeckCheckPanel.SetActive(true);
+    }
+
+    // 4. 카드 구매 팝업 열기
+    public void OpenBuyCardPopup()
+    {
+        BuyCardPopup.SetActive(true);
+    }
+
+    public void OpenCardEnchantRemovePanel()
+    {
+        CardEnchantRemovePanel.SetActive(true);
+    }
     
+    public void ClosePopup()
+    {        
+        transform.parent.gameObject.SetActive(false);        
+    }
+
+    public void CloseStoreUI()
+    {
+        storeUI.SetActive(false);
+    }
        
     
 }
