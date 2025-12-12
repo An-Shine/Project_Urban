@@ -4,7 +4,6 @@ using UnityEngine;
 public class DeckCheckUI : MonoBehaviour
 {
     [SerializeField] private Transform contentParent;     
-    
     [SerializeField] private DeckCheckImage cardItemPrefab;
     [SerializeField] private GameObject DeckCheckPanel;
 

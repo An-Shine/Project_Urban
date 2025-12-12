@@ -27,7 +27,6 @@ public class CardManager : Singleton<CardManager>
         return cardData.GetAllCardNames();
     }
 
-    public Dictionary<CardName, CardDataEntry> GetCardsByElement(Element element)
     public List<CardDataEntry> GetCardsByElement(Element element)
     {
         return cardData.GetCardsByElement(element);

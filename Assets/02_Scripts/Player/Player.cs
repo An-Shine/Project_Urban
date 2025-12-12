@@ -43,6 +43,9 @@ public class Player : Target
         Protect = PointControllerFactory.CreateProtect(maxProtect);
         Cost = PointControllerFactory.CreateCost(maxCost);
 
+        // GameManager에서 가져오기
+        Hp.CurrentPoint= GameManager.Instance.PlayerHp.CurrentPoint;
+
         // 죽으면 종료처리
         OnDead.AddListener(HandleDead);
     }
@@ -52,6 +55,7 @@ public class Player : Target
         // Turn Event
         BattleManager.Instance.OnTurnStart.AddListener(HandleTurnStart);
         BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
+        BattleManager.Instance.OnBattleEnd.AddListener(HandleBattleEnd);
 
         hpView.Bind(Hp);
         protectView.Bind(Protect);
@@ -69,6 +73,11 @@ public class Player : Target
     private void HandleTurnEnd()
     {
         Deck.DiscardAll();
+    }
+
+    private void HandleBattleEnd(bool isSuccess)
+    {
+        GameManager.Instance.PlayerHp.CurrentPoint = Hp.CurrentPoint;
     }
 
     private void HandleCardSelect(Card card)

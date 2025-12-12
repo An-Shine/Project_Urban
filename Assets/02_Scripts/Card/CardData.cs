@@ -70,7 +70,7 @@ public class CardData : ScriptableObject
         return cards.Select(entry => entry.cardName).ToList();
     }
 
-    public Dictionary<CardName, CardDataEntry> GetCardsByElement(Element element)
+
     public List<CardDataEntry> GetCardsByElement(Element element)
     {
         if (elementMap == null)

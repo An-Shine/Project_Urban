@@ -74,9 +74,6 @@ public class StoreUI : MonoBehaviour
             slotPriceTexts[i].color = Color.black;
             slotButtons[i].interactable = true;
         }
-        // 2. Deck의 공용 함수
-        var cards = CardManager.Instance.GetCardsByElement(currentElement);     
-        availableCardPool = cards.Select(entry => entry.cardName).ToList();   
     }
 
     // i번째 버튼을 눌렀을 때 실행되는 함수

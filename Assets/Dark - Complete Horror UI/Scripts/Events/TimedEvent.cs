@@ -17,17 +17,17 @@ namespace Michsky.UI.Dark
         void Start()
         {
             if(enableAtStart == true)
-                StartCoroutine("ProcessTimedEvent");
+                StartCoroutine(nameof(ProcessTimedEvent));
         }
 
         public void StartTimedEvent()
         {
-            StartCoroutine("ProcessTimedEvent");
+            StartCoroutine(nameof(ProcessTimedEvent));
         }
 
         public void StopTimedEvent()
         {
-            StopCoroutine("ProcessTimedEvent");
+            StopCoroutine(nameof(ProcessTimedEvent));
         }
 
         IEnumerator ProcessTimedEvent()

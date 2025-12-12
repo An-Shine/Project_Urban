@@ -13,13 +13,24 @@ public class GameManager : Singleton<GameManager>
 {
     [Header("Initial Deck Recipe")]
     [SerializeField] private List<CardRecipe> initialDeckRecipe = new();
+
+    [Header("Player Hp Settings")]
+    [SerializeField] private int playerMaxHp = 500;
     private readonly List<CardName> initialDeck = new();
 
-    private Deck deck;
-    private int coin = 1000;
 
+    private HpController playerHp;
+    private Deck deck;
+    private int coin;
+
+    public HpController PlayerHp => playerHp;
     public Deck Deck => deck;
     public int Coin => coin;
+
+    private void Start()
+    {
+        playerHp = PointControllerFactory.CreateHp(playerMaxHp);
+    }
 
     // 카드를 저장하는 함수
     public void SetBonusCards(IEnumerable<CardName> cardNames)
