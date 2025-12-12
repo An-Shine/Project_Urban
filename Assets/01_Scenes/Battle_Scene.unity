@@ -3330,6 +3330,15 @@ MonoBehaviour:
   - {fileID: 500984387}
   - {fileID: 151949347}
   - {fileID: 15046022}
+  elementWeights:
+  - element: 0
+    weight: 1
+  - element: 100
+    weight: 1
+  - element: 200
+    weight: 1
+  - element: 300
+    weight: 1
 --- !u!1001 &1029253343
 PrefabInstance:
   m_ObjectHideFlags: 0

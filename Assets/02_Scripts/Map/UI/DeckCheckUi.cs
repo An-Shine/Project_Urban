@@ -47,4 +47,9 @@ public class DeckCheckUI : MonoBehaviour
     {
         DeckCheckPanel.SetActive(false);
     }
+
+    public void OpenDeckCheckPanel()
+    {
+        DeckCheckPanel.SetActive(true);
+    }
 }
