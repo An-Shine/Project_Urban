@@ -4,7 +4,7 @@
       "cardName": "Punch",
       "element": "None",
       "isSpecial": false,
-      "description": "적에 데미지 5 부여"
+      "description": "적에 데미지 {value} 부여"
     },
     {
       "cardName": "Guard",

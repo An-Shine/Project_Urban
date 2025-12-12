@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86fff5e6bcbf2554eb53bfc2c7431cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlameBarrier
-  cardImage: {fileID: 0}
   element: 100
   cost: 1
   armor: 3
@@ -336,7 +335,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 750ee768543cb8f4eb30160755378d40, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c46370d4082df0d439259a949a0aeba9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -76,7 +76,7 @@ public class CardSelectUI : MonoBehaviour
 
     private CardName GetRandomCardFromElement(Element element)
     {
-        var cardNames = CardManager.Instance.GetCardsByElement(element).Keys.ToList();
-        return cardNames[Random.Range(0, cardNames.Count)];
+        List<CardDataEntry> cards = CardManager.Instance.GetCardsByElement(element);
+        return cards[Random.Range(0, cards.Count)].cardName;
     }
 } 
