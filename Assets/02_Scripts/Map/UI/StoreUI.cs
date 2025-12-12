@@ -41,9 +41,6 @@ public class StoreUI : MonoBehaviour
         {
             if(slot != null)SetRandomCardToSlot(slot);
         }
-            
-            
-        
     }
 
     // 현재 선택된 속성에 따라 등장할 카드리스트를 작성하는 함수
@@ -58,8 +55,8 @@ public class StoreUI : MonoBehaviour
             currentElement = GameManager.Instance.SelectedElement;
 
         // 2. Deck의 공용 함수
-        var map = CardManager.Instance.GetCardsByElement(currentElement);     
-        availableCardPool = map.Select((pair) => pair.Value.cardName).ToList();   
+        var cards = CardManager.Instance.GetCardsByElement(currentElement);     
+        availableCardPool = cards.Select(entry => entry.cardName).ToList();   
     }
 
     // 슬롯에 랜덤카드배치 함수

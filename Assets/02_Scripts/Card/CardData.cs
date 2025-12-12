@@ -15,8 +15,9 @@ public class CardData : ScriptableObject
     [SerializeField] private bool useElementFolder = true;
     [SerializeField] private List<CardDataEntry> cards = new();
 
-    // Element별로 묶고, CardName을 키로 하는 Dictionary
-    private Dictionary<Element, Dictionary<CardName, CardDataEntry>> cardDataMap;
+    // Element별로 List, CardName으로 직접 조회
+    private Dictionary<Element, List<CardDataEntry>> elementMap;
+    private Dictionary<CardName, CardDataEntry> cardNameMap;
 
     private void OnEnable()
     {
@@ -25,16 +26,20 @@ public class CardData : ScriptableObject
 
     private void BuildCardDataMap()
     {
-        cardDataMap = new Dictionary<Element, Dictionary<CardName, CardDataEntry>>();
+        elementMap = new Dictionary<Element, List<CardDataEntry>>();
+        cardNameMap = new Dictionary<CardName, CardDataEntry>();
 
         foreach (CardDataEntry entry in cards)
         {
-            if (!cardDataMap.ContainsKey(entry.element))
+            // Element별 List
+            if (!elementMap.ContainsKey(entry.element))
             {
-                cardDataMap[entry.element] = new Dictionary<CardName, CardDataEntry>();
+                elementMap[entry.element] = new List<CardDataEntry>();
             }
+            elementMap[entry.element].Add(entry);
 
-            cardDataMap[entry.element][entry.cardName] = entry;
+            // CardName으로 직접 조회
+            cardNameMap[entry.cardName] = entry;
         }
     }
 
@@ -52,24 +57,18 @@ public class CardData : ScriptableObject
 
     public CardDataEntry GetCardData(CardName cardName)
     {
-        if (cardDataMap == null)
+        if (cardNameMap == null)
             BuildCardDataMap();
 
-        foreach (var elementDict in cardDataMap.Values)
-        {
-            if (elementDict.ContainsKey(cardName))
-                return elementDict[cardName];
-        }
-
-        throw new KeyNotFoundException($"CardData not found for CardName: {cardName}");
+        return cardNameMap[cardName]; // 없으면 자동으로 KeyNotFoundException 발생
     }
 
-    public Dictionary<CardName, CardDataEntry> GetCardsByElement(Element element)
+    public List<CardDataEntry> GetCardsByElement(Element element)
     {
-        if (cardDataMap == null)
+        if (elementMap == null)
             BuildCardDataMap();
 
-        return cardDataMap[element]; // 없으면 자동으로 KeyNotFoundException 발생
+        return elementMap[element]; // 없으면 자동으로 KeyNotFoundException 발생
     }
 
     public IEnumerable<CardDataEntry> GetAllCards()

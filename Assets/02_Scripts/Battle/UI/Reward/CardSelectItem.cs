@@ -11,7 +11,8 @@ public class CardSelectItem : MonoBehaviour
         this.cardName = cardName;
 
         Image image = GetComponent<Image>();
-        image.sprite = CardManager.Instance.GetCardSprite(cardName);
+        Sprite sprite = CardManager.Instance.GetCardSprite(cardName);
+        image.sprite = sprite;
     }
 
     public void OnClickItem()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SuccessUI : MonoBehaviour
 {
@@ -20,5 +21,10 @@ public class SuccessUI : MonoBehaviour
     {
         rewardUI.gameObject.SetActive(false);
         cardSelectUI.gameObject.SetActive(true);
+    }
+
+    public void LoadMapScene()
+    {
+        SceneManager.LoadScene("Map_Scene");
     }
 }
