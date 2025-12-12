@@ -23,7 +23,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject removePopup;     // 카드제거 UI
     [SerializeField] private GameObject DeckCheckPanel;  // 덱 확인 UI  
     [SerializeField] private GameObject BuyCardPopup;    // 카드구매 UI
-    [SerializeField] private GameObject CardEnchantRemovePanel; //카드강화,제거용 덱확인 패널      
+    [SerializeField] private GameObject CardEnchantRemovePanel; //카드강화,제거용 덱확인 패널   
+    [SerializeField] private GameObject ShelterPopup;   
     
 
     private void Start()
@@ -106,6 +107,11 @@ public class MapManager : MonoBehaviour
     public void CloseStoreUI()
     {
         storeUI.SetActive(false);
+    }
+
+    public void OpenShelterPopup()
+    {
+        ShelterPopup.SetActive(true);
     }
        
     

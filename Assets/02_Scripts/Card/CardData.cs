@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -63,6 +64,13 @@ public class CardData : ScriptableObject
         return cardNameMap[cardName]; // 없으면 자동으로 KeyNotFoundException 발생
     }
 
+    public List<CardName> GetAllCardNames()
+    {
+        // 전체카드 이름만 다 뽑아서 리스트로 만들어서 StoreUI에 전달
+        return cards.Select(entry => entry.cardName).ToList();
+    }
+
+    public Dictionary<CardName, CardDataEntry> GetCardsByElement(Element element)
     public List<CardDataEntry> GetCardsByElement(Element element)
     {
         if (elementMap == null)
@@ -166,6 +174,7 @@ public class CardDataEntry
     public Element element;
     public bool isSpecial;
     public Card cardPrefab;
+    
     [TextArea] public string description;
 }
 
@@ -182,6 +191,6 @@ public class JsonCardData
     public string cardName;
     public string element;
     public bool isSpecial;
-    public string description;
+    public string description;    
 }
 #endif

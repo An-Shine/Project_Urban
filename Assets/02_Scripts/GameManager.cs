@@ -16,7 +16,7 @@ public class GameManager : Singleton<GameManager>
     private readonly List<CardName> initialDeck = new();
 
     private Deck deck;
-    private int coin;
+    private int coin = 1000;
 
     public Deck Deck => deck;
     public int Coin => coin;
