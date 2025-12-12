@@ -27,6 +27,11 @@ public class CardManager : Singleton<CardManager>
         return cardData.GetAllCardNames();
     }
 
+    public CardDataEntry GetCardData(CardName cardName)
+    {
+        return cardData.GetCardData(cardName);
+    }
+
     public List<CardDataEntry> GetCardsByElement(Element element)
     {
         return cardData.GetCardsByElement(element);

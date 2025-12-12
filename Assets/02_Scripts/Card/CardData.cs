@@ -116,9 +116,10 @@ public class CardData : ScriptableObject
                     continue;
                 }
 
-                CardDataEntry entry = new CardDataEntry
+                CardDataEntry entry = new()
                 {
                     cardName = parsedCardName,
+                    koreanName = jsonCard.koreanName ?? string.Empty,
                     element = parsedElement,
                     isSpecial = jsonCard.isSpecial,
                     description = jsonCard.description ?? string.Empty
@@ -170,11 +171,11 @@ public class CardData : ScriptableObject
 public class CardDataEntry
 {
     public CardName cardName;
+    public string koreanName;
     public Sprite cardSprite;
     public Element element;
     public bool isSpecial;
     public Card cardPrefab;
-    
     [TextArea] public string description;
 }
 
@@ -189,6 +190,7 @@ public class JsonWrapper
 public class JsonCardData
 {
     public string cardName;
+    public string koreanName;
     public string element;
     public bool isSpecial;
     public string description;    

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using TMPro;
 
 public enum CardType
 {
@@ -16,6 +17,7 @@ abstract public class Card : MonoBehaviour
     //카드 기본 정보
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
+    [SerializeField] TMP_Text cardTitle;
     
     // 이동 코루틴
     private Coroutine moveCoroutine;
@@ -28,6 +30,12 @@ abstract public class Card : MonoBehaviour
     public int Cost => cost;
     public Vector3 OriginPos { get; set; } = new();
     public bool IsEntered { get; set; } = false;
+
+    private void Start()
+    {
+        CardDataEntry cardData = CardManager.Instance.GetCardData(Name);
+        cardTitle.text = cardData.koreanName;
+    }
 
     public void Hover()
     {

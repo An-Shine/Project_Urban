@@ -287,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlameBarrier
   element: 100
   cost: 1
+  cardTitle: {fileID: 8848045993063123046}
   armor: 3
 --- !u!212 &6500936304541094541
 SpriteRenderer:
