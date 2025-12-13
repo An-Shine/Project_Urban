@@ -115,4 +115,6 @@ public class StoreUI : MonoBehaviour
         if (GameManager.Instance != null && currentCoinText != null)
             currentCoinText.text = $"Coin: {GameManager.Instance.Coin}";
     }
+
+    
 }

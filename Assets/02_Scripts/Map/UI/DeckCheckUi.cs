@@ -6,6 +6,7 @@ public class DeckCheckUI : MonoBehaviour
     [SerializeField] private Transform contentParent;     
     [SerializeField] private DeckCheckImage cardItemPrefab;
     [SerializeField] private GameObject DeckCheckPanel;
+    
 
     private void OnEnable()
     {
@@ -15,26 +16,17 @@ public class DeckCheckUI : MonoBehaviour
 
     public void RefreshDeck()
     {
-        // 1. 안전 장치
-        if (GameManager.Instance == null || GameManager.Instance.Deck == null) 
+        // 초기화
+        foreach (Transform child in contentParent)
         {
-            Debug.LogWarning("덱연결안됨");
-            return;
+            Destroy(child.gameObject);
         }
 
-        // 2. 초기화
-        int childCount = contentParent.childCount;
-        for (int i = childCount - 1; i >= 0; i--)
-        {
-            Transform child = contentParent.GetChild(i);           
-            Destroy(child.gameObject); 
-        }
+        // CardManager 가 가지고있는 덱리스트를 그대로받아옴        
+        List<CardName> currentDeck = CardManager.Instance.GetMyDeck();
 
-        // 3. 현재 덱의 모든 카드 가져오기
-        List<CardName> myDeck = GameManager.Instance.Deck.GetAllCards();
-
-        // 4. 카드 생성해서 Content 안에 넣기
-        foreach (CardName cardName in myDeck)
+        // 가져온 리스트 생성
+        foreach (CardName cardName in currentDeck)
         {
             DeckCheckImage item = Instantiate(cardItemPrefab, contentParent);
             item.Setup(cardName);

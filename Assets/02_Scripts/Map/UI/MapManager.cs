@@ -111,8 +111,12 @@ public class MapManager : MonoBehaviour
 
     public void OpenShelterPopup()
     {
-        ShelterPopup.SetActive(true);
+        ShelterPopup.SetActive(true);        
     }
-       
+    
+    private void CloseDeckCheckPanel()
+    {
+        DeckCheckPanel.SetActive(false);
+    }
     
 }
