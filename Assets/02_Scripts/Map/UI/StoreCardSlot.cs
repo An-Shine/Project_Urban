@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -85,5 +86,21 @@ public class StoreCardSlot : MonoBehaviour
         cardImage.color = Color.gray; // 이미지 회색 처리
 
         Debug.Log($"{_cardName} 구매 완료!");
+    }
+
+    internal void SetCard(CardData card)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetItem(CardDataEntry data)
+    {
+        if (data == null) return;
+
+        // Entry 안에 있는 cardSprite를 이미지에 넣음
+        if (cardImage != null) 
+        {
+            cardImage.sprite = data.cardSprite;
+        }        
     }
 }

@@ -1,79 +1,79 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
+using UnityEngine.UI; 
+using System.Collections.Generic; 
 
 public class DeckEnchantPanel : MonoBehaviour
 {
-    [Header("UI References")]
-    [SerializeField] private GameObject panelObject;      // 패널 전체 (켜고 끄기용)
-    [SerializeField] private Transform contentArea;       // ScrollView의 Content (카드가 생성될 위치)
-    [SerializeField] private GameObject cardSlotPrefab;   // 카드 슬롯 프리팹 (CardSlotUI 포함)
+    [Header("UI 연결 (필수)")]
+    [SerializeField] private GameObject panelObject;    // 패널 전체 오브젝트
+    [SerializeField] private Transform contentArea;     // ScrollView 안의 Content
+    [SerializeField] private GameObject cardSlotPrefab; // 슬롯 프리팹 (StoreCardSlot 붙은거)
+    
+    [Header("팝업 연결 (필수)")]
+    [SerializeField] private DeckEnchantPopup enchantPopup; // 위에서 만든 팝업 스크립트 연결
 
-    // 현재 플레이어의 덱 데이터를 참조하기 위한 변수
-    private List<CardData> myDeck; 
-
-    private void Start()
+    // 상점/쉼터 버튼이 이 함수를 호출합니다.
+    public void OpenEnchantPanel()
     {
-        // 시작 시 패널은 꺼둠
-        panelObject.SetActive(false);
+        // 1. 덱 데이터 가져오기 
+        List<CardDataEntry> currentDeck = ProtoTypeDeck.Instance.GetCurrentDeck();
+
+        // 2. UI 켜고 그리기
+        panelObject.SetActive(true);        
+        RenderDeck(currentDeck);
     }
 
-    // 외부에서 이 함수를 호출하여 강화팝업 오픈
-    public void OpenEnchantPanel(List<CardData> playerDeck)
-    {
-        myDeck = playerDeck;
-        panelObject.SetActive(true);
-        
-        RenderDeck();
-    }
-
-    // 패널 닫기
     public void CloseEnchantPanel()
     {
         panelObject.SetActive(false);
     }
 
-    // 덱 표시
-    private void RenderDeck()
+    // 카드 목록을 버튼으로 생성하는 함수
+    private void RenderDeck(List<CardDataEntry> deckToRender)
     {
-        // 1. 초기화
+        // 초기화
         foreach (Transform child in contentArea)
         {
             Destroy(child.gameObject);
         }
 
-        // 2. 덱에 있는 카드만큼 슬롯 생성
-        foreach (CardData card in myDeck)
+        // 새 슬롯 만들기
+        foreach (CardDataEntry entry in deckToRender)
         {
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
-            
-            // CardSlotUI 스크립트를 가져와서 데이터 세팅
-            //CardSlotUI slotUI = slotObj.GetComponent<CardSlotUI>();
-            //if (slotUI != null)
+
+            // (1) 이미지/텍스트 설정
+            StoreCardSlot slotScript = slotObj.GetComponent<StoreCardSlot>();
+            if (slotScript != null)
             {
-               // slotUI.SetCard(card); // 카드 이미지, 텍스트 등 설정
+                slotScript.SetItem(entry); // 이미지 표시
             }
 
-            // 3. 버튼 기능 연결
+            // (2) 버튼 기능 추가
             Button btn = slotObj.GetComponent<Button>();
-            if (btn != null)
+            if (btn == null)
             {
-                btn.onClick.AddListener(() => OnCardSelectedToEnchant(card));
+                btn = slotObj.AddComponent<Button>();
             }
+
+            btn.onClick.AddListener(() => OnCardClicked(entry));
         }
     }
 
-    // 카드가 선택되었을 때 실행되는 강화 로직
-    private void OnCardSelectedToEnchant(CardData selectedCard)
+    // 버튼 클릭 시 실행
+    private void OnCardClicked(CardDataEntry card)
     {
-       // Debug.Log($"[강화] {selectedCard.cardName} 카드를 선택했습니다.");
+        // 1. 클릭이 되는지 확인
+        Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
 
-        // --- 여기에 실제 강화 로직을 구현합니다 ---
-        // 예: selectedCard.attackPower += 3;
-        // 예: ResourceManager.Instance.SpendGold(100);
-        
-        // 강화를 마친 후 UI를 갱신하거나 패널을 닫습니다.
-        // RenderDeck(); // 변경된 수치를 반영하기 위해 다시 그림
-        // CloseEnchantPanel(); // 혹은 강화를 마치고 창 닫기
+        if (enchantPopup != null)
+        {
+            Debug.Log("📢 팝업 열기 명령 보냄!");
+            enchantPopup.OpenPopup(card); // 팝업 열기
+        }
+        else
+        {
+            Debug.LogError("❌ 오류: 인스펙터에서 Enchant Popup이 연결되지 않았습니다!");
+        }
     }
 }

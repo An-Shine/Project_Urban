@@ -21,7 +21,7 @@ public class GameManager : Singleton<GameManager>
 
     private HpController playerHp;
     private Deck deck;
-    private int coin;
+    private int coin = 1000;
 
     public HpController PlayerHp => playerHp;
     public Deck Deck => deck;
@@ -56,4 +56,7 @@ public class GameManager : Singleton<GameManager>
     {
         coin += amount;
     }
+   
+
+
 }
