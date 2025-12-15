@@ -25,6 +25,6 @@ public class SuccessUI : MonoBehaviour
 
     public void LoadMapScene()
     {
-        SceneManager.LoadScene("Map_Scene");
+        SceneManager.LoadScene("03_MapScene");
     }
 }

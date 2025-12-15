@@ -18,6 +18,8 @@ abstract public class Card : MonoBehaviour
     [SerializeField] protected Element element;
     [SerializeField] protected int cost;            // 코스트
     [SerializeField] TMP_Text cardTitle;
+    [SerializeField] TMP_Text cardDesc;
+
     
     // 이동 코루틴
     private Coroutine moveCoroutine;
@@ -35,6 +37,7 @@ abstract public class Card : MonoBehaviour
     {
         CardDataEntry cardData = CardManager.Instance.GetCardData(Name);
         cardTitle.text = cardData.koreanName;
+        cardDesc.text = cardData.description;
     }
 
     public void Hover()

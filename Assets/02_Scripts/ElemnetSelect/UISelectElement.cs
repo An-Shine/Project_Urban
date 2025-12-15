@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; 
 
-public class SelectManager : MonoBehaviour
+public class UISelectElement : MonoBehaviour
 {
     [SerializeField] private List<CardName> cards = new();
     private readonly Dictionary<Element, List<CardName>> elementCardMaps = new();
@@ -25,7 +25,7 @@ public class SelectManager : MonoBehaviour
         GameManager.Instance.SelectedElement = element;
         GameManager.Instance.SetBonusCards(elementCardMaps[element]);
 
-        SceneManager.LoadScene("Battle_Scene");
+        SceneManager.LoadScene("04_BattleScene");
     }
 
     public void OnClickFlame()

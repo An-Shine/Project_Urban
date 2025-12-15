@@ -9,11 +9,10 @@ public class ElementWeight
     public float weight = 1f; // 가중치
 }
 
-
 public class CardSelectUI : MonoBehaviour
 {
-    [SerializeField] private List<CardSelectItem> cardSelectItems;
-    [SerializeField] private List<ElementWeight> elementWeights = new()
+    [SerializeField] private List<UICard> cardSelectItems;
+    private readonly List<ElementWeight> elementWeights = new()
     {
         new() { element = Element.None },
         new() { element = Element.Flame },
@@ -32,27 +31,12 @@ public class CardSelectUI : MonoBehaviour
             }
         }
 
-        var selectedCards = SelectRandomCards(cardSelectItems.Count);
-        
-        int index = 0;
-        foreach (var item in cardSelectItems)
-        {
-            item.SetCardInfo(selectedCards[index++]);
-        }
-    }
-
-    private List<CardName> SelectRandomCards(int count)
-    {
-        List<CardName> result = new();
-        
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < cardSelectItems.Count; i++)
         {
             Element selectedElement = SelectRandomElement();
-            CardName randomCard = GetRandomCardFromElement(selectedElement);
-            result.Add(randomCard);
+            CardDataEntry randomCard  = GetRandomCardFromElement(selectedElement);
+            cardSelectItems[i].SetCardDataEntry(randomCard);
         }
-        
-        return result;
     }
 
     private Element SelectRandomElement()
@@ -74,9 +58,9 @@ public class CardSelectUI : MonoBehaviour
         return elementWeights[0].element;
     }
 
-    private CardName GetRandomCardFromElement(Element element)
+    private CardDataEntry GetRandomCardFromElement(Element element)
     {
         List<CardDataEntry> cards = CardManager.Instance.GetCardsByElement(element);
-        return cards[Random.Range(0, cards.Count)].cardName;
+        return cards[Random.Range(0, cards.Count)];
     }
 } 
