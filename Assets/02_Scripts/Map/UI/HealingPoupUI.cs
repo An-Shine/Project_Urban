@@ -6,7 +6,7 @@ public class HealingPopupUI : MonoBehaviour
 {
     [Header("UI 연결")]
     [SerializeField] private GameObject popupObject; // 팝업 패널
-    [SerializeField] private TMP_Text statusText;        // 결과 텍스트 (예: 현재체력 : 100 > 500)
+    [SerializeField] private TMP_Text statusText;    // 결과 텍스트 (예: 현재체력 : 100 > 500)
 
     public void OpenPopup()
     {
@@ -40,7 +40,7 @@ public class HealingPopupUI : MonoBehaviour
         }
     }
 
-    // [버튼 연결용] 클릭하면 실행됨
+    // 버튼 연결
     public void OnClickFullHeal()
     {
         // 1. 플레이어 HP 컨트롤러 가져오기
@@ -65,9 +65,7 @@ public class HealingPopupUI : MonoBehaviour
         }
 
         // 6. 팝업 텍스트 갱신 (150 > 500 형태)
-        UpdateStatusText(true, beforeHp);
-        
-        Debug.Log("✨ 플레이어 완전 회복 완료!");
+        UpdateStatusText(true, beforeHp);        
     }
 
     

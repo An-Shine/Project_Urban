@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI; 
-using System.Collections.Generic; 
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class DeckEnchantPanel : MonoBehaviour
 {
@@ -8,7 +8,9 @@ public class DeckEnchantPanel : MonoBehaviour
     [SerializeField] private GameObject panelObject;    // 패널 전체 오브젝트
     [SerializeField] private Transform contentArea;     // ScrollView 안의 Content
     [SerializeField] private GameObject cardSlotPrefab; // 슬롯 프리팹 (StoreCardSlot 붙은거)
-    
+    [SerializeField] private GameObject HealingPanel;
+
+
     [Header("팝업 연결 (필수)")]
     [SerializeField] private DeckEnchantPopup enchantPopup; // 위에서 만든 팝업 스크립트 연결
 
@@ -19,7 +21,8 @@ public class DeckEnchantPanel : MonoBehaviour
         List<CardDataEntry> currentDeck = ProtoTypeDeck.Instance.GetCurrentDeck();
 
         // 2. UI 켜고 그리기
-        panelObject.SetActive(true);        
+        panelObject.SetActive(true);
+        HealingPanel.SetActive(false);
         RenderDeck(currentDeck);
     }
 
@@ -31,49 +34,50 @@ public class DeckEnchantPanel : MonoBehaviour
     // 카드 목록을 버튼으로 생성하는 함수
     private void RenderDeck(List<CardDataEntry> deckToRender)
     {
-        // 초기화
-        foreach (Transform child in contentArea)
-        {
-            Destroy(child.gameObject);
-        }
+        // 1. 기존 슬롯들 삭제 (초기화)
+        foreach (Transform child in contentArea) Destroy(child.gameObject);
 
-        // 새 슬롯 만들기
+        // 2. 새로운 슬롯 생성
         foreach (CardDataEntry entry in deckToRender)
         {
+            // 프리팹 생성
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
 
-            // (1) 이미지/텍스트 설정
-            StoreCardSlot slotScript = slotObj.GetComponent<StoreCardSlot>();
+            // 방금 만든 스크립트(CardEnchantSlot) 가져오기
+            CardEnchantSlot slotScript = slotObj.GetComponent<CardEnchantSlot>();
+
             if (slotScript != null)
             {
-                slotScript.SetItem(entry); // 이미지 표시
+                // [핵심] 슬롯에게 데이터와 "클릭하면 실행할 함수(OnCardClicked)"를 전달
+                slotScript.SetEnchantItem(entry, OnCardClicked);
             }
-
-            // (2) 버튼 기능 추가
-            Button btn = slotObj.GetComponent<Button>();
-            if (btn == null)
+            else
             {
-                btn = slotObj.AddComponent<Button>();
+                Debug.LogError("❌ [EnchantPanel] 프리팹에 'CardEnchantSlot' 스크립트가 없습니다!");
             }
-
-            btn.onClick.AddListener(() => OnCardClicked(entry));
         }
     }
 
-    // 버튼 클릭 시 실행
+    // (참고) 이 함수는 이미 DeckEnchantPanel에 작성되어 있을 겁니다.
     private void OnCardClicked(CardDataEntry card)
     {
-        // 1. 클릭이 되는지 확인
-        Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
-
         if (enchantPopup != null)
         {
-            Debug.Log("📢 팝업 열기 명령 보냄!");
             enchantPopup.OpenPopup(card); // 팝업 열기
-        }
-        else
-        {
-            Debug.LogError("❌ 오류: 인스펙터에서 Enchant Popup이 연결되지 않았습니다!");
+
+            // 1. 클릭이 되는지 확인
+            Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
+
+            if (enchantPopup != null)
+            {
+                Debug.Log("📢 팝업 열기 명령 보냄!");
+                enchantPopup.OpenPopup(card); // 팝업 열기
+            }
+            else
+            {
+                Debug.LogError("❌ 오류: 인스펙터에서 Enchant Popup이 연결되지 않았습니다!");
+            }
         }
     }
 }
+

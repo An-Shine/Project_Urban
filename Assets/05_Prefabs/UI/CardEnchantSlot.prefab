@@ -87,8 +87,8 @@ GameObject:
   - component: {fileID: 6303456531395691815}
   - component: {fileID: 6828487003271515038}
   - component: {fileID: 2567720069340293986}
-  - component: {fileID: 3813784721205127111}
   - component: {fileID: 6112238550886881552}
+  - component: {fileID: 985661323161647112}
   m_Layer: 5
   m_Name: CardEnchantSlot
   m_TagString: Untagged
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: d0b3b32ac9572db4a916af4c00b552d8, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -197,21 +197,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6828487003271515038}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3813784721205127111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7590871367353887901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a4d81b0d5ce5d64e967f521f5db9c3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StoreCardSlot
-  cardImage: {fileID: 1644170770517612559}
-  priceButtonPrefab: {fileID: 8982617820092848705, guid: 28c66e582d308764f8872ce7aefe00dd, type: 3}
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6112238550886881552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,3 +236,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &985661323161647112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7590871367353887901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca22a40a4e366d24db8964613fba30e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardEnchantSlot
+  cardImage: {fileID: 1644170770517612559}
+  slotButton: {fileID: 2567720069340293986}
