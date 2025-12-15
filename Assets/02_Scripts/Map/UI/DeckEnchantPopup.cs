@@ -1,13 +1,13 @@
+using Michsky.UI.Dark;
 using UnityEngine;
 using UnityEngine.UI; // 이게 없으면 Image, Button에서 에러남
 
 public class DeckEnchantPopup : MonoBehaviour
 {
     [Header("UI 연결")]
-    [SerializeField] private GameObject popupObject; 
     [SerializeField] private Image targetCardImage;  
 
-    private CardDataEntry currentTarget; // 현재 강화 대기 중인 카드
+    private CardDataEntry currentTarget; // 현재 강화 대기 중인 카
 
     public void OpenPopup(CardDataEntry card)
     {
@@ -19,13 +19,13 @@ public class DeckEnchantPopup : MonoBehaviour
             targetCardImage.sprite = card.cardSprite;
         }
 
-        popupObject.SetActive(true);
+        gameObject.GetComponent<ModalWindowManager>().ModalWindowIn();
     }
 
     // 아니오 버튼
     public void ClosePopup()
     {
-        popupObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     // "예(강화)" 버튼

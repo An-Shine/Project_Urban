@@ -61,23 +61,8 @@ public class DeckEnchantPanel : MonoBehaviour
     // (참고) 이 함수는 이미 DeckEnchantPanel에 작성되어 있을 겁니다.
     private void OnCardClicked(CardDataEntry card)
     {
-        if (enchantPopup != null)
-        {
-            enchantPopup.OpenPopup(card); // 팝업 열기
-
-            // 1. 클릭이 되는지 확인
-            Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
-
-            if (enchantPopup != null)
-            {
-                Debug.Log("📢 팝업 열기 명령 보냄!");
-                enchantPopup.OpenPopup(card); // 팝업 열기
-            }
-            else
-            {
-                Debug.LogError("❌ 오류: 인스펙터에서 Enchant Popup이 연결되지 않았습니다!");
-            }
-        }
+        enchantPopup.OpenPopup(card); // 팝업 열기
+        Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
     }
 }
 
