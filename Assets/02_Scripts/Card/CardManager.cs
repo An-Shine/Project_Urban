@@ -3,7 +3,14 @@ using UnityEngine;
 
 public class CardManager : Singleton<CardManager>
 {
-    [SerializeField] private CardData cardData;
+    public static new CardManager Instance { get; private set; }
+    [SerializeField] private CardData cardData;        
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     public Card CreateCard(CardName cardName, Vector3 spawnPos, Transform hand)
     {
@@ -35,5 +42,8 @@ public class CardManager : Singleton<CardManager>
     public List<CardDataEntry> GetCardsByElement(Element element)
     {
         return cardData.GetCardsByElement(element);
-    }
+    }       
+
+
 }
+
