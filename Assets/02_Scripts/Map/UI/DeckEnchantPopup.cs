@@ -5,19 +5,18 @@ using UnityEngine.UI; // 이게 없으면 Image, Button에서 에러남
 public class DeckEnchantPopup : MonoBehaviour
 {
     [Header("UI 연결")]
-    [SerializeField] private Image targetCardImage;  
-
-    private CardDataEntry currentTarget; // 현재 강화 대기 중인 카
+    [SerializeField] private UICard targetCardUI;
+    [SerializeField] private GameObject popupObject;
+    private ModalWindowManager mwManager;
+    private CardDataEntry currentTarget; // 현재 강화 대기 중인 카드
 
     public void OpenPopup(CardDataEntry card)
     {
         currentTarget = card;
 
-        // 카드 이미지 세팅
-        if (targetCardImage != null && card != null)
-        {
-            targetCardImage.sprite = card.cardSprite;
-        }
+        // 카드 이미지 세팅       
+        //targetCardImage.sprite = card.cardSprite;
+        targetCardUI.SetCardDataEntry(card);              
 
         gameObject.GetComponent<ModalWindowManager>().ModalWindowIn();
     }
@@ -34,7 +33,7 @@ public class DeckEnchantPopup : MonoBehaviour
         if (currentTarget != null)
         {
             Debug.Log($"✨ [강화 성공] {currentTarget.cardName} 강화 완료!");
-            // 여기에 실제 강화 로직 추가 (예: 공격력 증가 등)
+            // 여기에 실제 강화 로직 추가 예정
         }
         
         ClosePopup();
