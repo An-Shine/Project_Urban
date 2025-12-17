@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class ProtoTypeDeck : MonoBehaviour
 {
     public static ProtoTypeDeck Instance;
+    public List<CardDataEntry> deck;
 
     [System.Serializable]
     public struct DeckRecipe
@@ -41,4 +42,13 @@ public class ProtoTypeDeck : MonoBehaviour
 
         return generatedDeck;
     }
+
+    public void RemoveCard(CardDataEntry card)
+{
+    if (deck.Contains(card))
+    {
+        deck.Remove(card);
+    }   
+}
+
 }

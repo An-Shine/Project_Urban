@@ -16,10 +16,7 @@ public class CardEnchantSlot : MonoBehaviour
     {
         cardImage = GetComponent<Image>();
         slotButton = GetComponent<Button>();
-    }
-
-    // [중요] 이 함수가 없어서 에러가 났던 것입니다!
-    // DeckEnchantPanel에서 이 함수를 호출해서 카드 정보와 클릭 기능을 넣어줍니다.
+    }  
     public void SetEnchantItem(CardDataEntry data, UnityAction<CardDataEntry> onClickCallback)
     {
         if (data == null) return;
@@ -30,9 +27,9 @@ public class CardEnchantSlot : MonoBehaviour
         cardImage.sprite = data.cardSprite;
         cardImage.color = Color.white; 
 
-        // 3. 버튼 클릭 이벤트 연결
-        slotButton.onClick.RemoveAllListeners(); // 기존 연결 제거 (중복 방지)
-        // 버튼을 클릭하면 -> 패널이 시킨 일(팝업 열기)을 수행해라!
+        // 2. 버튼 클릭 이벤트 연결
+        slotButton.onClick.RemoveAllListeners(); 
+        
         slotButton.onClick.AddListener(() => onClickCallback(_cardData));
     }
 }

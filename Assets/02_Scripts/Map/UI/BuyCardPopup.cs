@@ -1,41 +1,45 @@
 using UnityEngine;
+using UnityEngine.UI; 
 using TMPro;
+using Michsky.UI.Dark;
 
 public class BuyCardPopup : MonoBehaviour
-{
-    [Header("UI 연결")]
+{    
     [SerializeField] private TMP_Text questionText; 
     [SerializeField] private GameObject BuyCardPanel; 
+    [SerializeField] private Image targetCardImage; 
+    [SerializeField] private UICard targetCardUI;
 
     private StoreUI _storeUI;
     private int _targetSlotIndex;
 
-    // StoreUI가 이 함수를 호출해서 팝업 오픈
-    public void OpenPopup(StoreUI storeUI, int slotIndex, string cardName)
+    // cardData 전체를 받아옴
+    public void OpenPopup(StoreUI storeUI, int slotIndex, CardDataEntry cardData)
     {
         _storeUI = storeUI;
         _targetSlotIndex = slotIndex;
 
-        // 구매문구 설정
-        questionText.text = $"{cardName} buy?";
+        // 1. 텍스트 설정
+        questionText.text = $"{cardData.koreanName} 구매하시겠습니까?";
 
-        // 팝업 켜기
+        // 2. 카드 UI 설정 (UICard에게 데이터 전달)        
+        targetCardUI.SetCardDataEntry(cardData); 
+
+        // 3. 팝업 켜기
         BuyCardPanel.SetActive(true);
+        GetComponent<ModalWindowManager>().ModalWindowIn();
     }
 
-    // Yes 버튼에 연결
+    // Yes 버튼
     public void OnClickYes()
     {
         // 상점에게 구매 확정 전달
-        if (_storeUI != null)
-        {
-            _storeUI.ConfirmPurchase(_targetSlotIndex);
-        }
+        _storeUI.ConfirmPurchase(_targetSlotIndex);
         
         ClosePopup();
     }
 
-    // No 버튼에 연결
+    // No 버튼
     public void OnClickNo()
     {
         ClosePopup();
@@ -43,6 +47,8 @@ public class BuyCardPopup : MonoBehaviour
 
     private void ClosePopup()
     {
-        BuyCardPanel.SetActive(false);
-    }
+        // 닫기 애니메이션 실행
+        GetComponent<ModalWindowManager>().ModalWindowOut();       
+        
+    }   
 }

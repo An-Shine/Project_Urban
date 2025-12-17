@@ -22,7 +22,7 @@ public class DeckEnchantPanel : MonoBehaviour
 
         // 2. UI 켜고 그리기
         panelObject.SetActive(true);
-        HealingPanel.SetActive(false);
+        //HealingPanel.SetActive(false);
         RenderDeck(currentDeck);
     }
 
@@ -42,27 +42,25 @@ public class DeckEnchantPanel : MonoBehaviour
         {
             // 프리팹 생성
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
+            slotObj.transform.localScale = Vector3.one;
 
             // 방금 만든 스크립트(CardEnchantSlot) 가져오기
-            CardEnchantSlot slotScript = slotObj.GetComponent<CardEnchantSlot>();
-
-            if (slotScript != null)
-            {
-                // [핵심] 슬롯에게 데이터와 "클릭하면 실행할 함수(OnCardClicked)"를 전달
-                slotScript.SetEnchantItem(entry, OnCardClicked);
-            }
-            else
-            {
-                Debug.LogError("❌ [EnchantPanel] 프리팹에 'CardEnchantSlot' 스크립트가 없습니다!");
-            }
+            //CardEnchantSlot slotScript = slotObj.GetComponent<CardEnchantSlot>();
+            UICard cardScript = slotObj.GetComponent<UICard>();            
+           
+            cardScript.SetCardDataEntry(entry, OnCardClicked);        
         }
     }
-
-    // (참고) 이 함수는 이미 DeckEnchantPanel에 작성되어 있을 겁니다.
+    
     private void OnCardClicked(CardDataEntry card)
     {
         enchantPopup.OpenPopup(card); // 팝업 열기
         Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
+    }
+
+    public void OnClickRemoveCard()
+    {
+        
     }
 }
 
