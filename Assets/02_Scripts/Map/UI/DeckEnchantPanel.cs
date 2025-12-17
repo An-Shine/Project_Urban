@@ -42,6 +42,7 @@ public class DeckEnchantPanel : MonoBehaviour
         {
             // 프리팹 생성
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
+            slotObj.transform.localScale = Vector3.one;
 
             // 방금 만든 스크립트(CardEnchantSlot) 가져오기
             //CardEnchantSlot slotScript = slotObj.GetComponent<CardEnchantSlot>();

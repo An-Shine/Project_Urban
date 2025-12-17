@@ -46,6 +46,7 @@ public class DeckCheckUI : MonoBehaviour
         foreach (CardDataEntry entry in deckToRender)
         {
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
+            slotObj.transform.localScale = Vector3.one;
             
             // 프리팹에 StoreCardSlot 컴포넌트가 있는지 확인
             //StoreCardSlot slotScript = slotObj.GetComponent<StoreCardSlot>();

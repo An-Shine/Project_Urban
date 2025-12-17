@@ -33,6 +33,7 @@ public class StoreCardRemovePanel : MonoBehaviour
         foreach (CardDataEntry card in myDeck)
         {
             GameObject newObj = Instantiate(uiCardPrefab, contentArea);
+            newObj.transform.localScale = Vector3.one;
             UICard uiCard = newObj.GetComponent<UICard>();
 
             if (uiCard != null)

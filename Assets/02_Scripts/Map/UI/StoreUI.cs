@@ -66,6 +66,7 @@ public class StoreUI : MonoBehaviour
 
             // 프리팹 생성 및 컴포넌트 가져오기
             GameObject newObj = Instantiate(uiCardPrefab, contentArea);
+            newObj.transform.localScale = Vector3.one;
             UICard uiCard = newObj.GetComponent<UICard>();
             _spawnedCards.Add(uiCard);
 
