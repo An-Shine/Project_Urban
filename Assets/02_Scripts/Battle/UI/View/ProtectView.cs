@@ -1,15 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Slider))]
 public class ProtectView : MonoBehaviour, IPointView
 {
-    private Slider protectSlider;
-
-    private void Awake()
-    {
-        protectSlider = GetComponent<Slider>();
-    }
+    [SerializeField] private Slider protectSlider;
+    [SerializeField] private TMP_Text protectText;
 
     // 0나누기 방지 
     public void UpdateView(int curProtect, int maxProtect)
@@ -22,6 +18,7 @@ public class ProtectView : MonoBehaviour, IPointView
 
         float ratio = (float)curProtect / maxProtect;
         protectSlider.value = ratio;
+        protectText.text = $"{curProtect}/{maxProtect}";
     }
 
     public void Bind(PointController controller)

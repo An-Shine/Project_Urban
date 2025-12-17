@@ -1,19 +1,12 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-
-[RequireComponent(typeof(Text))]
 public class CostView : MonoBehaviour, IPointView
 {
-    private Text costText;
-
-    private void Awake()
-    {
-        costText = GetComponent<Text>();
-    }
+    [SerializeField] TMP_Text costText;
 
     public void UpdateView(int curCost, int maxCost)
     {
-        costText.text = $"{curCost} / {maxCost}";
+        costText.text = $"{curCost}/{maxCost}";
     }
 
     public void Bind(PointController controller)

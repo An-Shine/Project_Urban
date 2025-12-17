@@ -273,7 +273,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select Element
+  m_text: "\uC18D\uC131\uC744 \uC120\uD0DD\uD558\uC138\uC694\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a181474f4e9885c439d4947c4ba59982, type: 2}
   m_sharedMaterial: {fileID: 1073631401402722801, guid: a181474f4e9885c439d4947c4ba59982, type: 2}
@@ -1327,37 +1327,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1587095001}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickFlame
-      objectReference: {fileID: 0}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UISelectElement, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4342999759598597388, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 4443540872749229999, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 825896ebf89307a46b55f61f4558fbdb, type: 3}
     - target: {fileID: 6057391893672190808, guid: b5a0853aba2eb0f40bbe850ed26e0093, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
