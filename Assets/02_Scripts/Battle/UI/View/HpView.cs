@@ -1,16 +1,11 @@
-using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Slider))]
 public class HpView : MonoBehaviour, IPointView
 {
-    private Slider hpSlider;
-
-    private void Awake()
-    {
-        hpSlider = GetComponent<Slider>();
-    }
+    [SerializeField] private Slider hpSlider;
+    [SerializeField] private TMP_Text hpText;
 
     // 0나누기 방지 
     public void UpdateView(int curHp, int maxHp)
@@ -23,6 +18,7 @@ public class HpView : MonoBehaviour, IPointView
 
         float ratio = (float)curHp / maxHp;
         hpSlider.value = ratio;
+        hpText.text = $"{curHp}/{maxHp}";
     }
 
     public void Bind(PointController controller)

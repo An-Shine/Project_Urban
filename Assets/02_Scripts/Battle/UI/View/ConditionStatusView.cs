@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Text;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(TMP_Text))]
 public class ConditionStatusView : MonoBehaviour
 {
-    private Text costText;
+    private TMP_Text costText;
     private readonly StringBuilder stringBuilder = new();
 
     private void Awake()
     {
-        costText = GetComponent<Text>();
+        costText = GetComponent<TMP_Text>();
     }
 
     public void UpdateView(IEnumerable<ConditionStatus> list)
