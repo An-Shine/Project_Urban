@@ -176,6 +176,7 @@ public class CardDataEntry
     public Element element;
     public bool isSpecial;
     public Card cardPrefab;
+    public int Price;
     [TextArea] public string description;
 }
 
@@ -193,6 +194,7 @@ public class JsonCardData
     public string koreanName;
     public string element;
     public bool isSpecial;
-    public string description;    
+    public string description;   
+    public int Price; 
 }
 #endif

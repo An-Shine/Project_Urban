@@ -105,7 +105,6 @@ GameObject:
   - component: {fileID: 3941076683463202709}
   - component: {fileID: 7293535141034106536}
   - component: {fileID: 6630254492334889983}
-  - component: {fileID: 5899661018974569789}
   - component: {fileID: 2656048199382207044}
   m_Layer: 5
   m_Name: DeckEnchantPanel
@@ -113,7 +112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &477590771055487828
 RectTransform:
   m_ObjectHideFlags: 0
@@ -197,23 +196,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &5899661018974569789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874639545362283149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &2656048199382207044
 MonoBehaviour:
   m_ObjectHideFlags: 0
