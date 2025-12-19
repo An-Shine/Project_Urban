@@ -1,28 +1,28 @@
 abstract public class ConditionStatus
 {
     private readonly int initTurn;
-    private readonly  TurnController turn;
-    public int RemainingTurn => turn.CurrentPoint;
+    private int turn;
+    public int RemainingTurn => turn;
 
     public ConditionStatus(int initTurn)
     {
         this.initTurn = initTurn;
-        turn = PointControllerFactory.CreateTurn(initTurn);
+
     }
 
     public void DecreaseTurn(int amount = 1)
     {
-        turn.Decrease(amount);
+        turn -= amount;
     }
 
     public void IncreaseTurn(int amount = 1)
     {
-        turn.Increase(amount);
+        turn += amount;
     }
 
     public void RefreshTurn()
     {
-        turn.CurrentPoint = initTurn;   
+        turn = initTurn;   
     }
 
     abstract public void Execute(Target target);

@@ -19,17 +19,17 @@ public class GameManager : Singleton<GameManager>
     private readonly List<CardName> initialDeck = new();
 
 
-    private HpController playerHp;
+    private HealthController playerHp;
     private Deck deck;
     private int coin = 1000;
 
-    public HpController PlayerHp => playerHp;
+    public HealthController PlayerHealth => playerHp;
     public Deck Deck => deck;
     public int Coin => coin;
 
     private void Start()
     {
-        playerHp = PointControllerFactory.CreateHp(playerMaxHp);
+        playerHp = new HealthController(playerMaxHp);
     }
 
     // 카드를 저장하는 함수
@@ -56,7 +56,4 @@ public class GameManager : Singleton<GameManager>
     {
         coin += amount;
     }
-   
-
-
 }

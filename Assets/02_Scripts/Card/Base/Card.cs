@@ -55,6 +55,22 @@ abstract public class Card : MonoBehaviour
         transform.localPosition = OriginPos;
     }
 
+    // Unity 마우스 이벤트
+    void OnMouseEnter()
+    {
+        Debug.Log($"[Card] OnMouseEnter: {Name}");
+    }
+
+    void OnMouseExit()
+    {
+        Debug.Log($"[Card] OnMouseExit: {Name}");
+    }
+
+    void OnMouseDown()
+    {
+        Debug.Log($"[Card] OnMouseDown: {Name}");
+    }
+
     // 목표 위치로 부드럽게 이동하는 함수
     public void MoveTo(Vector3 targetLocalPos, UnityAction onComplete = null)
     {
