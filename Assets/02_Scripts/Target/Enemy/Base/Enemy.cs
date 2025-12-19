@@ -23,6 +23,7 @@ abstract public class Enemy : Target
     private int actionIdx = 0;
     private EnemyAction enemyAction;
     private Coroutine moveCoroutine;
+    private IEnemyEventHandler handler;
 
     public float RewardCoefficient => rewardCoefficient;
 
@@ -47,6 +48,9 @@ abstract public class Enemy : Target
 
     private void Start()
     {   
+        // 핸들러 주입
+        handler = BattleManager.Instance?.Player;
+        
         healthView.Bind(Health);
         selectedArrow.enabled = false;
 
@@ -82,6 +86,22 @@ abstract public class Enemy : Target
     public void UnHover()
     {
         selectedArrow.enabled = false;
+    }
+
+    // Unity 마우스 이벤트
+    private void OnMouseEnter()
+    {
+        handler?.OnEnemyEnter(this);
+    }
+
+    private void OnMouseExit()
+    {
+        handler?.OnEnemyExit(this);
+    }
+
+    private void OnMouseDown()
+    {
+        handler?.OnEnemyClick(this);
     }
 
     public void MoveTo(Vector3 targetPos, UnityAction onComplete = null)

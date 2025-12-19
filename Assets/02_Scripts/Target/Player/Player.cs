@@ -1,26 +1,31 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class Player : Target
+[RequireComponent(typeof(PlayerInput))]
+public class Player : Target, ICardEventHandler, IEnemyEventHandler
 {
     [Header("Player Settings")]
     [SerializeField] private int maxCost;
     [SerializeField] private int startingDrawCount = 6; //시작할때 카드 6장 드로우
+    [SerializeField] private Hand hand;
 
     [Header("Player View")]
     [SerializeField] protected CostView costView;
-
-    [Header("Mouse Pointer")]
-    [SerializeField] private MousePointer mousePointer;
-
-    private Card prevSelectedCard;
+    
+    private PlayerInput playerInput;
     private Deck deck;
+    private Card selectedCard;
 
     public CostController Cost { get; private set; }
     public Deck Deck
     {
         get
         {
-            deck ??= GameManager.Instance.Deck;
+            if (deck == null)
+            {
+                deck = GameManager.Instance.Deck;
+                deck.Initialize(hand);
+            }
 
             return deck;
         }
@@ -28,168 +33,170 @@ public class Player : Target
 
     private void Awake()
     {
-        // Card Event
-        mousePointer.OnCardSelect.AddListener(HandleCardSelect);
-        mousePointer.OnCardUnSelect.AddListener(HandleCardUnSelect);
-        mousePointer.OnCardEnter.AddListener(HandleCardEnter);
-        mousePointer.OnCardExit.AddListener(HandleCardExit);
-
-        // Enemy Event
-        mousePointer.OnEnemySelect.AddListener(HandleEnemySelect);
-        mousePointer.OnEnemyEnter.AddListener(HandleEnemyEnter);
-        mousePointer.OnEnemyExit.AddListener(HandleEnemyExit);
-
+        playerInput = GetComponent<PlayerInput>();
+        
         Health = GameManager.Instance.PlayerHealth;
         Cost = new CostController(maxCost);
 
         // 죽으면 종료처리
         OnDead.AddListener(HandleDead);
+        
+        // 우클릭으로 선택 해제
+        playerInput.actions["RightClick"].started += OnRightClick;
+    }
+    
+    private void OnDestroy()
+    {
+        playerInput.actions["RightClick"].started -= OnRightClick;
+    }
+    
+    private void OnRightClick(InputAction.CallbackContext context)
+    {
+        DeselectCard();
     }
 
     private void Start()
     {
-        // Turn Event
-        BattleManager.Instance.OnTurnStart.AddListener(HandleTurnStart);
-        BattleManager.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
-
         healthView.Bind(Health);
         costView.Bind(Cost);
     }
-
-    private void HandleTurnStart()
+    
+    // BattleManager가 호출
+    public void OnBattleStart()
+    {
+        OnTurnStart();
+    }
+    
+    public void OnTurnStart()
     {
         if (IsStun())
-            BattleManager.Instance.TurnEnd();
+        {
+            BattleManager.Instance.EndPlayerTurn();
+            return;
+        }
 
+        Cost.ResetCost();
         Deck.Draw(startingDrawCount);
+        DeselectCard();
     }
 
-    private void HandleTurnEnd()
+    public void OnTurnEnd()
     {
+        DeselectCard();
         Deck.DiscardAll();
-    }
-
-    private void HandleCardSelect(Card card)
-    {
-        // 이미 선택된 카드를 다시 클릭한 경우
-        if (prevSelectedCard == card)
-        {
-            // 자신에게 사용하는 카드인 경우, 선택된 카드를 다시 클릭하면 사용된다.
-            if (card.Type == CardType.Defense || card.Type == CardType.Buff)
-            {
-                if (card.Cost > Cost.CurrentCost)
-                {
-                    Debug.Log($"코스트 부족 - 카드 코스트:{card.Cost}/현재 코스트:{Cost.CurrentCost} ");
-                }
-                else
-                {
-                    int cost = card.Use(this);
-                    Cost.DecreaseCost(cost);
-                    Deck.Discard(card);     
-                                   
-                    Debug.Log($"Use Card To Player : {card.name}");
-                }
-
-                mousePointer.ClearSelection();
-                prevSelectedCard = null;
-                return;
-            }
-
-            // 전체 공격 혹은 전체 디버프 처리
-            else if (card.Type == CardType.Attack || card.Type == CardType.Debuff)
-            {
-                return; // 아직 미처리
-            }
-
-            return;
-        }
-
-        // 새로운 카드 선택
-        if (prevSelectedCard != null)
-        {
-            prevSelectedCard.UnHover();
-            card.Hover();
-        }
-
-        prevSelectedCard = card;
-    }
-
-    private void HandleCardEnter(Card card)
-    {
-        if (prevSelectedCard == null)
-            card.Hover();
-    }
-
-    private void HandleCardExit(Card card)
-    {
-        if (prevSelectedCard == null)
-            card.UnHover();
-    }
-
-    private void HandleCardUnSelect(Card card)
-    {
-        Card selectedCard = mousePointer.SelectedCard;
-
-        if (selectedCard != null)
-            selectedCard.UnHover();
-
-        mousePointer.ClearSelection();
-        prevSelectedCard = null;
-    }
-
-    private void HandleEnemySelect(Enemy enemy)
-    {
-        if (!CanTargetEnemy())
-            return;
-
-        Card selectedCard = mousePointer.SelectedCard;
-
-        if (selectedCard.Cost > Cost.CurrentCost)
-            Debug.Log($"코스트 부족 - 카드 코스트:{selectedCard.Cost}/현재 코스트:{Cost.CurrentCost} ");
-        else
-        {
-            int cost = selectedCard.Use(enemy);
-            Cost.DecreaseCost(cost);
-            Deck.Discard(selectedCard);
-        }
-
-        enemy.UnHover();
-        mousePointer.ClearSelection();
-    }
-
-    private void HandleEnemyEnter(Enemy enemy)
-    {
-        if (CanTargetEnemy())
-            enemy.Hover();
-    }
-
-    private void HandleEnemyExit(Enemy enemy)
-    {
-        if (CanTargetEnemy())
-            enemy.UnHover();
     }
 
     private void HandleDead(Target target)
     {
-        BattleManager.Instance.OnBattleEnd.Invoke(false);
-    }
-
-    private bool CanTargetEnemy()
-    {
-        Card selectedCard = mousePointer.SelectedCard;
-        if (selectedCard == null) return false;
-        if (selectedCard.Type == CardType.Defense || selectedCard.Type == CardType.Buff) return false;
-
-        return true;
-    }
-
-    public void Reset()
-    {
-        // 새로운 전투 시작 시, HP는 리셋하지 않는다
+        BattleManager.Instance.EndBattle(false);
     }
 
     public void DrawCard(int amount)
     {
         Deck.Draw(amount);
+    }
+
+    // ICardEventHandler 구현
+    public void OnCardEnter(Card card)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+        if (selectedCard != null) return;  // 카드가 선택되어 있으면 호버 안 함
+        
+        card.Hover();
+    }
+
+    public void OnCardExit(Card card)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+        if (selectedCard != null) return;  // 카드가 선택되어 있으면 언호버 안 함
+        
+        card.UnHover();
+    }
+
+    public void OnCardClick(Card card)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+
+        // 같은 카드 재클릭 - 자신에게 사용
+        if (selectedCard == card)
+        {
+            TryUseCardOnSelf(card);
+            return;
+        }
+
+        // 다른 카드 선택
+        if (selectedCard != null)
+            selectedCard.UnSelect();
+
+        selectedCard = card;
+        selectedCard.Select();
+    }
+
+    // IEnemyEventHandler 구현
+    public void OnEnemyEnter(Enemy enemy)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+        
+        // 카드가 선택되어 있고, 공격/디버프 카드일 때만 호버
+        if (selectedCard != null && 
+            (selectedCard.Type == CardType.Attack || selectedCard.Type == CardType.Debuff))
+        {
+            enemy.Hover();
+        }
+    }
+
+    public void OnEnemyExit(Enemy enemy)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+        enemy.UnHover();
+    }
+
+    public void OnEnemyClick(Enemy enemy)
+    {
+        if (!BattleManager.Instance.IsPlayerTurn) return;
+        if (selectedCard == null) return;
+
+        if (selectedCard.Type != CardType.Attack && selectedCard.Type != CardType.Debuff)
+            return;
+
+        if (selectedCard.Cost > Cost.CurrentCost)
+        {
+            Debug.Log($"코스트 부족: {selectedCard.Cost}/{Cost.CurrentCost}");
+            return;
+        }
+
+        UseCard(selectedCard, enemy);
+    }
+    
+    public void DeselectCard()
+    {
+        if (selectedCard != null)
+            selectedCard.UnSelect();
+
+        selectedCard = null;
+    }
+
+    private void TryUseCardOnSelf(Card card)
+    {
+        if (card.Type != CardType.Defense && card.Type != CardType.Buff)
+            return;
+
+        if (card.Cost > Cost.CurrentCost)
+        {
+            Debug.Log($"코스트 부족: {card.Cost}/{Cost.CurrentCost}");
+            return;
+        }
+
+        UseCard(card, this);
+    }
+
+
+    private void UseCard(Card card, Target target)
+    {
+        int cost = card.Use(target);
+        Cost.DecreaseCost(cost);
+        Deck.Discard(card);
+
+        selectedCard = null;
     }
 }

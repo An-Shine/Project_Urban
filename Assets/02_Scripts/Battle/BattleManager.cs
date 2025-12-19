@@ -5,13 +5,11 @@ public class BattleManager : SceneSingleton<BattleManager>
 {
     // Player
     [SerializeField] private Player player;
-    [SerializeField] private Hand hand;
     private int curTurn;
     private bool isPlayerTurn = true;
     private int earnedCoin;
 
     public Player Player => player;
-    public Hand Hand => hand;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
     public int EarnedCoin => earnedCoin;
@@ -24,6 +22,13 @@ public class BattleManager : SceneSingleton<BattleManager>
     private void Start()
     {
         OnBattleEnd.AddListener(HandleBattleEnd);
+        InitializeBattle();
+    }
+    
+    private void InitializeBattle()
+    {
+        // 명시적 초기화
+        player.OnBattleStart();
         OnTurnStart?.Invoke();
     }
 
@@ -33,8 +38,8 @@ public class BattleManager : SceneSingleton<BattleManager>
         GameManager.Instance.AddCoin(earnedCoin);
     }
 
-    // UI로 호출
-    public void TurnEnd()
+    // UI 또는 Player가 호출
+    public void EndPlayerTurn()
     {
         OnTurnEnd?.Invoke();
 
@@ -44,8 +49,19 @@ public class BattleManager : SceneSingleton<BattleManager>
         EnemyManager.Instance.ExecuteEnemyAction(() =>
         {
             isPlayerTurn = true;
-            OnTurnStart?.Invoke();
+            StartPlayerTurn();
         });
+    }
+    
+    private void StartPlayerTurn()
+    {
+        player.OnTurnStart();
+        OnTurnStart?.Invoke();
+    }
+    
+    public void EndBattle(bool isVictory)
+    {
+        OnBattleEnd?.Invoke(isVictory);
     }
 
     public void AddCoin(int amount)

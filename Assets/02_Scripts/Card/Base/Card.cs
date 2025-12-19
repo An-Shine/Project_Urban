@@ -23,6 +23,8 @@ abstract public class Card : MonoBehaviour
     
     // 이동 코루틴
     private Coroutine moveCoroutine;
+    private Vector3 localScale;
+    private ICardEventHandler handler;
 
     // 카드 정보 관련
     public bool IsSpecial { get; }      // 특수 카드 여부 
@@ -33,8 +35,16 @@ abstract public class Card : MonoBehaviour
     public Vector3 OriginPos { get; set; } = new();
     public bool IsEntered { get; set; } = false;
 
+    private void Awake()
+    {
+        localScale = transform.localScale;
+    }
+
     private void Start()
     {
+        // 핸들러 주입
+        handler = BattleManager.Instance?.Player;
+        
         CardDataEntry cardData = CardManager.Instance.GetCardData(Name);
         cardTitle.text = cardData.koreanName;
         cardDesc.text = cardData.description;
@@ -56,19 +66,34 @@ abstract public class Card : MonoBehaviour
     }
 
     // Unity 마우스 이벤트
-    void OnMouseEnter()
+    private void OnMouseEnter()
     {
-        Debug.Log($"[Card] OnMouseEnter: {Name}");
+        handler?.OnCardEnter(this);
     }
 
-    void OnMouseExit()
+    private void OnMouseExit()
     {
-        Debug.Log($"[Card] OnMouseExit: {Name}");
+        handler?.OnCardExit(this);
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
-        Debug.Log($"[Card] OnMouseDown: {Name}");
+        handler?.OnCardClick(this);
+    }
+
+    public void Select()
+    {
+        transform.localScale = localScale * 1.2f;
+        
+        Vector3 newPos = transform.localPosition;
+        newPos.z = -3.0f;  // 최상단으로
+        transform.localPosition = newPos;
+    }
+
+    public void UnSelect()
+    {
+        transform.localScale = localScale;
+        transform.localPosition = OriginPos;  // 원래 위치로
     }
 
     // 목표 위치로 부드럽게 이동하는 함수

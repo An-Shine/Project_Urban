@@ -53,4 +53,10 @@ public class CostController
 
         OnUpdateCost?.Invoke(curCost, maxCost);
     }
+
+    public void ResetCost()
+    {
+        curCost = maxCost;
+        OnUpdateCost?.Invoke(curCost, maxCost);
+    }
 }

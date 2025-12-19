@@ -8,19 +8,10 @@ public class Deck
     private readonly List<CardName> usedCardList = new();       // 사용한 카드리스트
     private readonly List<CardName> tempCardList = new(12);         // 카드 임시 버퍼
 
-    private Hand hand = null;
+    private Hand hand;
     
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
-
-    public Hand Hand
-    {
-        get
-        {
-            hand = hand != null ? hand : BattleManager.Instance.Hand;
-            return hand;
-        }
-    }
 
     public Deck(IEnumerable<CardName> cardRecipes)
     {
@@ -31,6 +22,11 @@ public class Deck
         }
 
         Shuffle();
+    }
+    
+    public void Initialize(Hand hand)
+    {
+        this.hand = hand;
     }
 
 
@@ -56,12 +52,12 @@ public class Deck
         for (int i = 0; i < amount; i++)
             tempCardList.Add(GetNextCardName());
 
-        Hand.AddCards(tempCardList);
+        hand.AddCards(tempCardList);
     }
 
     public void Draw()
     {
-        Hand.AddCard(GetNextCardName());
+        hand.AddCard(GetNextCardName());
     }
 
     private CardName GetNextCardName()
@@ -79,17 +75,17 @@ public class Deck
     public void Discard(Card usedCard)
     {
         usedCardList.Add(usedCard.Name);
-        Hand.RemoveCard(usedCard);
+        hand.RemoveCard(usedCard);
     }
 
     public void DiscardAll()
     {
-        foreach (Card card in Hand.CurHand)
+        foreach (Card card in hand.CurHand)
         {
             usedCardList.Add(card.Name);
         }
 
-        Hand.RemoveAll();
+        hand.RemoveAll();
     }
 
     public void ResetDeck()
