@@ -10,7 +10,6 @@ public class DeckEnchantPanel : MonoBehaviour
     [SerializeField] private GameObject cardSlotPrefab; // 슬롯 프리팹 (StoreCardSlot 붙은거)
     [SerializeField] private GameObject HealingPanel;
 
-
     [Header("팝업 연결 (필수)")]
     [SerializeField] private DeckEnchantPopup enchantPopup; // 위에서 만든 팝업 스크립트 연결
 
@@ -44,23 +43,28 @@ public class DeckEnchantPanel : MonoBehaviour
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
             slotObj.transform.localScale = Vector3.one;
 
-            // 방금 만든 스크립트(CardEnchantSlot) 가져오기
-            //CardEnchantSlot slotScript = slotObj.GetComponent<CardEnchantSlot>();
-            UICard cardScript = slotObj.GetComponent<UICard>();            
-           
-            cardScript.SetCardDataEntry(entry, OnCardClicked);        
+            UICard cardScript = slotObj.GetComponent<UICard>();
+
+            cardScript.SetCardDataEntry(entry);
+
+            Button btn = slotObj.GetComponentInChildren<Button>();
+
+
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => OnCardClicked(entry));
+
+
         }
     }
-    
+
     private void OnCardClicked(CardDataEntry card)
     {
-        enchantPopup.OpenPopup(card); // 팝업 열기
-        Debug.Log($"🖱️ [클릭 감지됨!] 선택한 카드: {card.cardName}");
+        enchantPopup.OpenPopup(card); // 팝업 열기        
     }
 
     public void OnClickRemoveCard()
     {
-        
+
     }
 }
 

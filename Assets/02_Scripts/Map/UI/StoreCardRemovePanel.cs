@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Button을 쓰기 위해 추가
 
 public class StoreCardRemovePanel : MonoBehaviour
 {
@@ -25,8 +26,7 @@ public class StoreCardRemovePanel : MonoBehaviour
         // 1. 기존 슬롯 삭제
         foreach (Transform child in contentArea) Destroy(child.gameObject);
 
-        // 2. 덱 가져오기
-        if (ProtoTypeDeck.Instance == null) return;
+        // 2. 덱 가져오기 
         List<CardDataEntry> myDeck = ProtoTypeDeck.Instance.GetCurrentDeck();
 
         // 3. 생성
@@ -34,19 +34,27 @@ public class StoreCardRemovePanel : MonoBehaviour
         {
             GameObject newObj = Instantiate(uiCardPrefab, contentArea);
             newObj.transform.localScale = Vector3.one;
+            
             UICard uiCard = newObj.GetComponent<UICard>();
 
-            if (uiCard != null)
-            {
-                CardDataEntry currentCard = card; 
-                
-                uiCard.SetCardDataEntry(currentCard, (data) => OnCardClicked(data));
-            }
+            // 데이터 세팅
+            uiCard.SetCardDataEntry(card);
+
+            // 버튼 직접 찾아서 연결
+            Button btn = newObj.GetComponentInChildren<Button>();
+                       
+            
+            btn.interactable = true; // 버튼 켜기
+            btn.onClick.RemoveAllListeners();
+            // 클릭 시 OnCardClicked 실행
+            btn.onClick.AddListener(() => OnCardClicked(card));
+            
         }
     }
 
     private void OnCardClicked(CardDataEntry card)
     {    
+        Debug.Log($"[제거 패널] {card.koreanName} 클릭됨 -> 팝업 요청");
         // 팝업 열기
         removePopup.OpenPopup(card);
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro; 
 
 public class StoreUI : MonoBehaviour
@@ -9,13 +10,17 @@ public class StoreUI : MonoBehaviour
     [SerializeField] private GameObject uiCardPrefab;   // UI_Card 프리팹
     [SerializeField] private BuyCardPopup buyCardPopup; 
     [SerializeField] private TMP_Text currentCoinText; 
+    [SerializeField] private List<TMP_Text> priceText; // 가격 텍스트 (이제 MapManager가 처리하므로 안 쓸 수도 있음)
+    [SerializeField] private List<Button> slotButtons; // 이것도 MapManager가 처리하면 필요 없을 수 있음
 
     // 데이터 관리 리스트
     private List<UICard> _spawnedCards = new List<UICard>(); 
     private List<CardDataEntry> _shopData = new List<CardDataEntry>(); 
     private List<int> _shopPrices = new List<int>(); 
     private List<bool> _isSoldOut = new List<bool>();
-    private CardName[] currentCardsInSlots = new CardName[6];
+    
+    // [중요] OnClickBuy에서 사용하려던 배열이 초기화가 안 되어 있어서, _shopData를 활용하는 것으로 통일합니다.
+    // private CardName[] currentCardsInSlots = new CardName[6]; 
 
     private void Start()
     {
@@ -26,7 +31,10 @@ public class StoreUI : MonoBehaviour
     private void Update()
     {
         // 현재 보유중 코인표시
-        currentCoinText.text = $"{GameManager.Instance.Coin}";
+        if (GameManager.Instance != null)
+        {
+            currentCoinText.text = $"{GameManager.Instance.Coin}";
+        }
     }
 
     public void SetupStore()
@@ -47,6 +55,8 @@ public class StoreUI : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             if (deckToDraw.Count == 0) break;
+            
+            int index = i; 
 
             // 랜덤 뽑기
             int randIndex = Random.Range(0, deckToDraw.Count);
@@ -56,8 +66,8 @@ public class StoreUI : MonoBehaviour
             // 데이터 가져오기
             CardDataEntry cardData = CardManager.Instance.GetCardData(pickedName);
 
-            // 가격 설정 (나중에 cardData.price 등으로 변경 예정)
-            int price = 100; 
+            // 가격 설정
+            int price = cardData.Price; 
 
             // 리스트 저장
             _shopData.Add(cardData);
@@ -67,19 +77,19 @@ public class StoreUI : MonoBehaviour
             // 프리팹 생성 및 컴포넌트 가져오기
             GameObject newObj = Instantiate(uiCardPrefab, contentArea);
             newObj.transform.localScale = Vector3.one;
+            
             UICard uiCard = newObj.GetComponent<UICard>();
             _spawnedCards.Add(uiCard);
-
-            // 1. 카드 정보 + 클릭 함수(인덱스 전달)
-            int index = i; 
-            uiCard.SetCardDataEntry(cardData, (data) => OnClickSlot(index));
             
-            // 2. 가격 표시
-            uiCard.SetStoreMode(price);
+            // 클릭 시 실행할 함수 연결
+            MapManager.Instance.InitializeCard(uiCard, cardData, (data) => OnClickSlot(index));
+
+            // MapManager를 통해 상점 모드(가격 표시) 설정
+            MapManager.Instance.ConfigureShopCard(uiCard, price);
         }
     }
 
-    // 슬롯 클릭 시
+    // 슬롯(카드) 클릭 시 호출됨
     public void OnClickSlot(int index)
     {
         if (_isSoldOut[index]) return;
@@ -92,29 +102,26 @@ public class StoreUI : MonoBehaviour
             // 팝업 열기
             CardDataEntry data = _shopData[index];
             buyCardPopup.OpenPopup(this, index, data);
-        }
+        }        
     }
 
+    // 구매 팝업에서 "구매" 버튼 눌렀을 때 
     public void OnClickBuy(int index)
     {
         if (_isSoldOut[index]) return;
 
-        int price = 100; 
+        int price = _shopPrices[index];
 
         if (GameManager.Instance.Coin >= price)
         {
-            // 1. 이름 가져오기
-            CardName cName = currentCardsInSlots[index];
+            CardDataEntry cardData = _shopData[index];
 
-            // 2. 이름으로 카드 데이터 전체(CardDataEntry) 찾기           
-            CardDataEntry cardData = CardManager.Instance.GetCardData(cName); 
-
-            // 3. 팝업에 데이터 통째로 전달
+            // 팝업에 데이터 전달
             buyCardPopup.OpenPopup(this, index, cardData);
         }       
     }
 
-    // 구매 확정
+    // 구매 확정 
     public void ConfirmPurchase(int index)
     {
         int price = _shopPrices[index];
@@ -125,13 +132,17 @@ public class StoreUI : MonoBehaviour
 
         // 품절 처리
         _isSoldOut[index] = true;
-        _spawnedCards[index].SetSoldOut(); // UI 갱신
+       
+        MapManager.Instance.SetCardSoldOut(_spawnedCards[index]);
 
         UpdateCoinUI();
     }
 
     private void UpdateCoinUI()
     {
-        currentCoinText.text = $"Coin: {GameManager.Instance.Coin}";
+        if (GameManager.Instance != null)
+        {
+            currentCoinText.text = $"Coin: {GameManager.Instance.Coin}";
+        }
     }
 }
