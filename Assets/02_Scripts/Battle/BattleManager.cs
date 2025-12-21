@@ -41,8 +41,9 @@ public class BattleManager : SceneSingleton<BattleManager>
     // UI 또는 Player가 호출
     public void EndPlayerTurn()
     {
+        player.OnTurnEnd();
         OnTurnEnd?.Invoke();
-
+    
         isPlayerTurn = false;
         curTurn++;
 

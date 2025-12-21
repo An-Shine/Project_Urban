@@ -64,7 +64,7 @@ public class Player : Target, ICardEventHandler, IEnemyEventHandler
     // BattleManager가 호출
     public void OnBattleStart()
     {
-        OnTurnStart();
+       OnTurnStart();
     }
     
     public void OnTurnStart()

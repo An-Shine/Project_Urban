@@ -52,10 +52,10 @@ public class MapManager : MonoBehaviour
         }        
     }
 
-    public void InitializeCard(UICard uiCard, CardDataEntry data, UnityAction<CardDataEntry> onClickCallback)
+    public void InitializeCard(UICard uiCard, UnityAction onClickCallback)
     {
         // 1. 데이터 세팅
-        uiCard.SetCardDataEntry(data);
+        // uiCard.SetCardDataEntry(data);
 
         // 2. 버튼 바로 가져오기
         Button btn = uiCard.GetComponent<Button>();
@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
         if (onClickCallback != null)
         {
             btn.interactable = true;
-            btn.onClick.AddListener(() => onClickCallback(data));
+            btn.onClick.AddListener(onClickCallback);
         }
         else
         {                

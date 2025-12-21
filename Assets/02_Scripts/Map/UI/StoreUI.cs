@@ -79,10 +79,11 @@ public class StoreUI : MonoBehaviour
             newObj.transform.localScale = Vector3.one;
             
             UICard uiCard = newObj.GetComponent<UICard>();
+            uiCard.SetCardDataEntry(cardData);
+            uiCard.AddClickEventHandler(() => OnClickSlot(index));
             _spawnedCards.Add(uiCard);
             
             // 클릭 시 실행할 함수 연결
-            MapManager.Instance.InitializeCard(uiCard, cardData, (data) => OnClickSlot(index));
 
             // MapManager를 통해 상점 모드(가격 표시) 설정
             MapManager.Instance.ConfigureShopCard(uiCard, price);
