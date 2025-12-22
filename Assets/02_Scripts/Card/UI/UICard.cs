@@ -9,10 +9,15 @@ public class UICard : MonoBehaviour
 {
     [SerializeField] private TMP_Text cardTitle;
     [SerializeField] private TMP_Text cardDesc;
-    [SerializeField] private Image cardImage;       
+    [SerializeField] private Image cardImage;
+    
+    private CardName cardName;
+    
+    public CardName CardName => cardName;
     
     public void SetCardDataEntry(CardDataEntry data)
     {
+        cardName = data.cardName;
         cardImage.sprite = data.cardSprite;
         cardTitle.text = data.koreanName;
         cardDesc.text = data.description;           

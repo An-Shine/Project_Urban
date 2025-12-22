@@ -18,18 +18,18 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private int playerMaxHp = 500;
     private readonly List<CardName> initialDeck = new();
 
-
     private HealthController playerHp;
+    private CoinController coin;
     private Deck deck;
-    private int coin = 1000;
 
     public HealthController PlayerHealth => playerHp;
+    public CoinController Coin => coin;
     public Deck Deck => deck;
-    public int Coin => coin;
 
     private void Start()
     {
         playerHp = new HealthController(playerMaxHp);
+        coin = new CoinController();
     }
 
     // 카드를 저장하는 함수
@@ -50,10 +50,15 @@ public class GameManager : Singleton<GameManager>
     public Element SelectedElement { get; set; } = Element.None;
 
     // 메인화면으로 돌아갈 때, 맵 선택창을 띄울지 여부
-    public bool IsStageSelectMode { get; set; } = false;
+    // public bool IsStageSelectMode { get; set; } = false;
 
     public void AddCoin(int amount)
     {
-        coin += amount;
+        coin.IncreaseCoin(amount);
+    }
+
+    public void UseCoin(int amount)
+    {
+        coin.DecreaseCoin(amount);
     }
 }

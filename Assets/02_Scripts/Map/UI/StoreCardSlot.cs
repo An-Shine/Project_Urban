@@ -58,7 +58,7 @@ public class StoreCardSlot : MonoBehaviour
     {
         if (_isSoldOut) return;
 
-        if (GameManager.Instance.Coin >= _price)
+        if (GameManager.Instance.Coin.CurrentCoin >= _price)
         {
             BuyCard();
         }

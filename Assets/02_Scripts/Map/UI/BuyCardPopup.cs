@@ -13,6 +13,7 @@ public class BuyCardPopup : MonoBehaviour
     private StoreUI _storeUI;
     private int _targetSlotIndex;
 
+
     // cardData 전체를 받아옴
     public void OpenPopup(StoreUI storeUI, int slotIndex, CardDataEntry cardData)
     {
@@ -49,6 +50,5 @@ public class BuyCardPopup : MonoBehaviour
     {
         // 닫기 애니메이션 실행
         GetComponent<ModalWindowManager>().ModalWindowOut();       
-        
     }   
 }

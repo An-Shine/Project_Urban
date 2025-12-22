@@ -50,34 +50,22 @@ abstract public class Card : MonoBehaviour
         cardDesc.text = cardData.description;
     }
 
-    public void Hover()
-    {
-        transform.localScale *= 1.2f;
-        
-        Vector3 newPos = OriginPos;
-        newPos.z = -2.0f;
-        transform.localPosition = newPos;
-    }
-
-    public void UnHover()
-    {
-        transform.localScale /= 1.2f;
-        transform.localPosition = OriginPos;
-    }
-
     // Unity 마우스 이벤트
     private void OnMouseEnter()
     {
+        if (moveCoroutine != null) return;
         handler?.OnCardEnter(this);
     }
 
     private void OnMouseExit()
     {
+        if (moveCoroutine != null) return;
         handler?.OnCardExit(this);
     }
 
     private void OnMouseDown()
     {
+        if (moveCoroutine != null) return;
         handler?.OnCardClick(this);
     }
 
@@ -87,6 +75,7 @@ abstract public class Card : MonoBehaviour
         
         Vector3 newPos = transform.localPosition;
         newPos.z = -3.0f;  // 최상단으로
+        newPos.y = OriginPos.y + 0.5f;
         transform.localPosition = newPos;
     }
 
@@ -105,7 +94,7 @@ abstract public class Card : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveRoutine(targetLocalPos, onComplete));
     }
 
-    private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 1.0f)
+    private IEnumerator MoveRoutine(Vector3 targetPos, UnityAction onComplete, float duration = 0.5f)
     {
         float time = 0;
         Vector3 startPos = transform.localPosition;

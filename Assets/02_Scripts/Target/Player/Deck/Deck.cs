@@ -10,6 +10,7 @@ public class Deck
 
     private Hand hand;
     
+    public IEnumerable<CardName> CardList => originCardList;
     public int UnusedCardCount => unusedCardList.Count;
     public int UsedCardCount => usedCardList.Count;
 

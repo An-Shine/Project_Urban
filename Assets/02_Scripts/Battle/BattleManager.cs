@@ -7,11 +7,13 @@ public class BattleManager : SceneSingleton<BattleManager>
     [SerializeField] private Player player;
     private int curTurn;
     private bool isPlayerTurn = true;
+    private bool isBattleEnded = false;
     private int earnedCoin;
 
     public Player Player => player;
     public int CurrentTurn => curTurn;
     public bool IsPlayerTurn => isPlayerTurn;
+    public bool IsBattleEnded => isBattleEnded;
     public int EarnedCoin => earnedCoin;
 
     // Event
@@ -32,10 +34,17 @@ public class BattleManager : SceneSingleton<BattleManager>
         OnTurnStart?.Invoke();
     }
 
-    private void HandleBattleEnd(bool isSuccess)
+    private void HandleBattleEnd(bool isVictory)
     {
-        Debug.Log("Battle End!");
+        if (isBattleEnded) return; // 중복 호출 방지
+        
+        isBattleEnded = true;
+        isPlayerTurn = false;
+        
+        // 코인 전달
         GameManager.Instance.AddCoin(earnedCoin);
+        GameManager.Instance.Deck.ResetDeck();
+        GameManager.Instance.PlayerHealth.ResetProtect();
     }
 
     // UI 또는 Player가 호출
@@ -58,11 +67,6 @@ public class BattleManager : SceneSingleton<BattleManager>
     {
         player.OnTurnStart();
         OnTurnStart?.Invoke();
-    }
-    
-    public void EndBattle(bool isVictory)
-    {
-        OnBattleEnd?.Invoke(isVictory);
     }
 
     public void AddCoin(int amount)

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement; 
 
-public class MapManager : MonoBehaviour
+public class MapManager : SceneSingleton<MapManager>
 {
     public enum StageType
     {
@@ -27,29 +27,22 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject CardEnchantRemovePanel; //카드강화,제거용 덱확인 패널     
     [SerializeField] private GameObject EnterButton;
     [SerializeField] private GameObject ShelterPopup;    
-    
-    public static MapManager Instance; 
-
-    void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {
-        
-        bool isReturning = GameManager.Instance.IsStageSelectMode;    
+        stageSelectUI.SetActive(true);
+        // bool isReturning = GameManager.Instance.IsStageSelectMode;    
 
-        if (isReturning)
-        {            
-            stageSelectUI.SetActive(true);
+        // if (isReturning)
+        // {            
+        //     stageSelectUI.SetActive(true);
            
-            GameManager.Instance.IsStageSelectMode = false;
-        }
-        else
-        {            
-            stageSelectUI.SetActive(false);
-        }        
+        //     GameManager.Instance.IsStageSelectMode = false;
+        // }
+        // else
+        // {            
+        //     stageSelectUI.SetActive(false);
+        // }        
     }
 
     public void InitializeCard(UICard uiCard, UnityAction onClickCallback)
@@ -133,22 +126,24 @@ public class MapManager : MonoBehaviour
 
     public void OnClickNormal()
     {
-        SceneManager.LoadScene("Battle_Scene");
+        SceneManager.LoadScene(Scene.Battle);
     }
 
     public void OnClickShelter()
     {
         shelterUI.SetActive(true);
+        stageSelectUI.SetActive(false);
     }
 
     public void OnClickStore()
     {
-        storeUI.SetActive(true);        
+        storeUI.SetActive(true);       
+        stageSelectUI.SetActive(false); 
     }
 
     public void OnClickBoss()
     {
-        SceneManager.LoadScene("Battle_Scene");
+        SceneManager.LoadScene(Scene.Battle);
     }
 
     public void OpenEnchantPopup()
@@ -184,6 +179,7 @@ public class MapManager : MonoBehaviour
     public void CloseStoreUI()
     {
         storeUI.SetActive(false);
+        stageSelectUI.SetActive(true);
     }
 
     public void OpenShelterPopup()
@@ -200,6 +196,7 @@ public class MapManager : MonoBehaviour
     public void CloseShelterPanel()
     {
         shelterUI.SetActive(false);
+        stageSelectUI.SetActive(true);
     }
     
     private void CloseDeckCheckPanel()

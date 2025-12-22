@@ -9,7 +9,6 @@ public class StoreUI : MonoBehaviour
     [SerializeField] private Transform contentArea;  
     [SerializeField] private GameObject uiCardPrefab;   // UI_Card 프리팹
     [SerializeField] private BuyCardPopup buyCardPopup; 
-    [SerializeField] private TMP_Text currentCoinText; 
     [SerializeField] private List<TMP_Text> priceText; // 가격 텍스트 (이제 MapManager가 처리하므로 안 쓸 수도 있음)
     [SerializeField] private List<Button> slotButtons; // 이것도 MapManager가 처리하면 필요 없을 수 있음
 
@@ -25,16 +24,6 @@ public class StoreUI : MonoBehaviour
     private void Start()
     {
         SetupStore();
-        UpdateCoinUI();
-    }
-
-    private void Update()
-    {
-        // 현재 보유중 코인표시
-        if (GameManager.Instance != null)
-        {
-            currentCoinText.text = $"{GameManager.Instance.Coin}";
-        }
     }
 
     public void SetupStore()
@@ -67,7 +56,7 @@ public class StoreUI : MonoBehaviour
             CardDataEntry cardData = CardManager.Instance.GetCardData(pickedName);
 
             // 가격 설정
-            int price = cardData.Price; 
+            int price = cardData.price; 
 
             // 리스트 저장
             _shopData.Add(cardData);
@@ -98,7 +87,7 @@ public class StoreUI : MonoBehaviour
         int price = _shopPrices[index];
 
         // 돈 확인
-        if (GameManager.Instance.Coin >= price)
+        if (GameManager.Instance.Coin.CanBuy(price))
         { 
             // 팝업 열기
             CardDataEntry data = _shopData[index];
@@ -113,7 +102,7 @@ public class StoreUI : MonoBehaviour
 
         int price = _shopPrices[index];
 
-        if (GameManager.Instance.Coin >= price)
+        if (GameManager.Instance.Coin.CanBuy(price))
         {
             CardDataEntry cardData = _shopData[index];
 
@@ -128,22 +117,12 @@ public class StoreUI : MonoBehaviour
         int price = _shopPrices[index];
 
         // 코인 사용처리, 카드추가
-        GameManager.Instance.AddCoin(-price);
+        GameManager.Instance.UseCoin(price);
         GameManager.Instance.Deck.AddCard(_shopData[index].cardName);
 
         // 품절 처리
         _isSoldOut[index] = true;
        
         MapManager.Instance.SetCardSoldOut(_spawnedCards[index]);
-
-        UpdateCoinUI();
-    }
-
-    private void UpdateCoinUI()
-    {
-        if (GameManager.Instance != null)
-        {
-            currentCoinText.text = $"Coin: {GameManager.Instance.Coin}";
-        }
     }
 }

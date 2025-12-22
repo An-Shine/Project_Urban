@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class ElementWeight
@@ -19,6 +19,14 @@ public class CardSelectUI : MonoBehaviour
         new() { element = Element.Ice },
         new() { element = Element.Grass },
     };
+
+    public void Initialize(UnityAction<CardName> onCardSelected)
+    {
+        foreach (var card in cardSelectItems)
+        {
+            card.AddClickEventHandler(() => onCardSelected(card.CardName));
+        }
+    }
 
     private void Awake()
     {
