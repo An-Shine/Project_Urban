@@ -10,6 +10,18 @@ public class SuccessUI : MonoBehaviour
     {
         ShowReward();
     }
+    
+    public void OnCardSelected(CardName cardName)
+    {
+        GameManager.Instance.Deck.AddCard(cardName);
+        rewardUI.DisableCardSelectButton();
+        ShowReward();
+    }
+
+    public void OnTest()
+    {
+        Debug.Log("Click");
+    }
 
     public void ShowReward()
     {
@@ -19,6 +31,8 @@ public class SuccessUI : MonoBehaviour
 
     public void ShowCardSelect()
     {
+        cardSelectUI.Initialize(OnCardSelected);
+        
         rewardUI.gameObject.SetActive(false);
         cardSelectUI.gameObject.SetActive(true);
     }

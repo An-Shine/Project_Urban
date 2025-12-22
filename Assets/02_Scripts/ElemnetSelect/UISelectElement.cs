@@ -25,7 +25,7 @@ public class UISelectElement : MonoBehaviour
         GameManager.Instance.SelectedElement = element;
         GameManager.Instance.SetBonusCards(elementCardMaps[element]);
 
-        SceneManager.LoadScene("04_BattleScene");
+        SceneManager.LoadScene(Scene.Map);
     }
 
     public void OnClickFlame()

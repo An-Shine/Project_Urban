@@ -231,13 +231,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187aaf5b1ab96244fbfd83989d0a92c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Straggler
-  maxHp: 1
-  maxProtect: 100
   element: 0
   healthView: {fileID: 4295513656600534293}
   conditionStatusView: {fileID: 7050763360853890896}
   selectedArrow: {fileID: 3515555034441816934}
   nextActionText: {fileID: 8296309700260891106}
+  baseHp: 1
   typeCount: 3
   hpIncrement: 0
   rewardCoefficient: 0
@@ -307,6 +306,7 @@ GameObject:
   - component: {fileID: 8885720216733313841}
   - component: {fileID: 1653046015516349212}
   - component: {fileID: 3515555034441816934}
+  - component: {fileID: 1033875667959595713}
   m_Layer: 7
   m_Name: Image_Selected
   m_TagString: Untagged
@@ -330,7 +330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 325}
+  m_AnchoredPosition: {x: 0, y: 350}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1653046015516349212
@@ -371,6 +371,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1033875667959595713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997018410110691740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9471d58385a104896189b4869f81e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  moveDistance: 10
+  moveSpeed: 5
 --- !u!1 &5103459864203984338
 GameObject:
   m_ObjectHideFlags: 0

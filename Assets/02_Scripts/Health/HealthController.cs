@@ -79,4 +79,10 @@ public class HealthController
 
         OnUpdate?.Invoke(curHp, maxHp, protect);
     }
+
+    public void ResetProtect()
+    {
+        protect = 0;
+        OnUpdate?.Invoke(curHp, maxHp, protect);
+    }
 }

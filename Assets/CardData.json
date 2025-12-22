@@ -5,56 +5,64 @@
       "koreanName": "타격",
       "element": "None",
       "isSpecial": false,
-      "description": "적에 데미지 {value} 부여"
+      "description": "적에 데미지 {value} 부여",
+      "price": 7
     },
     {
       "cardName": "Guard",
       "koreanName": "방어",
       "element": "None",
       "isSpecial": false,
-      "description": "적의 데미지 공격을 5만큼 방어."
+      "description": "적의 데미지 공격을 5만큼 방어.",
+      "price": 4
     },
     {
       "cardName":"Ignition",
       "koreanName": "점화",
       "element": "Flame",
       "isSpecial": false,
-      "description": "데미지+화상(디버프5)"
+      "description": "데미지+화상(디버프5)",
+      "price": 12
     },
     {
       "cardName": "BlazeBarrier",
       "koreanName": "화염 방벽",
       "element": "Flame",
       "isSpecial": false,
-      "description" :"방어+정화의 손길(버프3)"
+      "description" :"방어+정화의 손길(버프3)",
+      "price": 15
     },
      {
       "cardName":"GlacialWedge",
       "koreanName": "빙하 쐐기",
       "element": "Ice",
       "isSpecial": false,
-      "description": "데미지+동결(디버프8)"
+      "description": "데미지+동결(디버프8)",
+      "price": 18
     },
     {
       "cardName": "IceShield",
       "koreanName": "얼음 방패",
       "element": "Ice",
       "isSpecial": false,
-      "description" :"방어+냉기의 가호(버프7)"
+      "description" :"방어+냉기의 가호(버프7)",
+      "price": 9
     },
      {
       "cardName":"DoubleEdged",
       "koreanName": "양날의 검",
       "element": "Grass",
       "isSpecial": false,
-      "description": "데미지+플레이어에 데미지"
+      "description": "데미지+플레이어에 데미지",
+      "price": 6
     },
     {
       "cardName": "ElasticBarrier",
       "koreanName": "탄성 장벽",
       "element": "Grass",
       "isSpecial": false,
-      "description" :"방어+생체 반응 장갑(버프11)+플레이어를 공격한 적에 약화(디버프0)2&파갑(디버프1)2"
+      "description" :"방어+생체 반응 장갑(버프11)+플레이어를 공격한 적에 약화(디버프0)2&파갑(디버프1)2",
+      "price": 20
     }
   ]
 }

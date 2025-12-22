@@ -122,7 +122,8 @@ public class CardData : ScriptableObject
                     koreanName = jsonCard.koreanName ?? string.Empty,
                     element = parsedElement,
                     isSpecial = jsonCard.isSpecial,
-                    description = jsonCard.description ?? string.Empty
+                    description = jsonCard.description ?? string.Empty,
+                    price = jsonCard.price
                 };
 
                 // Sprite 로드
@@ -176,7 +177,7 @@ public class CardDataEntry
     public Element element;
     public bool isSpecial;
     public Card cardPrefab;
-    public int Price;
+    public int price;
     [TextArea] public string description;
 }
 
@@ -195,6 +196,6 @@ public class JsonCardData
     public string element;
     public bool isSpecial;
     public string description;   
-    public int Price; 
+    public int price; 
 }
 #endif

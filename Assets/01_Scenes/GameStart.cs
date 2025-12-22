@@ -6,6 +6,11 @@ public class GameStart : MonoBehaviour
 {
     public void OnGameStart()
     {
-        SceneManager.LoadScene("02_ElementSelectScene");
+        SceneManager.LoadScene(Scene.ElementSelect);
+    }
+    
+    public void OnQuitGame()
+    {        
+        Application.Quit();
     }
 }

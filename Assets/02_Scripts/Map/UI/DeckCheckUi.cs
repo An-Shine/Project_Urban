@@ -13,7 +13,7 @@ public class DeckCheckUI : MonoBehaviour
 
     public void OpenDeckUI()
     {               
-        List<CardDataEntry> receivedDeck = ProtoTypeDeck.Instance.GetCurrentDeck();
+        IEnumerable<CardName> receivedDeck = GameManager.Instance.Deck.CardList;
         
         //Debug.Log($"[DeckCheckUI] ProtoTypeDeck에서 받아온 카드 개수: {receivedDeck.Count}장");
 
@@ -28,7 +28,7 @@ public class DeckCheckUI : MonoBehaviour
         cardSlotUI.SetActive(true);
     }
 
-    private void RenderDeck(List<CardDataEntry> deckToRender)
+    private void RenderDeck(IEnumerable<CardName> deckToRender)
     {
         // 1. 초기화
         foreach (Transform child in contentArea)
@@ -36,14 +36,14 @@ public class DeckCheckUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        if (deckToRender == null || deckToRender.Count == 0)
+        if (deckToRender == null)
         {
             Debug.LogWarning("[DeckCheckUI] 표시할 카드가 없습니다 (리스트가 비었음).");
             return;
         }
 
         // 2. 슬롯 생성
-        foreach (CardDataEntry entry in deckToRender)
+        foreach (CardName cardName in deckToRender)
         {
             GameObject slotObj = Instantiate(cardSlotPrefab, contentArea);
             slotObj.transform.localScale = Vector3.one;
@@ -52,7 +52,7 @@ public class DeckCheckUI : MonoBehaviour
             //StoreCardSlot slotScript = slotObj.GetComponent<StoreCardSlot>();
             UICard cardScript = slotObj.GetComponent<UICard>();
 
-            cardScript.SetCardDataEntry(entry);
+            cardScript.SetCardDataEntry(CardManager.Instance.GetCardData(cardName));
         }
     }
 }

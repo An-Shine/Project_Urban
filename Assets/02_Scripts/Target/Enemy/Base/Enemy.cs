@@ -11,6 +11,7 @@ abstract public class Enemy : Target
     [SerializeField] protected NextActionView nextActionText;
 
     [Header("Enemy Settings")]
+    [SerializeField] protected int baseHp;
     [SerializeField] private int typeCount;
     [SerializeField] private int hpIncrement;
     [SerializeField] private float rewardCoefficient;
@@ -41,9 +42,9 @@ abstract public class Enemy : Target
 
         // A B C 타입 랜덤 설정하기
         int increment = Random.Range(0, typeCount) * hpIncrement;
-        maxHp += increment;
+        baseHp += increment;
 
-        Health = new HealthController(maxHp);
+        Health = new HealthController(baseHp);
     }
 
     private void Start()

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 abstract public class Target : MonoBehaviour
 {
     [Header("Base Settings")]
-    [SerializeField] protected int maxHp;
     [SerializeField] protected Element element;
 
     [Header("Base View Settings")]

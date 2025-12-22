@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapManager : SceneSingleton<MapManager>
 {
     public static MapManager Instance; 
 

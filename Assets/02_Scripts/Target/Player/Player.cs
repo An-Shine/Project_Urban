@@ -88,7 +88,7 @@ public class Player : Target, ICardEventHandler, IEnemyEventHandler
 
     private void HandleDead(Target target)
     {
-        BattleManager.Instance.EndBattle(false);
+        BattleManager.Instance.OnBattleEnd?.Invoke(false);
     }
 
     public void DrawCard(int amount)
@@ -99,22 +99,25 @@ public class Player : Target, ICardEventHandler, IEnemyEventHandler
     // ICardEventHandler 구현
     public void OnCardEnter(Card card)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
         if (selectedCard != null) return;  // 카드가 선택되어 있으면 호버 안 함
         
-        card.Hover();
+        card.Select();
     }
 
     public void OnCardExit(Card card)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
         if (selectedCard != null) return;  // 카드가 선택되어 있으면 언호버 안 함
         
-        card.UnHover();
+        card.UnSelect();
     }
 
     public void OnCardClick(Card card)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
 
         // 같은 카드 재클릭 - 자신에게 사용
@@ -135,6 +138,7 @@ public class Player : Target, ICardEventHandler, IEnemyEventHandler
     // IEnemyEventHandler 구현
     public void OnEnemyEnter(Enemy enemy)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
         
         // 카드가 선택되어 있고, 공격/디버프 카드일 때만 호버
@@ -147,12 +151,14 @@ public class Player : Target, ICardEventHandler, IEnemyEventHandler
 
     public void OnEnemyExit(Enemy enemy)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
         enemy.UnHover();
     }
 
     public void OnEnemyClick(Enemy enemy)
     {
+        if (BattleManager.Instance.IsBattleEnded) return;
         if (!BattleManager.Instance.IsPlayerTurn) return;
         if (selectedCard == null) return;
 
