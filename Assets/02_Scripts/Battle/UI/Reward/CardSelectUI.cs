@@ -24,7 +24,7 @@ public class CardSelectUI : MonoBehaviour
     {
         foreach (var card in cardSelectItems)
         {
-            card.AddClickEventHandler(() => onCardSelected(card.CardName));
+            // card.AddClickEventHandler(() => onCardSelected(card.CardName));
         }
     }
 

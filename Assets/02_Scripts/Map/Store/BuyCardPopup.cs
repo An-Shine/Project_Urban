@@ -8,12 +8,11 @@ public class BuyCardPopup : MonoBehaviour
     [SerializeField] private GameObject buyCardPanel; 
     [SerializeField] private UICard targetCardUI;
 
-    private StoreUI storeUI;
+    private UIStoreCard selectedCard;
 
-    public void OpenPopup(StoreUI storeUIInstance, CardDataEntry cardData)
+    public void OpenPopup(UIStoreCard uIStoreCard, CardDataEntry cardData)
     {
-        storeUI = storeUIInstance;
-
+        selectedCard = uIStoreCard;
         questionText.text = $"{cardData.koreanName} 구매하시겠습니까?";
         targetCardUI.SetCardDataEntry(cardData); 
 
@@ -23,7 +22,7 @@ public class BuyCardPopup : MonoBehaviour
 
     public void OnClickYes()
     {
-        storeUI.ConfirmPurchase();
+        selectedCard.Buy();
         ClosePopup();
     }
 

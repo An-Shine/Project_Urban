@@ -8,17 +8,16 @@ public class ButtonEvent : MonoBehaviour
     [SerializeField] private GameObject Store_UI;
     [SerializeField] private GameObject Shelter_UI;
 
-    
 
     // 전투 씬 이동
     public void OnClickNormal()
     {
-        SceneManager.LoadScene("Battle_Scene");
+        SceneManager.LoadScene(Scene.Battle);
     }
 
     public void OnClickBoss()
     {
-        SceneManager.LoadScene("Battle_Scene");
+        SceneManager.LoadScene(Scene.Battle);
     }
 
     // 상점UI

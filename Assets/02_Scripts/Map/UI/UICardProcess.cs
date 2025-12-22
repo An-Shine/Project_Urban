@@ -87,7 +87,7 @@ public class UICardProcess : MonoBehaviour
 
     private void SetupShopMode()
     {
-        price = cardData.Price; 
+        price = cardData.price; 
 
         if (priceTagObj != null && priceText != null)
         {
@@ -106,17 +106,17 @@ public class UICardProcess : MonoBehaviour
     public bool CanBuy()
     {
         if (isSoldOut) return false;
-        if (GameManager.Instance.Coin < price) return false;
+        if (GameManager.Instance.Coin.CanBuy(price)) return false;
         return true;
     }
 
     public void PurchaseSuccess()
     {
         // 1. 돈 차감
-        GameManager.Instance.AddCoin(-price);
+        GameManager.Instance.UseCoin(price);
 
         // 2. 덱에 카드 추가
-        ProtoTypeDeck.Instance.AddCard(cardData.cardName);
+        GameManager.Instance.Deck.AddCard(cardData.cardName);
 
         // 3. UI 매진 처리
         isSoldOut = true;

@@ -31,6 +31,7 @@ public class BattleManager : SceneSingleton<BattleManager>
     {
         // 명시적 초기화
         player.OnBattleStart();
+        GameManager.Instance.Deck.ResetDeck();
         OnTurnStart?.Invoke();
     }
 
@@ -43,7 +44,6 @@ public class BattleManager : SceneSingleton<BattleManager>
         
         // 코인 전달
         GameManager.Instance.AddCoin(earnedCoin);
-        GameManager.Instance.Deck.ResetDeck();
         GameManager.Instance.PlayerHealth.ResetProtect();
     }
 

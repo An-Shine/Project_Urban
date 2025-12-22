@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7569355921529148370}
   - component: {fileID: 8275873575832220746}
   - component: {fileID: 4769700100629125999}
-  - component: {fileID: 705260050387000885}
-  - component: {fileID: -5502235565810306032}
+  - component: {fileID: 1588194994954674565}
+  - component: {fileID: 8592224651683891068}
   m_Layer: 5
   m_Name: UI_Card_Store
   m_TagString: Untagged
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &705260050387000885
+--- !u!114 &1588194994954674565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   cardTitle: {fileID: 7374973465773631952}
   cardDesc: {fileID: 3684791358197395920}
   cardImage: {fileID: 8275873575832220746}
---- !u!114 &-5502235565810306032
+--- !u!114 &8592224651683891068
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,11 +149,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 513533824014746170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45aa46822595a4e4f88fab32c7b72463, type: 3}
+  m_Script: {fileID: 11500000, guid: 54ae99abcdac9f24cb4208fba3b91e59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UICardProcess
-  cardBtn: {fileID: 4769700100629125999}
-  priceTagObj: {fileID: 6593484945374591832}
+  m_EditorClassIdentifier: Assembly-CSharp::UIStoreCard
+  uICard: {fileID: 1588194994954674565}
   priceText: {fileID: 4279790194438885181}
 --- !u!1 &5831246705508364084
 GameObject:
@@ -247,7 +246,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 15
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -303,7 +302,7 @@ GameObject:
   - component: {fileID: 36313401496097421}
   - component: {fileID: 4279790194438885181}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: Text_Price
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +382,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -439,12 +438,12 @@ GameObject:
   - component: {fileID: 7001646795898029356}
   - component: {fileID: 2688586922812972117}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: UI_Price
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2766474498930342035
 RectTransform:
   m_ObjectHideFlags: 0
