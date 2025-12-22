@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public class ProtoTypeDeck : MonoBehaviour
 {
     public static ProtoTypeDeck Instance;
-    public List<CardDataEntry> deck;
+
+    private List<CardDataEntry> runtimeDeck = new List<CardDataEntry>();
 
     [System.Serializable]
     public struct DeckRecipe
@@ -16,39 +17,64 @@ public class ProtoTypeDeck : MonoBehaviour
     [Header("카드 데이터베이스")]
     [SerializeField] private CardData cardDatabase;
 
-    [Header("임시 덱 구성")]
+    [Header("초기 덱 구성")]
     [SerializeField] private List<DeckRecipe> deckConfig = new List<DeckRecipe>();
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+
+        // 게임 시작 시 초기 덱을 생성
+        InitializeDeck();
     }
 
-    public List<CardDataEntry> GetCurrentDeck()
+    // 1. 초기 덱 생성
+    private void InitializeDeck()
     {
-        List<CardDataEntry> generatedDeck = new List<CardDataEntry>();
+        runtimeDeck.Clear();
 
         foreach (DeckRecipe recipe in deckConfig)
         {
+            // 데이터베이스에서 카드 정보 가져오기            
             CardDataEntry entry = cardDatabase.GetCardData(recipe.cardName);
 
-            // 설정한 개수만큼 리스트에 추가
+
             for (int i = 0; i < recipe.count; i++)
             {
-                generatedDeck.Add(entry);
+                runtimeDeck.Add(entry);
             }
-        }
 
-        return generatedDeck;
+        }
     }
 
-    public void RemoveCard(CardDataEntry card)
-{
-    if (deck.Contains(card))
+    // 2. 현재 덱 가져오기
+    public List<CardDataEntry> GetCurrentDeck()
     {
-        deck.Remove(card);
-    }   
-}
+        return runtimeDeck;
+    }
 
+    // 3. 카드 추가
+    public void AddCard(CardName cardName)
+    {
+        CardDataEntry newCard = cardDatabase.GetCardData(cardName);
+
+        if (newCard != null)
+        {
+            runtimeDeck.Add(newCard);
+            Debug.Log($"[Deck] {newCard.koreanName} 추가됨! (현재 {runtimeDeck.Count}장)");
+        }
+    }
+
+    // 4. 카드 제거
+    public void RemoveCard(CardDataEntry card)
+    {
+        if (runtimeDeck.Contains(card))
+        {
+            runtimeDeck.Remove(card);
+            Debug.Log($"[Deck] {card.koreanName} 제거됨. (현재 {runtimeDeck.Count}장)");
+        }
+    }
 }

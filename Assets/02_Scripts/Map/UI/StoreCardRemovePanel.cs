@@ -53,9 +53,7 @@ public class StoreCardRemovePanel : MonoBehaviour
     }
 
     private void OnCardClicked(CardDataEntry card)
-    {    
-        Debug.Log($"[제거 패널] {card.koreanName} 클릭됨 -> 팝업 요청");
-        // 팝업 열기
-        removePopup.OpenPopup(card);
+    {
+        removePopup.OpenPopup(this, card);
     }
 }

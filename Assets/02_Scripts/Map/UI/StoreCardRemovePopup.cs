@@ -7,39 +7,43 @@ public class StoreCardRemovePopup : MonoBehaviour
     [Header("UI 연결")]
     [SerializeField] private GameObject popupObject; 
     [SerializeField] private TMP_Text titleText;    
-    [SerializeField] private UICard targetCardUI; // 팝업 화면 카드 프리팹 연결
+    [SerializeField] private UICard targetCardUI; 
 
-    private CardDataEntry _targetCard;    
+    private CardDataEntry targetCard;    
     private ModalWindowManager mwManager;
+    private StoreCardRemovePanel parentPanel;
 
-    public void OpenPopup(CardDataEntry card)
+    public void OpenPopup(StoreCardRemovePanel panel, CardDataEntry card)
     {
-        mwManager = GetComponent<ModalWindowManager>();
+        if (mwManager == null) mwManager = GetComponent<ModalWindowManager>();
         
-        _targetCard = card;
+        parentPanel = panel; // 패널 기억하기
+        targetCard = card;
 
         // 1. 텍스트 변경
-        
         titleText.text = $"{card.koreanName}을(를)\n제거하시겠습니까?";
 
-        // 2. 카드 이미지/정보 변경        
-        
-        targetCardUI.SetCardDataEntry(card);
-        
+        // 2. 카드 이미지 세팅
+        if (targetCardUI != null)
+        {
+            targetCardUI.SetCardDataEntry(card);
+        }
+
         // 3. 팝업 켜기
-        mwManager.ModalWindowIn();        
+        if (mwManager != null) mwManager.ModalWindowIn();
+        else gameObject.SetActive(true);
     }
 
     public void OnClickRemove()
     {  
-        if (_targetCard != null)
+        if (targetCard != null)
         {
-            Debug.Log($"[카드 제거] {_targetCard.koreanName} 제거 완료!");
-            // 실제 덱에서 카드를 제거하는 로직 추가 예정
-            // GameManager.Instance.Deck.RemoveCard(_targetCard);
+            // 실제 덱 데이터에서 제거 (ProtoTypeDeck 연결)
+            ProtoTypeDeck.Instance.RemoveCard(targetCard);
             
-            // 제거 후 패널 갱신이 필요하다면 여기서 호출
-            // transform.parent.GetComponent<StoreCardRemovePanel>().RenderDeck();
+            // 뒤에 있는 패널 새로고침 (카드 제거 반영)           
+            parentPanel.RenderDeck();
+            
         }
        
         ClosePopup();
@@ -52,6 +56,7 @@ public class StoreCardRemovePopup : MonoBehaviour
 
     private void ClosePopup()
     {
-        mwManager.ModalWindowOut();        
+        if (mwManager != null) mwManager.ModalWindowOut();
+        else gameObject.SetActive(false);
     }
 }
