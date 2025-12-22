@@ -875,7 +875,7 @@ GameObject:
   - component: {fileID: 323058329343492502}
   - component: {fileID: 393580894869273736}
   m_Layer: 5
-  m_Name: HealingPopup
+  m_Name: Button_HealingPopup
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 334450e98a5cf444a9f758ab16f567aa, type: 3}
   m_NavMeshLayer: 0
