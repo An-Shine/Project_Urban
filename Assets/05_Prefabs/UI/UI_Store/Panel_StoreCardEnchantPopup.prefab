@@ -2313,7 +2313,6 @@ GameObject:
   - component: {fileID: 3642981822876633847}
   - component: {fileID: 1963370551713479852}
   - component: {fileID: 635665077051074074}
-  - component: {fileID: 7513943289086812004}
   m_Layer: 5
   m_Name: Panel_StoreCardEnchantPopup
   m_TagString: Untagged
@@ -2407,20 +2406,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7513943289086812004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8866050858649970547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 035a9dc0e8163cb4b882a71f838ec695, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeckEnchantPopup
-  targetCardUI: {fileID: 705260050387000885, guid: 5f5063414175f4c4dbe59c30ec710e65, type: 3}
-  popupObject: {fileID: 8866050858649970547}
 --- !u!1 &9021906598674256362
 GameObject:
   m_ObjectHideFlags: 0

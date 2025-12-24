@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class ElementWeight
@@ -24,7 +25,8 @@ public class CardSelectUI : MonoBehaviour
     {
         foreach (var card in cardSelectItems)
         {
-            // card.AddClickEventHandler(() => onCardSelected(card.CardName));
+            Button button = card.gameObject.AddComponent<Button>();
+            button.onClick.AddListener(() => onCardSelected(card.CardName));
         }
     }
 
