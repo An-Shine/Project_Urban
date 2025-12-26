@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct CardRecipe
@@ -60,5 +61,11 @@ public class GameManager : Singleton<GameManager>
     public void UseCoin(int amount)
     {
         coin.DecreaseCoin(amount);
+    }
+    
+    public void GameOver()
+    {
+        Destroy(gameObject);
+        SceneManager.LoadScene(Scene.Main);
     }
 }

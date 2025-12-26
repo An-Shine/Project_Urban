@@ -15,12 +15,12 @@ public class UIManager : SceneSingleton<UIManager>
         BattleManager.Instance.OnBattleEnd.AddListener(HandleBattleEnd);
     }
 
-    public void HandleBattleEnd(bool isSuccess)
+    public void HandleBattleEnd(bool isVictory)
     {
         battleUI.gameObject.SetActive(false);
         battleEndUI.gameObject.SetActive(true);
 
-        if (isSuccess)
+        if (isVictory)
             successUI.gameObject.SetActive(true);
         else
             failUI.gameObject.SetActive(true);

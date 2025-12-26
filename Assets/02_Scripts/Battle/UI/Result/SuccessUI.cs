@@ -39,6 +39,6 @@ public class SuccessUI : MonoBehaviour
 
     public void LoadMapScene()
     {
-        SceneManager.LoadScene("03_MapScene");
+        SceneManager.LoadScene(Scene.Map);
     }
 }

@@ -50,6 +50,8 @@ public class BattleManager : SceneSingleton<BattleManager>
     // UI 또는 Player가 호출
     public void EndPlayerTurn()
     {
+        if (!isPlayerTurn) return;
+
         player.OnTurnEnd();
         OnTurnEnd?.Invoke();
     
