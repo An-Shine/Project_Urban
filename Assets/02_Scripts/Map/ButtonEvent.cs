@@ -1,14 +1,15 @@
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement; 
 
+
 public class ButtonEvent : MonoBehaviour
 {
-    [Header("메인 UI 연결")]
-    [SerializeField] private GameObject stageSelectButton;
-    [SerializeField] private GameObject Store_UI;
-    [SerializeField] private GameObject Shelter_UI;
 
+    private GameObject UI_Store;
+    private GameObject UI_Shelter;
+    private GameObject stageSelectButton;
     // 전투 씬 이동
     public void OnClickNormal()
     {
@@ -23,20 +24,20 @@ public class ButtonEvent : MonoBehaviour
     // 상점UI
     public void OnClickStore()
     {        
-        Store_UI.SetActive(true);
-        stageSelectButton.SetActive(false);
+        UI_Store.SetActive(true);
+        //stageSelectButton.SetActive(false);
     }
 
     public void OnClickStoreExit()
     {
-        Store_UI.SetActive(false);
-        stageSelectButton.SetActive(true);
+        UI_Store.SetActive(false);
+        //stageSelectButton.SetActive(true);
     }
 
     // 쉼터UI
     public void OnClickShelter()
     {
-       Shelter_UI.SetActive(true);
-       stageSelectButton.SetActive(false);
+       UI_Shelter.SetActive(true);
+       //stageSelectButton.SetActive(false);
     }
 }
