@@ -146,16 +146,14 @@ public class MapManager : Singleton<MapManager>
     // 플레이어가 현재 위치한 노드
     private MapNode currentNode = null;
 
-
-
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         InitRuleData(); 
         InitBranches();
         GenerateMap(); // 맵 생성 시작       
         playerMove.gameObject.SetActive(false);
-        
-        
     } 
     
     // ScriptableObject 데이터를 런타임에서 사용할 Dictionary로 변환
@@ -259,10 +257,6 @@ public class MapManager : Singleton<MapManager>
         
         // 3. 노드 간 연결(선) 생성
         GenerateFixedPaths();
-
-        // 4. 시각화 요청 (화면에 그리기)
-        if (MapVisualizer.Instance != null)
-            MapVisualizer.Instance.ShowMap(mapGrid);
     }
     
     // 특정 위치의 노드 타입을 결정하는 함수 (우선순위: 고정 > 천장 > 가중치 랜덤)

@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class MapVisualizer : MonoBehaviour
+public class MapVisualizer : SceneSingleton<MapVisualizer>
 {
-    public static MapVisualizer Instance;
 
     [Header("UI References")]
     [SerializeField] private Transform mapContentParent; // 맵 오브젝트들이 생성될 부모 Transform (Scroll View의 Content)
@@ -35,9 +34,10 @@ public class MapVisualizer : MonoBehaviour
     // MapNode와 실제 화면 GameObject를 연결해주는 캐시
     private Dictionary<MapNode, GameObject> nodeObjMap = new Dictionary<MapNode, GameObject>();
 
-    private void Awake()
+    private void Start()
     {
-        Instance = this;
+        ShowMap(MapManager.Instance.mapGrid);
+        ButtonEvent.Instance.ActiveMap();
     }
 
     // 외부에서 맵 생성이 완료되면 호출하는 메인 함수
@@ -70,7 +70,12 @@ public class MapVisualizer : MonoBehaviour
         InitializePlayerParent();
 
         // 4. 스크롤 위치 초기화 (맨 아래 1층부터 시작하도록)
-        StartCoroutine(ResetScroll());
+        // StartCoroutine(ResetScroll());
+
+        ScrollRect sr = mapContentParent.GetComponentInParent<ScrollRect>();
+
+        sr.verticalNormalizedPosition = 0f; // 0 = 바닥, 1 = 천장
+        sr.velocity = Vector2.zero;         // 관성 제거
     }
 
     // ScrollView의 Content 크기 및 피벗 설정
@@ -116,7 +121,7 @@ public class MapVisualizer : MonoBehaviour
     private void CreateNodeObject(MapNode node, int mapWidth)
     {
         GameObject prefabToUse = GetPrefabByNodeType(node.nodeType);
-        if (prefabToUse == null) return;
+        if (prefabToUse == null) throw new System.Exception();
 
         GameObject newObj = Instantiate(prefabToUse, nodeContainer);
         newObj.transform.localScale = Vector3.one;
@@ -133,12 +138,8 @@ public class MapVisualizer : MonoBehaviour
         nodeObjMap.Add(node, newObj);
 
         // 버튼클릭 이벤트 연결
-        Button btn = newObj.GetComponent<Button>();
-        if (btn != null)
-        {
-            // 클릭 시 MapManager에게 클릭여부를 알림
-            btn.onClick.AddListener(() => MapManager.Instance.OnNodeClicked(node));
-        }
+        NodeButton btn = newObj.GetComponent<NodeButton>();
+        btn.AddOnClickEvent(() => MapManager.Instance.OnNodeClicked(node));
     }
 
     // 데이터에 저장된 연결 정보를 시각화하는 함수
@@ -192,27 +193,27 @@ public class MapVisualizer : MonoBehaviour
     // 노드 타입에 맞는 프리팹 반환
     private GameObject GetPrefabByNodeType(NodeType type)
     {
-        switch (type)
+        return type switch
         {
-            case NodeType.Monster: return normalStagePrefab;
-            case NodeType.Elite: return eliteStagePrefab;
-            case NodeType.Boss: return bossStagePrefab;
-            case NodeType.Shelter: return shelterStagePrefab;
-            case NodeType.Store: return storeStagePrefab;
-            case NodeType.Event: return eventStagePrefab;
-            default: return null;
-        }
+            NodeType.Monster => normalStagePrefab,
+            NodeType.Elite => eliteStagePrefab,
+            NodeType.Boss => bossStagePrefab,
+            NodeType.Shelter => shelterStagePrefab,
+            NodeType.Store => storeStagePrefab,
+            NodeType.Event => eventStagePrefab,
+            _ => null,
+        };
     }
 
     // 맵 생성 직후 스크롤 위치를 맨 아래로 초기화
     private IEnumerator ResetScroll()
     {
         yield return null; // 한 프레임 대기 (UI 갱신 대기)
+
         ScrollRect sr = mapContentParent.GetComponentInParent<ScrollRect>();
 
         sr.verticalNormalizedPosition = 0f; // 0 = 바닥, 1 = 천장
         sr.velocity = Vector2.zero;         // 관성 제거
-
     }
 
     // 플레이어 캐릭터를 클릭한 노드 위치로 이동시키는 함수
@@ -241,8 +242,6 @@ public class MapVisualizer : MonoBehaviour
     {
         var player = MapManager.Instance.playerMove;
 
-
-
         // 1. 플레이어는 ScrollView의 내용 오브젝트와 함께 움직임
         player.transform.SetParent(nodeContainer, false);
 
@@ -262,7 +261,6 @@ public class MapVisualizer : MonoBehaviour
         if (nodeObjMap.TryGetValue(targetNode, out GameObject targetObj))
         {
             PlayerMove player = MapManager.Instance.playerMove;
-
 
             // 타겟 노드의 위치 가져오기
             Vector3 targetPos = targetObj.transform.localPosition;

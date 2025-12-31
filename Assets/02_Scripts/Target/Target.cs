@@ -14,6 +14,8 @@ abstract public class Target : MonoBehaviour
     // 버프-디버프 관리
     protected List<ConditionStatus> conditionStatusList = new();
 
+    public UnityEvent<IEnumerable<ConditionStatus>> OnUpdateConditionStatusList = new();
+
     // Property
     public HealthController Health { get; protected set; }
 
@@ -59,7 +61,6 @@ abstract public class Target : MonoBehaviour
     public void AddConditionStatus(ConditionStatus conditionStatus)
     {
         conditionStatusList.Add(conditionStatus);
-        conditionStatusView?.UpdateView(conditionStatusList);
     }
 
     public bool IsStun()
