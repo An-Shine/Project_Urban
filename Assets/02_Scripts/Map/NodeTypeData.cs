@@ -2,22 +2,32 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NodeType { Monster, Elite, Store, Shelter, Event, Boss }
-
 [CreateAssetMenu(fileName = "NodeTypeData", menuName = "Node/NodeTypeData", order = 0)]
 public class NodeTypeData : ScriptableObject
 {
-    [SerializeField] private List<NodeTypeDataEntry> nodeEntries = new();
-    private readonly Dictionary<NodeType, NodeTypeDataEntry> nodeMap;
+    [SerializeField] private List<NodeTypeDataEntry> nodeEntries = new List<NodeTypeDataEntry>();
+
+    private Dictionary<NodeType, NodeTypeDataEntry> nodeMap = new Dictionary<NodeType, NodeTypeDataEntry>();
 
     private void OnEnable()
     {
+        InitializeDictionary();
+    }
+
+    public void InitializeDictionary()
+    {
+        nodeMap.Clear();
         foreach (NodeTypeDataEntry entry in nodeEntries)
-            nodeMap[entry.type] = entry;
+        {
+            if (!nodeMap.ContainsKey(entry.type))
+                nodeMap[entry.type] = entry;
+        }
     }
 
     public Dictionary<NodeType, NodeTypeDataEntry> GetNodeMap()
     {
+        if (nodeMap.Count == 0 && nodeEntries.Count > 0)
+            InitializeDictionary();
         return new Dictionary<NodeType, NodeTypeDataEntry>(nodeMap);
     }
 }

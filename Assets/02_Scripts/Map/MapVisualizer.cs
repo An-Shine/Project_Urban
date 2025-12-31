@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class MapVisualizer : MonoBehaviour
 {
     public static MapVisualizer Instance;
 
     [Header("UI References")]
-    [SerializeField] private Transform mapContentParent; 
-    [SerializeField] private GameObject linePrefab;      
+    [SerializeField] private Transform mapContentParent; // 맵 오브젝트들이 생성될 부모 Transform (Scroll View의 Content)
+    [SerializeField] private GameObject linePrefab;      // 노드 사이를 이어줄 선 프리팹
 
     [Header("Node Prefabs")]
-    [SerializeField] private GameObject normalStagePrefab;   
-    [SerializeField] private GameObject eliteStagePrefab;    
-    [SerializeField] private GameObject bossStagePrefab;     
-    [SerializeField] private GameObject shelterStagePrefab;  
-    [SerializeField] private GameObject storeStagePrefab;    
-    
+    // 각 노드 타입에 매칭되는 UI 프리팹들
+    [SerializeField] private GameObject normalStagePrefab;
+    [SerializeField] private GameObject eliteStagePrefab;
+    [SerializeField] private GameObject bossStagePrefab;
+    [SerializeField] private GameObject shelterStagePrefab;
+    [SerializeField] private GameObject storeStagePrefab;
+    [SerializeField] private GameObject eventStagePrefab;
+
     [Header("Layout Settings")]
     [SerializeField] private float xSpacing = 200f;      // 노드 간 가로 간격
     [SerializeField] private float ySpacing = 150f;      // 노드 간 세로 간격
-    [SerializeField] private float bottomPadding = 100f; // 1층 노드가 바닥에서 얼마나 띄워질지
+    [SerializeField] private float startYPosition = -3800f; // 1층 노드가 생성될 시작 Y 좌표
+    [SerializeField] private float fixedContentHeight = 6000f; // 스크롤 뷰의 전체 높이 고정값
 
-    // 선 과 노드를 담을 별도의 부모 객체 (계층 구조 분리)
-
+    // 계층 구조 정리용 컨테이너 (선은 뒤에, 노드는 앞에 그리기 위함)
     private Transform lineContainer;
     private Transform nodeContainer;
 
-    // 데이터와 실제 생성된 게임오브젝트를 짝지어 저장하는 딕셔너리
+    // MapNode와 실제 화면 GameObject를 연결해주는 캐시
     private Dictionary<MapNode, GameObject> nodeObjMap = new Dictionary<MapNode, GameObject>();
 
     private void Awake()
@@ -36,39 +39,23 @@ public class MapVisualizer : MonoBehaviour
         Instance = this;
     }
 
-    // 맵 데이터를 받아 화면에 그리는 함수
-  public void ShowMap(List<List<MapNode>> mapGrid)
+    // 외부에서 맵 생성이 완료되면 호출하는 메인 함수
+    public void ShowMap(List<List<MapNode>> mapGrid)
     {
-        RectTransform contentRect = mapContentParent.GetComponent<RectTransform>();
-        contentRect.pivot = new Vector2(0.5f, 0f); 
-        contentRect.anchorMin = new Vector2(0.5f, 0f);
-        contentRect.anchorMax = new Vector2(0.5f, 0f);
-        
-        // 위치를 0,0으로 초기화
-        contentRect.anchoredPosition = Vector2.zero; 
+        if (mapGrid == null || mapGrid.Count == 0) return;
 
-        // 2. 초기화
-        foreach (Transform child in mapContentParent) Destroy(child.gameObject);
-        nodeObjMap.Clear();
+        // 1. 기존 맵 삭제 및 UI 설정 초기화
+        InitializeUI();
+        ClearOldMap();
 
-        CreateContainer("LineContainer", out lineContainer);
-        CreateContainer("NodeContainer", out nodeContainer);
-
-        // 3. 노드 생성
         int mapWidth = mapGrid[0].Count;
-        float topPadding = 200f; // 보스 위 여유 공간
-        float contentHeight = (mapGrid.Count * ySpacing) + bottomPadding + topPadding;
-        
-        // 계산된 높이 적용
-        contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, contentHeight);
 
-        // 4. 노드 배치 루프
-        for (int y = 0; y < mapGrid.Count; y++)
+        // 2. 노드 오브젝트 생성
+        foreach (var row in mapGrid)
         {
-            List<MapNode> row = mapGrid[y];
-            for (int x = 0; x < row.Count; x++)
+            foreach (var node in row)
             {
-                MapNode node = row[x];
+                // 활성화된 노드이고, 타입이 None이 아닐 때만 그립니다.
                 if (node.isActive)
                 {
                     CreateNodeObject(node, mapWidth);
@@ -76,13 +63,53 @@ public class MapVisualizer : MonoBehaviour
             }
         }
 
-        // 5. 연결선 그리기
-        DrawConnections();
-        
-        // 6. 스크롤 위치 초기화
+        // 3. 선 그리기
+        DrawConnections(mapGrid);
+
+        // 4. 스크롤 위치 초기화 (맨 아래 1층부터 시작하도록)
         StartCoroutine(ResetScroll());
     }
 
+    // ScrollView의 Content 크기 및 피벗 설정
+    private void InitializeUI()
+    {
+        RectTransform contentRect = mapContentParent.GetComponent<RectTransform>();
+        contentRect.pivot = new Vector2(0.5f, 0f);      // 피벗을 하단 중앙으로 설정
+        contentRect.anchorMin = new Vector2(0.5f, 0f);
+        contentRect.anchorMax = new Vector2(0.5f, 0f);
+        contentRect.anchoredPosition = Vector2.zero;
+        contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, fixedContentHeight);
+    }
+
+    // 이전에 생성된 노드와 선들을 모두 제거하고 컨테이너를 재생성
+    private void ClearOldMap()
+    {
+        foreach (Transform child in mapContentParent) Destroy(child.gameObject);
+        nodeObjMap.Clear();
+
+        // 선이 노드보다 뒤에 그려지도록 순서 관리 
+        CreateContainer("LineContainer", out lineContainer);
+        CreateContainer("NodeContainer", out nodeContainer);
+    }
+
+    // 계층 정리를 위한 빈 오브젝트 생성 헬퍼 함수
+    private void CreateContainer(string name, out Transform container)
+    {
+        GameObject go = new GameObject(name);
+        go.transform.SetParent(mapContentParent, false);
+
+        RectTransform rect = go.AddComponent<RectTransform>();
+        // 부모 영역을 가득 채우도록 설정
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.localScale = Vector3.one;
+
+        container = go.transform;
+    }
+
+    // 개별 노드(아이콘) 생성 함수
     private void CreateNodeObject(MapNode node, int mapWidth)
     {
         GameObject prefabToUse = GetPrefabByNodeType(node.nodeType);
@@ -91,119 +118,90 @@ public class MapVisualizer : MonoBehaviour
         GameObject newObj = Instantiate(prefabToUse, nodeContainer);
         newObj.transform.localScale = Vector3.one;
 
-        // X축: 중앙 정렬
+        // [위치 계산 로직]
+        // x: 중앙 정렬을 위해 (현재 인덱스 - (전체폭-1)/2) 공식을 사용
+        // y: 시작 위치 + 층수 * 간격
         float xPos = (node.x - (mapWidth - 1) / 2.0f) * xSpacing;
-        
-        // Y축: 바닥(0) 기준 좌표 계산
-        float yPos = bottomPadding + (node.y * ySpacing); 
+        float yPos = startYPosition + (node.y * ySpacing);
 
         newObj.transform.localPosition = new Vector3(xPos, yPos, 0);
-        
+
+        // 나중에 선을 그을 때 이 노드의 위치를 찾아야 하므로 딕셔너리에 등록
         nodeObjMap.Add(node, newObj);
     }
 
-
-    // 노드나 선을 담을 투명한 부모 객체폴더를 만드는 함수
-   private void CreateContainer(string name, out Transform container)
+    // 데이터에 저장된 연결 정보를 시각화하는 함수
+    private void DrawConnections(List<List<MapNode>> mapGrid)
     {
-        // 1. 오브젝트 생성
-        GameObject go = new GameObject(name);
-        go.transform.SetParent(mapContentParent, false); 
-        
-        // 2. RectTransform 컴포넌트 추가
-        RectTransform rect = go.AddComponent<RectTransform>();
-        
-        // 3. 앵커설정
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-
-        // 노드 생성 영역 설정
-        rect.offsetMin = new Vector2(0f, -1500f); 
-        rect.offsetMax = new Vector2(0f, -1500f); 
-
-        // 스케일과 Z좌표 초기화
-        rect.localScale = Vector3.one;
-        rect.anchoredPosition3D = new Vector3(rect.anchoredPosition3D.x, rect.anchoredPosition3D.y, 0f);
-        
-        container = go.transform;
-    }   
-
-    // 생성된 노드들을 순회하며 선을 긋는 함수
-    private void DrawConnections()
-    {
-        foreach (var kvp in nodeObjMap)
+        foreach (var row in mapGrid)
         {
-            MapNode currentNode = kvp.Key;
-            // 현재 노드의 화면상 위치
-            Vector3 startPos = kvp.Value.transform.localPosition;
-
-            // 이 노드와 연결된 다음 층 노드들을 모두 확인
-            foreach (MapNode nextNode in currentNode.nextNodes)
+            foreach (var node in row)
             {
-                // 다음 노드가 생성되어 있다면
-                if (nodeObjMap.TryGetValue(nextNode, out GameObject nextObj))
+                // 화면에 없는 노드는 건너뜀
+                if (!node.isActive || !nodeObjMap.ContainsKey(node)) continue;
+
+                Vector3 startPos = nodeObjMap[node].transform.localPosition;
+
+                // MapNode 데이터 안에 이미 누구랑 연결될지(nextNodes)가 들어있음
+                // 단순히 그 리스트를 순회하며 선만 그어주면 됨
+                foreach (var nextNode in node.nextNodes)
                 {
-                    // 두 지점 사이에 선 그리기
-                    CreateLine(startPos, nextObj.transform.localPosition);
+                    // 목적지 노드가 실제로 화면에 존재한다면 선 생성
+                    if (nodeObjMap.TryGetValue(nextNode, out GameObject targetObj))
+                    {
+                        CreateLine(startPos, targetObj.transform.localPosition);
+                    }
                 }
             }
         }
     }
 
-    /// 두 점(start, end) 사이에 직선 이미지를 생성하고 회전시키는 함수
+    // 두 점 사이를 잇는 선 오브젝트 생성 및 배치
     private void CreateLine(Vector3 startPos, Vector3 endPos)
     {
-        // 라인 컨테이너의 자식으로 생성
         GameObject line = Instantiate(linePrefab, lineContainer);
-        
         RectTransform rect = line.GetComponent<RectTransform>();
-        // 선의 중심점을 기준으로 회전 및 길이 조절을 위해 피벗을 (0.5, 0.5)로 설정
-        rect.pivot = new Vector2(0.5f, 0.5f); 
 
-        // 1. 방향 벡터 (도착점 - 시작점)
-        Vector3 dir = (endPos - startPos).normalized;
-        
-        // 2. 두 점 사이의 거리 구하기
-        float distance = Vector3.Distance(startPos, endPos);
+        // 1. 시작점에 피벗을 맞춤 (회전의 기준점이 됨)
+        rect.pivot = new Vector2(0f, 0.5f);
+        rect.localPosition = startPos;
 
-        // 3. 위치 설정: 두 점의 '중간 지점'에 선을 둠
-        rect.localPosition = startPos + (dir * distance * 0.5f);
-        
-        // 4. 회전 설정
+        // 2. 거리(선의 길이)와 각도(회전) 계산
+        Vector3 dir = endPos - startPos;
+        float distance = dir.magnitude;
+
+        // Atan2를 사용하여 두 점 사이의 각도를 구함 (라디안 -> 디그리 변환)
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        // 3. 회전 및 크기 적용
         rect.localRotation = Quaternion.Euler(0, 0, angle);
-        
-        // 5. 크기 설정: 너비를 거리만큼 늘림
-        rect.sizeDelta = new Vector2(distance, rect.sizeDelta.y);
+        rect.sizeDelta = new Vector2(distance, rect.sizeDelta.y); // 너비=거리, 높이=선 두께
     }
 
-    /// 노드 타입에 맞춰 연결된 프리팹을 반환
+    // 노드 타입에 맞는 프리팹 반환
     private GameObject GetPrefabByNodeType(NodeType type)
     {
         switch (type)
         {
             case NodeType.Monster: return normalStagePrefab;
-            case NodeType.Elite:   return eliteStagePrefab;
-            case NodeType.Boss:    return bossStagePrefab;
+            case NodeType.Elite: return eliteStagePrefab;
+            case NodeType.Boss: return bossStagePrefab;
             case NodeType.Shelter: return shelterStagePrefab;
-            case NodeType.Store:   return storeStagePrefab;
-            
+            case NodeType.Store: return storeStagePrefab;
+            case NodeType.Event: return eventStagePrefab;
             default: return null;
         }
     }
-    
-    /// UI 갱신 타이밍 문제 해결을 위해 1프레임 대기 후 스크롤을 내리는 코루틴
+
+    // 맵 생성 직후 스크롤 위치를 맨 아래(시작점)로 초기화
     private IEnumerator ResetScroll()
     {
-        // UI가 완전히 그려질 때까지 한 프레임 대기
-        yield return null; 
-        
-        // Scroll View 컴포넌트를 찾아서
+        yield return null; // 한 프레임 대기 (UI 갱신 대기)
         ScrollRect sr = mapContentParent.GetComponentInParent<ScrollRect>();
-       
-        sr.verticalNormalizedPosition = 0f; 
-        // 스크롤이 튕기는 관성 효과 제거 (딱 멈추게)
-        sr.velocity = Vector2.zero;
-        
+        if (sr != null)
+        {
+            sr.verticalNormalizedPosition = 0f; // 0 = 바닥, 1 = 천장
+            sr.velocity = Vector2.zero;         // 관성 제거
+        }
     }
 }
