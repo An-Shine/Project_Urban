@@ -11,6 +11,7 @@ public class MapVisualizer : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Transform mapContentParent; // 맵 오브젝트들이 생성될 부모 Transform (Scroll View의 Content)
     [SerializeField] private GameObject linePrefab;      // 노드 사이를 이어줄 선 프리팹
+    [SerializeField] private GameObject playerImagePrefab;  // 플레이어 캐릭터 프리펩
 
     [Header("Node Prefabs")]
     // 각 노드 타입에 매칭되는 UI 프리팹들
@@ -55,7 +56,7 @@ public class MapVisualizer : MonoBehaviour
         {
             foreach (var node in row)
             {
-                // 활성화된 노드이고, 타입이 None이 아닐 때만 그립니다.
+                // 활성화된 노드이고, 타입이 None이 아닐 때만 그림
                 if (node.isActive)
                 {
                     CreateNodeObject(node, mapWidth);
@@ -65,6 +66,8 @@ public class MapVisualizer : MonoBehaviour
 
         // 3. 선 그리기
         DrawConnections(mapGrid);
+
+        InitializePlayerParent();
 
         // 4. 스크롤 위치 초기화 (맨 아래 1층부터 시작하도록)
         StartCoroutine(ResetScroll());
@@ -128,6 +131,14 @@ public class MapVisualizer : MonoBehaviour
 
         // 나중에 선을 그을 때 이 노드의 위치를 찾아야 하므로 딕셔너리에 등록
         nodeObjMap.Add(node, newObj);
+
+        // 버튼클릭 이벤트 연결
+        Button btn = newObj.GetComponent<Button>();
+        if (btn != null)
+        {
+            // 클릭 시 MapManager에게 클릭여부를 알림
+            btn.onClick.AddListener(() => MapManager.Instance.OnNodeClicked(node));
+        }
     }
 
     // 데이터에 저장된 연결 정보를 시각화하는 함수
@@ -193,15 +204,72 @@ public class MapVisualizer : MonoBehaviour
         }
     }
 
-    // 맵 생성 직후 스크롤 위치를 맨 아래(시작점)로 초기화
+    // 맵 생성 직후 스크롤 위치를 맨 아래로 초기화
     private IEnumerator ResetScroll()
     {
         yield return null; // 한 프레임 대기 (UI 갱신 대기)
         ScrollRect sr = mapContentParent.GetComponentInParent<ScrollRect>();
-        if (sr != null)
+
+        sr.verticalNormalizedPosition = 0f; // 0 = 바닥, 1 = 천장
+        sr.velocity = Vector2.zero;         // 관성 제거
+
+    }
+
+    // 플레이어 캐릭터를 클릭한 노드 위치로 이동시키는 함수
+    public void MovePlayer(MapNode targetNode)
+    {
+        if (nodeObjMap.TryGetValue(targetNode, out GameObject targetObj))
         {
-            sr.verticalNormalizedPosition = 0f; // 0 = 바닥, 1 = 천장
-            sr.velocity = Vector2.zero;         // 관성 제거
+            PlayerMove player = MapManager.Instance.playerMove;
+
+            if (player != null)
+            {
+                // 타겟(노드)의 로컬 좌표 가져오기
+                Vector3 targetLocalPos = targetObj.transform.localPosition;
+
+                // Z값은 0으로 고정
+                targetLocalPos.z = 0;
+
+                // 이동 명령
+                player.MoveTo(targetLocalPos);
+            }
+        }
+    }
+
+    // 플레이어프리펩 노드컨테이너 밑에 생성
+    private void InitializePlayerParent()
+    {
+        var player = MapManager.Instance.playerMove;
+
+
+
+        // 1. 플레이어는 ScrollView의 내용 오브젝트와 함께 움직임
+        player.transform.SetParent(nodeContainer, false);
+
+        // 2. 크기 및 회전 초기화
+        player.transform.localScale = Vector3.one;
+        player.transform.localRotation = Quaternion.identity;
+
+        // 3. Z값 0으로 고정
+        Vector3 pos = player.transform.localPosition;
+        pos.z = 0;
+        player.transform.localPosition = pos;
+
+    }
+    // 플레이어 프리펩 초기위치 지정용
+    public void SetPlayerPositionDirectly(MapNode targetNode, Vector3 offset)
+    {
+        if (nodeObjMap.TryGetValue(targetNode, out GameObject targetObj))
+        {
+            PlayerMove player = MapManager.Instance.playerMove;
+
+
+            // 타겟 노드의 위치 가져오기
+            Vector3 targetPos = targetObj.transform.localPosition;
+
+            // 원하는 오프셋만큼 더해서 시작 위치 설정 
+            player.transform.localPosition = targetPos + offset;
+
         }
     }
 }

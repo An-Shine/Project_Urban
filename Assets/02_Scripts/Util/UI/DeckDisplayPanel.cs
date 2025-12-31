@@ -11,9 +11,31 @@ public class DeckDisplayPanel : MonoBehaviour
 
     private int prevCardCount;
 
-    public void OpenDeckDisplay()
+   public void OpenDeckDisplay()
     {
+        // 1. GameManager 체크
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("DeckDisplayPanel: GameManager.Instance가 없습니다!");
+            return;
+        }
+
+        // 2. 덱 체크 
+        if (GameManager.Instance.Deck == null)
+        {
+            Debug.LogError("DeckDisplayPanel: GameManager.Instance.Deck이 초기화되지 않았습니다!");
+            return;
+        }
+
         IEnumerable<CardName> receivedDeck = GameManager.Instance.Deck.CardList;
+        
+        // 3. 카드 리스트 자체 체크
+        if (receivedDeck == null)
+        {
+            Debug.LogError("DeckDisplayPanel: 카드 리스트(CardList)가 Null입니다!");
+            return;
+        }
+
         int curCardCount = receivedDeck.Count();
 
         if (prevCardCount != curCardCount)
