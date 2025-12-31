@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8275873575832220746}
   - component: {fileID: 4769700100629125999}
   - component: {fileID: 1588194994954674565}
-  - component: {fileID: 8592224651683891068}
+  - component: {fileID: 6791485178532195961}
   m_Layer: 5
   m_Name: UI_CardStore
   m_TagString: Untagged
@@ -140,7 +140,7 @@ MonoBehaviour:
   cardTitle: {fileID: 7374973465773631952}
   cardDesc: {fileID: 3684791358197395920}
   cardImage: {fileID: 8275873575832220746}
---- !u!114 &8592224651683891068
+--- !u!114 &6791485178532195961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54ae99abcdac9f24cb4208fba3b91e59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIStoreCard
+  m_EditorClassIdentifier: Assembly-CSharp::StoreCardUI
   uICard: {fileID: 1588194994954674565}
   priceText: {fileID: 4279790194438885181}
 --- !u!1 &5831246705508364084

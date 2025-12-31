@@ -74,6 +74,7 @@
         "Dont",
         "interactable",
         "Lerp",
+        "playermove",
         "UGUI"
     ]
 }

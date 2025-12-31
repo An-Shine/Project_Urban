@@ -21,40 +21,82 @@ public class StoreCardUI : MonoBehaviour, IClickable
 
     public void SetCardDataEntry(CardDataEntry cardDataEntry)
     {
-        uICard.SetCardDataEntry(cardDataEntry);
+        // 1. 데이터가 비어있으면 중단
+        if (cardDataEntry == null)
+        {
+            Debug.LogError("StoreCardUI: 받은 카드 데이터가 Null입니다!");
+            return;
+        }
+
+        // 2. UI 카드 비주얼 업데이트 (여기도 에러날 수 있으니 체크)
+        if (uICard != null)
+        {
+            uICard.SetCardDataEntry(cardDataEntry);
+        }
+
         price = cardDataEntry.price;
         cardName = cardDataEntry.cardName;
-        priceText.text = $"{price}C";
+        
+        // 3. 가격 텍스트 업데이트
+        if (priceText != null)
+        {
+            priceText.text = $"{price}C";
+        }
 
-        GameManager.Instance.Coin.OnUpdateCoin.AddListener(UpdatePriceText);
-        UpdatePriceText(GameManager.Instance.Coin.CurrentCoin);
+        if (GameManager.Instance != null && GameManager.Instance.Coin != null)
+        {
+            // 이벤트 중복 등록 방지 
+            GameManager.Instance.Coin.OnUpdateCoin.RemoveListener(UpdatePriceText);
+            GameManager.Instance.Coin.OnUpdateCoin.AddListener(UpdatePriceText);
+            
+            UpdatePriceText(GameManager.Instance.Coin.CurrentCoin);
+        }
+        else
+        {
+            // GameManager가 없을 때를 대비한 로그 (게임 멈춤 방지)
+            Debug.LogWarning("현재 보유 코인 연결안됨");
+            
+            // 기본적으로 구매 가능 상태로 둠 (나중에 갱신되길 기대하며)
+            if (button != null) button.interactable = true;
+        }
     }
 
     private void UpdatePriceText(int curCoin)
     {
-        if (isSoldOut) return;
+        if (isSoldOut || button == null || priceText == null) return;
 
         if (price > curCoin)
         {
             priceText.color = Color.red;
             button.interactable = false;
         }
+        else
+        {
+            // 돈이 충분해지면 다시 하얀색으로 (필요하다면 추가)
+            priceText.color = Color.white;
+            button.interactable = true;
+        }
     }
 
     public void Buy()
     {
-        // 카드 비활성화 및 품절 처리
-        isSoldOut = true;
-        button.interactable = false;
-        priceText.text = "Sold Out";        
+        if (isSoldOut) return;
 
-        // 코인 사용 처리 및 덱에 카드 추가
-        GameManager.Instance.UseCoin(price);
-        GameManager.Instance.Deck.AddCard(cardName);
+        isSoldOut = true;
+        if(button != null) button.interactable = false;
+        if(priceText != null) priceText.text = "Sold Out";        
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.UseCoin(price);
+            GameManager.Instance.Deck.AddCard(cardName);
+        }
     }
 
     public void AddClickHandler(UnityAction handleClick)
     {
+        if(button == null) button = GetComponent<Button>();
+        
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(handleClick);
     }
